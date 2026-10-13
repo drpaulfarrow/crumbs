@@ -16,33 +16,43 @@ PREBID_SNAPSHOT_JS = r"""
 (() => {
   const names = new Set([...(window._pbjsGlobals || []), "pbjs"]);
   const out = [];
+  const bidOf = (b) => ({ auction: b.auctionId || "", unit: b.adUnitCode, bidder: b.bidderCode || b.bidder,
+    cpm: Number(b.cpm) || 0, currency: b.currency || "", size: b.size || `${b.width}x${b.height}`,
+    ms: b.timeToRespond });
   for (const name of names) {
     const p = window[name];
-    if (!p || typeof p.getBidResponses !== "function") continue;
-    const bids = [];
-    for (const [unit, v] of Object.entries(p.getBidResponses() || {})) {
-      for (const b of (v.bids || [])) {
-        bids.push({ unit, bidder: b.bidderCode || b.bidder, cpm: Number(b.cpm) || 0,
-          currency: b.currency || "", size: b.size || `${b.width}x${b.height}`,
-          ms: b.timeToRespond, status: b.status || "" });
-      }
-    }
-    const won = (typeof p.getAllWinningBids === "function" ? p.getAllWinningBids() : [])
-      .map(b => ({ unit: b.adUnitCode, bidder: b.bidderCode, cpm: Number(b.cpm) || 0, currency: b.currency || "" }));
+    if (!p || typeof p.getEvents !== "function") continue;
+    // The event log covers every auction on the page. getBidResponses() only
+    // returns the latest auction's bids for slots still registered, which on
+    // real sites (lazy loading, refresh, removeAdUnit) is often empty.
+    let events = [];
+    try { events = p.getEvents() || []; } catch (e) {}
+    const bids = [], won = [], slots = new Set();
     const requested = new Set(), noBid = new Set(), timedOut = new Set(), errored = new Set();
     let auctions = 0;
-    try {
-      for (const e of p.getEvents()) {
-        const a = e.args || {};
-        if (e.eventType === "auctionInit") auctions++;
-        else if (e.eventType === "bidRequested") requested.add(a.bidderCode);
-        else if (e.eventType === "noBid") noBid.add(a.bidder || a.bidderCode);
-        else if (e.eventType === "bidTimeout") (Array.isArray(a) ? a : [a]).forEach(t => timedOut.add(t.bidder || t.bidderCode));
-        else if (e.eventType === "bidderError") errored.add((a.bidderRequest || {}).bidderCode || a.bidderCode);
+    for (const e of events) {
+      const a = e.args || {};
+      switch (e.eventType) {
+        case "auctionInit": auctions++; break;
+        case "bidRequested":
+          requested.add(a.bidderCode);
+          (a.bids || []).forEach(b => slots.add(b.adUnitCode));
+          break;
+        case "bidResponse": bids.push(bidOf(a)); break;
+        case "bidWon": won.push(bidOf(a)); break;
+        case "noBid": noBid.add(a.bidder || a.bidderCode); break;
+        case "bidTimeout": (Array.isArray(a) ? a : [a]).forEach(t => timedOut.add(t.bidder || t.bidderCode)); break;
+        case "bidderError": errored.add((a.bidderRequest || {}).bidderCode || a.bidderCode); break;
       }
-    } catch (e) {}
-    const units = (p.adUnits || []).length;
-    out.push({ global: name, version: p.version || "", ad_units: units, auctions, bids, won,
+    }
+    if (!events.length && typeof p.getBidResponses === "function") {
+      // Fallback for builds that keep no event history.
+      for (const [unit, v] of Object.entries(p.getBidResponses() || {})) {
+        slots.add(unit);
+        for (const b of (v.bids || [])) bids.push(bidOf(b));
+      }
+    }
+    out.push({ global: name, version: p.version || "", ad_units: slots.size, auctions, bids, won,
       requested: [...requested].filter(Boolean), no_bid: [...noBid].filter(Boolean),
       timed_out: [...timedOut].filter(Boolean), errored: [...errored].filter(Boolean) });
   }
@@ -59,10 +69,12 @@ def summarise(snapshots: list[dict]) -> dict:
     won = [b for s in snapshots for b in s.get("won", [])]
     requested = sorted({x for s in snapshots for x in s.get("requested", [])})
     bidders_bid = sorted({b["bidder"] for b in bids if b.get("bidder")})
-    top_per_unit: dict[str, float] = {}
+    # Best bid per slot per auction: a slot refreshed three times is three chances to earn.
+    top_per_unit: dict[tuple[str, str], float] = {}
     by_bidder: dict[str, dict] = defaultdict(lambda: {"bids": 0, "max_cpm": 0.0, "sum_cpm": 0.0})
     for b in bids:
-        top_per_unit[b["unit"]] = max(top_per_unit.get(b["unit"], 0.0), b["cpm"])
+        key = (b.get("auction", ""), b["unit"])
+        top_per_unit[key] = max(top_per_unit.get(key, 0.0), b["cpm"])
         entry = by_bidder[b["bidder"]]
         entry["bids"] += 1
         entry["sum_cpm"] += b["cpm"]
@@ -80,7 +92,7 @@ def summarise(snapshots: list[dict]) -> dict:
         "bids": len(bids),
         "avg_cpm": round(sum(b["cpm"] for b in bids) / len(bids), 3) if bids else 0.0,
         "top_bid_sum": round(sum(top_per_unit.values()), 3),
-        "units_with_bids": len(top_per_unit),
+        "units_with_bids": len({unit for _, unit in top_per_unit}),
         "won": len(won),
         "won_sum": round(sum(b["cpm"] for b in won), 3),
         "currency": "/".join(currencies) or "",

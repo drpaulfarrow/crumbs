@@ -246,11 +246,12 @@ function prebidSite(host, pair) {
   const val = (S, f) => (S && S.found ? f(S) : null);
   const cur = (A && A.currency) || (B && B.currency) || "";
   const rows = [
+    ["Auctions run", S => S.auctions],
     ["Bidders asked", S => S.bidders_requested.length],
     ["Bidders that bid", S => S.bidders_bid.length],
     ["Bids received", S => S.bids],
     ["Ad slots with a bid", S => `${S.units_with_bids} of ${S.ad_units}`, true],
-    ["Top bid per slot, summed (CPM)", S => S.top_bid_sum, false, true],
+    ["Top bid per slot per auction, summed (CPM)", S => S.top_bid_sum, false, true],
     ["Average bid (CPM)", S => S.avg_cpm, false, true],
     ["Winning bids rendered", S => S.won],
     ["Bidders timed out", S => S.timed_out.length],
