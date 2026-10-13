@@ -14,7 +14,9 @@ from .blocklist import Blocklists, download_lists
 from .control import ControlServer, load_demo_config
 from .dns_server import start_dns
 from .engine import Engine, Lane
+from .browser_monitor import LaneMonitor
 from .launcher import launch_ab
+from .system_dns import system_dns_state
 from .proxy import LaneProxy
 from .upstream import Upstream
 
@@ -29,6 +31,10 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("--panel-port", type=int, default=5380)
     run.add_argument("--lane-a-port", type=int, default=8081)
     run.add_argument("--lane-b-port", type=int, default=8082)
+    run.add_argument("--cdp-a-port", type=int, default=9231, help="DevTools port window A is watched on")
+    run.add_argument("--cdp-b-port", type=int, default=9232, help="DevTools port window B is watched on")
+    run.add_argument("--browser", choices=["edge", "chrome"], default=None,
+                     help="browser for the A/B windows (default: 'browser' in demo_config.json, else edge)")
     run.add_argument("--dns-port", type=int, default=53)
     run.add_argument("--no-dns", action="store_true", help="don't start the system DNS lane")
     run.add_argument("--upstream", default="auto",
@@ -138,8 +144,21 @@ async def serve(args) -> None:
         system = engine.add_lane(Lane("system", "Whole PC (system DNS)", "dns", args.dns_port, enabled=True))
         closers += await start_dns(engine, system, ["127.0.0.1", "::1"])
 
+    monitors = {}
+    for lane, cdp_port in ((lane_a, args.cdp_a_port), (lane_b, args.cdp_b_port)):
+        lane.monitor = monitors[lane.name] = LaneMonitor(lane, cdp_port)
+        lane.monitor.start()
+    browser = args.browser or load_demo_config().get("browser", "edge")
+
     def launcher(page: str = args.page):
-        return launch_ab({"a": args.lane_a_port, "b": args.lane_b_port}, ab_urls(args.panel_port, page))
+        # Windows start blank; each monitor opens the pages once it's attached,
+        # so the live request view sees the very first request.
+        urls = ab_urls(args.panel_port, page)
+        started = launch_ab({"a": (args.lane_a_port, args.cdp_a_port),
+                             "b": (args.lane_b_port, args.cdp_b_port)}, [], prefer=browser)
+        for name in started:
+            monitors[name].open_urls([u.replace("{lane}", name) for u in urls])
+        return started
 
     control = ControlServer(engine, args.panel_port, launcher=launcher)
     closers.append(await control.start())
@@ -156,6 +175,8 @@ async def serve(args) -> None:
         print(f"  Lane {lane.name:<6} port {lane.port:<5} {status}")
     if engine.crumbs_warning:
         print(f"  WARNING: {engine.crumbs_warning}")
+    if "system" in engine.lanes and not system_dns_state()["switched"]:
+        print("  Whole PC lane: Windows isn't using it yet (panel button, or scripts\\windows\\system-dns-on.ps1).")
     print("  Ctrl+C to stop.\n")
 
     if not args.no_open:
@@ -170,6 +191,9 @@ async def serve(args) -> None:
     finally:
         for c in closers:
             c.close()
+        if system_dns_state()["switched"]:
+            print("\n  WARNING: Windows is still pointed at this demo's DNS server, so name lookups will fail.\n"
+                  "  Run scripts\\windows\\system-dns-off.ps1 as administrator to restore your DNS.\n")
 
 
 def main(argv=None) -> int:

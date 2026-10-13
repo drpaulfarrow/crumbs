@@ -331,3 +331,27 @@ def test_control_api_toggle_state_and_page_events():
         status, _, _ = await ctl.route("GET", "/static/../../README.md", b"", {}, None)
         assert status.startswith("404")
     asyncio.run(run())
+
+
+# --- browser monitor ------------------------------------------------------------
+
+def test_browser_outcomes_distinguish_crumbs_from_browser_blocking():
+    from crumbs_demo.browser_monitor import LaneMonitor, outcome_for
+
+    assert outcome_for("net::ERR_BLOCKED_BY_CLIENT", None) == "blocked by the browser itself"
+    assert outcome_for("net::ERR_NAME_NOT_RESOLVED", None) == "DNS lookup failed"
+    assert outcome_for("net::ERR_FAILED", "mixed-content") == "blocked by the browser itself"
+
+    async def run():
+        lane = Lane("b", "B", "proxy", 1, enabled=True)
+        lane.stats.last_verdict.update({"www.google-analytics.com": "blocked", "slow.example": "allowed"})
+        mon = LaneMonitor(lane, 0)
+        for rid, url in (("1", "https://www.google-analytics.com/g/collect"), ("2", "https://slow.example/x")):
+            await mon._handle({"method": "Network.requestWillBeSent", "sessionId": "s",
+                               "params": {"requestId": rid, "type": "Fetch", "request": {"url": url}}})
+            await mon._handle({"method": "Network.loadingFailed", "sessionId": "s",
+                               "params": {"requestId": rid, "errorText": "net::ERR_TUNNEL_CONNECTION_FAILED"}})
+        outcomes = [r["outcome"] for r in mon.requests]
+        assert outcomes == ["blocked by Crumbs", "proxy could not connect"]
+        assert mon.counts["crumbs"] == 1
+    asyncio.run(run())

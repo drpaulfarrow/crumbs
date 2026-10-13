@@ -8,7 +8,7 @@
   ],
   "prebid": {
     "bidder": "appnexus",
-    "timeout_ms": 1000,
+    "timeout_ms": 3000,
     "use_test_placement": false,
     "test_placement_id": 13144370,
     "_note": "Placements from the drpaulfarrow.com Prebid test page. use_test_placement switches every unit to placement 13144370.",
@@ -73,7 +73,8 @@
           ]
         }
       }
-    ]
+    ],
+    "_timeout_note": "Your live page uses 1000 ms; the demo adds a local proxy hop, so allow 3000 ms."
   },
   "page": {
     "title": "Marathon training: the 12-week plan",
@@ -83,7 +84,7 @@
   "probes": [
     {
       "label": "Xandr auction (ib.adnxs.com)",
-      "url": "https://ib.adnxs.com/getuid",
+      "url": "https://ib.adnxs.com/ut/v3",
       "kind": "ad"
     },
     {
@@ -135,5 +136,7 @@
   "xandr_account": {
     "member_id": 958,
     "publisher_id": 1557389
-  }
+  },
+  "browser": "edge",
+  "_browser_note": "edge or chrome. Windows A and B always use fresh profiles."
 }

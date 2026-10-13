@@ -26,12 +26,27 @@ Background research for the case study is in [`research/RESEARCH_BRIEF.md`](rese
 - The browser never resolves names itself. Every hostname goes through the filter, which is exactly what a DNS blocker sees.
 - HTTPS stays end-to-end encrypted; the lane only sees hostnames.
 
+**Live view of each window**
+- The panel watches both windows through the browser's DevTools port (9231 for A, 9232 for B, loopback only).
+- It shows the page each window has open, and every request with its full URL and outcome: OK, blocked by Crumbs, blocked by the browser itself, DNS failure, timeout.
+- Windows open blank, and the panel then opens the pages, so even the first request is recorded.
+- The A/B windows use **Edge** by default. Set `"browser": "chrome"` in `demo_config.json` to use Chrome instead.
+- Edge's built-in tracking prevention blocks some trackers on its own, even in window A. Those requests show up as "blocked by the browser itself", not as Crumbs.
+
 **Switching a lane**
 - Flipping a switch takes effect immediately: the lane closes its open connections so the browser reconnects through the new setting.
 
 **Whole-PC lane**
 - This lane is a real DNS server.
 - `system-dns-on.ps1` points Windows at it; `system-dns-off.ps1` puts everything back.
+
+## Updating
+
+```powershell
+git pull
+.venv\Scripts\python -m pip install -r requirements.txt
+Copy-Item demo_config.example.json demo_config.json -Force   # if you haven't customised it
+```
 
 ## Setup (once)
 
@@ -111,6 +126,12 @@ Set `"use_test_placement": true` to switch every unit to placement 13144370 inst
 
 ## Whole-PC lane (optional, needs admin)
 
+The Whole PC card says whether Windows is using the demo's DNS server.
+- **Point Windows here (admin)** runs `system-dns-on.ps1` after a Windows admin prompt.
+- **Restore Windows DNS (admin)** puts your DNS settings back.
+
+The scripts can also be run by hand:
+
 ```powershell
 # demo already running, in an admin PowerShell:
 scripts\windows\system-dns-on.ps1
@@ -139,4 +160,4 @@ python -m pytest -q tests
 python -m crumbs_demo run --no-dns --crumbs-resolver local   # macOS/Linux: no admin port needed
 ```
 
-`static/vendor/prebid-11.41.0-appnexus.js` is Prebid.js 11.41.0 with only the Xandr adapter, bundled with esbuild from the npm package.
+`static/vendor/hb-11.41.0.js` is Prebid.js 11.41.0 with only the Xandr adapter, bundled with esbuild from the npm package. It has a neutral file name because ad-block filters match URLs containing "prebid".

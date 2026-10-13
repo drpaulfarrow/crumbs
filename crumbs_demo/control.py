@@ -13,6 +13,7 @@ from urllib.parse import parse_qs, urlsplit
 
 from .blocklist import PACKAGE_DIR
 from .engine import Engine
+from .system_dns import run_elevated, system_dns_state
 
 log = logging.getLogger("crumbs.control")
 
@@ -96,7 +97,20 @@ class ControlServer:
         if method == "GET" and path.startswith("/static/"):
             return self._static(path[len("/static/"):])
         if method == "GET" and path == "/api/state":
-            return self._json(self.engine.state())
+            state = self.engine.state()
+            state["system_dns"] = system_dns_state()
+            return self._json(state)
+        if method == "GET" and path == "/api/verdicts":
+            # What the lane decided per hostname, so the test page can say
+            # "blocked by Crumbs" only when Crumbs really blocked it.
+            lane = self.engine.lanes.get(parse_qs(url.query).get("lane", [""])[0])
+            return self._json(lane.stats.last_verdict if lane else {})
+        if method == "POST" and path in ("/api/system-dns/on", "/api/system-dns/off"):
+            try:
+                run_elevated(path.endswith("/on"))
+            except Exception as e:
+                return self._json({"error": str(e)}, "500 Internal Server Error")
+            return self._json({"ok": True})
         if method == "GET" and path == "/api/demo-config":
             return self._json(load_demo_config())
 

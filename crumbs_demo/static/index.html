@@ -71,6 +71,17 @@ h3 { margin: 4px 0 0; font-size: 12px; color: var(--muted); text-transform: uppe
 .pill.allowed { background: var(--on-soft); color: var(--on); }
 .pill.ad { background: var(--ad-soft); color: var(--ad); }
 .cat { color: var(--muted); }
+.pill.crumbs { background: var(--block-soft); color: var(--block); }
+.pill.browser { background: var(--warn-bg); color: var(--warn-ink); }
+.pill.other { background: var(--bg); color: var(--muted); }
+.pill.ok { background: var(--on-soft); color: var(--on); }
+.tabs { display: flex; flex-direction: column; gap: 4px; }
+.tab { font-size: 12px; background: var(--bg); border-radius: 8px; padding: 6px 8px; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap; }
+.tab b { font-weight: 600; }
+.counts { display: flex; flex-wrap: wrap; gap: 6px; font-size: 12px; }
+.note { font-size: 12px; background: var(--warn-bg); color: var(--warn-ink); border-radius: 8px; padding: 8px 10px; }
+.note.ok { background: var(--on-soft); color: var(--on); }
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
 th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
 th { color: var(--muted); font-weight: 600; font-size: 12px; }
@@ -99,7 +110,7 @@ th { color: var(--muted); font-weight: 600; font-size: 12px; }
     <h3>Test page results (auctions and blocking probes, newest first)</h3>
     <p class="hint">From the A/B windows and from the Android emulator at <code>http://10.0.2.2:5380/test?lane=emulator</code>.</p>
     <table>
-      <thead><tr><th>Time</th><th>Lane</th><th>Crumbs</th><th>Auction</th><th>Blocked probes</th></tr></thead>
+      <thead><tr><th>Time</th><th>Lane</th><th>Crumbs</th><th>Auction</th><th>Not reachable</th></tr></thead>
       <tbody id="events"><tr><td colspan="5" class="empty">No test page runs yet.</td></tr></tbody>
     </table>
   </section>
@@ -119,10 +130,39 @@ function bars(rows, cls) {
     `<span class="n">${n}</span></div>`).join("") + "</div>";
 }
 
-function laneCard(l) {
+function browserSection(b) {
+  if (!b) return "";
+  if (!b.connected) {
+    return `<h3>In this window</h3><div class="empty">Not connected to the window yet (DevTools port ${b.cdp_port}). ` +
+      `Open the windows from the buttons above.</div>`;
+  }
+  const tabs = b.tabs.map(t => `<div class="tab" title="${esc(t.url)}"><b>${esc(t.title || "(loading)")}</b><br>${esc(t.url)}</div>`).join("");
+  const c = b.counts;
+  const reqs = b.requests.map(r =>
+    `<div title="${esc(r.url)}"><span class="pill ${r.kind}">${esc(r.outcome)}</span>` +
+    `<span class="cat">${esc(r.type)}</span> ${esc(r.url)}</div>`).join("");
+  return `<h3>In this window now</h3><div class="tabs">${tabs || '<div class="empty">No tabs.</div>'}</div>
+    <h3>Requests, as the browser saw them</h3>
+    <div class="counts"><span class="pill ok">OK ${c.ok}</span><span class="pill crumbs">blocked by Crumbs ${c.crumbs}</span>
+      <span class="pill browser">blocked by browser ${c.browser}</span><span class="pill other">other failures ${c.other}</span></div>
+    <div class="feed">${reqs || '<div class="empty">No requests yet.</div>'}</div>`;
+}
+
+function systemNote(l, sys) {
+  if (l.kind !== "dns" || !sys) return "";
+  if (sys.switched) {
+    return `<div class="note ok">Windows is using this DNS server. ` +
+      `<button data-sysdns="off">Restore Windows DNS (admin)</button></div>`;
+  }
+  return `<div class="note">Windows isn't using this DNS server yet, so it sees no traffic. ` +
+    (sys.supported ? `<button data-sysdns="on">Point Windows here (admin)</button>` : "") +
+    ` Chrome/Edge "Use secure DNS" also bypasses it.</div>`;
+}
+
+function laneCard(l, sys) {
   const s = l.stats;
   const pct = s.requests ? Math.round(s.blocked / s.requests * 100) : 0;
-  const unit = l.kind === "dns" ? "lookups" : "requests";
+  const unit = l.kind === "dns" ? "lookups" : "connections";
   const sub = l.kind === "dns" ? `DNS server on port ${l.port}` : `proxy on port ${l.port}`;
   const running = l.running ? "" : ` · <b style="color:var(--block)">not running: ${esc(l.error)}</b>`;
   const feed = s.recent.map(e =>
@@ -136,15 +176,17 @@ function laneCard(l) {
         aria-checked="${l.enabled}" data-toggle="${l.name}">
         <span class="txt">${l.enabled ? "ON" : "OFF"}</span><span class="knob"></span></button></span>
     </div>
+    ${systemNote(l, sys)}
     <div class="stats">
       <div class="stat"><div class="v">${s.requests}</div><div class="k">${unit}</div></div>
       <div class="stat block"><div class="v">${s.blocked}</div><div class="k">blocked (${pct}%)</div></div>
       <div class="stat"><div class="v">${s.tracker_domains_seen}</div><div class="k">tracker domains seen</div></div>
     </div>
     ${l.kind === "proxy" ? `<div class="lane-sub">Data downloaded: ${kb(s.bytes_down)} · uploaded: ${kb(s.bytes_up)}</div>` : ""}
+    ${browserSection(l.browser)}
     <h3>Blocked, by company</h3>${bars(s.blocked_companies, "")}
     <h3>Ad domains still loading</h3>${bars(s.ad_domains_seen, "ad")}
-    <h3>Live</h3><div class="feed">${feed || '<div class="empty">Waiting for traffic…</div>'}</div>
+    <h3>Hostnames, as the filter saw them</h3><div class="feed">${feed || '<div class="empty">Waiting for traffic…</div>'}</div>
   </section>`;
 }
 
@@ -154,7 +196,8 @@ function eventRow(e) {
   if (a.status === "won") auction = `Filled ${a.filled}/${a.total}: ` +
     (a.units || []).filter(u => u.status === "won").map(u => `$${Number(u.cpm).toFixed(2)} ${esc(u.size)}`).join(", ");
   else if (a.status) auction = esc(a.status) + (a.detail ? `: ${esc(a.detail)}` : "");
-  const blocked = (e.probes || []).filter(p => !p.reachable).map(p => esc(p.label));
+  const failed = (e.probes || []).filter(p => !p.reachable);
+  const blocked = failed.map(p => esc(p.label) + (p.outcome && p.outcome !== "blocked by Crumbs" ? ` (${esc(p.outcome)})` : ""));
   const total = (e.probes || []).length;
   return `<tr><td>${time(e.t)}</td><td>${esc(e.lane || "?")}</td><td>${esc(e.crumbs ?? "?")}</td>` +
     `<td>${auction}</td><td>${blocked.length}/${total}${blocked.length ? ": " + blocked.join(", ") : ""}</td></tr>`;
@@ -173,7 +216,9 @@ async function refresh() {
     const w = $("#warn");
     w.style.display = st.crumbs_warning ? "block" : "none";
     w.textContent = st.crumbs_warning || "";
-    $("#lanes").innerHTML = st.lanes.map(laneCard).join("");
+    if (!document.querySelector(".feed:hover")) {  // don't redraw under the pointer while reading
+      $("#lanes").innerHTML = st.lanes.map(l => laneCard(l, st.system_dns)).join("");
+    }
     $("#events").innerHTML = st.page_events.length
       ? st.page_events.map(eventRow).join("")
       : '<tr><td colspan="5" class="empty">No test page runs yet.</td></tr>';
@@ -187,6 +232,11 @@ document.addEventListener("click", async (ev) => {
     const on = t.getAttribute("aria-checked") !== "true";
     await fetch(`/api/lanes/${t.dataset.toggle}`, { method: "POST", body: JSON.stringify({ enabled: on }) });
     refresh();
+  }
+  const sd = ev.target.closest("[data-sysdns]");
+  if (sd) {
+    const r = await (await fetch(`/api/system-dns/${sd.dataset.sysdns}`, { method: "POST" })).json();
+    if (r.error) alert(r.error);
   }
 });
 async function launch(page) {

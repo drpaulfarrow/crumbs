@@ -39,6 +39,7 @@ class LaneStats:
     tracker_domains_seen: set = field(default_factory=set)
     ad_domains_seen: Counter = field(default_factory=Counter)
     recent: deque = field(default_factory=lambda: deque(maxlen=150))
+    last_verdict: dict = field(default_factory=dict)
 
     def to_dict(self) -> dict:
         return {
@@ -67,6 +68,8 @@ class Lane:
         self.error: str | None = None
         self.stats = LaneStats()
         self.on_toggle: list[Callable[[Lane], None]] = []
+        self.monitor = None  # BrowserMonitor for proxy lanes, once windows are launched
+        self.note: str | None = None
 
     def to_dict(self) -> dict:
         return {
@@ -77,7 +80,9 @@ class Lane:
             "enabled": self.enabled,
             "running": self.running,
             "error": self.error,
+            "note": self.note,
             "stats": self.stats.to_dict(),
+            "browser": self.monitor.to_dict() if self.monitor else None,
         }
 
 
@@ -170,6 +175,7 @@ class Engine:
             s.blocked += 1
             s.blocked_companies[d.company] += 1
             s.blocked_domains[d.host] += 1
+        s.last_verdict[d.host] = "blocked" if d.blocked else "allowed"
         s.recent.append({
             "t": time.time(),
             "host": d.host,
@@ -183,6 +189,8 @@ class Engine:
     def reset_stats(self) -> None:
         for lane in self.lanes.values():
             lane.stats = LaneStats()
+            if lane.monitor:
+                lane.monitor.reset()
         self.page_events.clear()
 
     def state(self) -> dict:
