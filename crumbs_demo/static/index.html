@@ -86,6 +86,13 @@ table { width: 100%; border-collapse: collapse; font-size: 13px; }
 th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
 th { color: var(--muted); font-weight: 600; font-size: 12px; }
 .hint { color: var(--muted); font-size: 12px; margin: 0; }
+.pb-site { margin-top: 10px; }
+.pb-site h4 { margin: 8px 0 4px; font-size: 14px; }
+.pb-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 760px) { .pb-grid { grid-template-columns: 1fr; } }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+.down { color: var(--block); font-weight: 600; }
+.up { color: var(--on); font-weight: 600; }
 @media (max-width: 520px) {
   header, main { padding-left: 16px; padding-right: 16px; }
   .warn { margin-left: 16px; margin-right: 16px; }
@@ -105,6 +112,14 @@ th { color: var(--muted); font-weight: 600; font-size: 12px; }
 </header>
 <div class="warn" id="warn"></div>
 <main id="lanes"></main>
+<main>
+  <section class="card wide">
+    <h3>Monetization seen in Prebid: window A (Crumbs off) vs window B (Crumbs on)</h3>
+    <p class="hint">Read live from each page's Prebid.js. Covers header bidding only: Google AdX, direct deals and
+      Amazon bids decide outside Prebid. CPMs are bids in the header auction, in the bid currency.</p>
+    <div id="prebid"><div class="empty">Open the A/B windows on a site that uses Prebid.</div></div>
+  </section>
+</main>
 <main>
   <section class="card wide">
     <h3>Test page results (auctions and blocking probes, newest first)</h3>
@@ -203,6 +218,74 @@ function eventRow(e) {
     `<td>${auction}</td><td>${blocked.length}/${total}${blocked.length ? ": " + blocked.join(", ") : ""}</td></tr>`;
 }
 
+function prebidByHost(lanes) {
+  const sites = {};
+  for (const l of lanes) {
+    if (!l.browser || !l.browser.prebid) continue;
+    for (const p of l.browser.prebid) {
+      let host = "";
+      try { host = new URL(p.url).host; } catch (e) { continue; }
+      if (!host) continue;
+      (sites[host] = sites[host] || {})[l.name] = p;
+    }
+  }
+  return sites;
+}
+
+function money(v, cur) { return v == null ? "–" : `${Number(v).toFixed(2)}${cur ? " " + esc(cur) : ""}`; }
+function delta(a, b, isMoney) {
+  if (a == null || b == null) return "";
+  const d = b - a;
+  if (Math.abs(d) < 1e-9) return "same";
+  const pct = a ? ` (${d > 0 ? "+" : ""}${Math.round(d / a * 100)}%)` : "";
+  return `<span class="${d < 0 ? "down" : "up"}">${d > 0 ? "+" : ""}${isMoney ? d.toFixed(2) : d}${pct}</span>`;
+}
+
+function prebidSite(host, pair) {
+  const A = pair.a && pair.a.summary, B = pair.b && pair.b.summary;
+  const val = (S, f) => (S && S.found ? f(S) : null);
+  const cur = (A && A.currency) || (B && B.currency) || "";
+  const rows = [
+    ["Bidders asked", S => S.bidders_requested.length],
+    ["Bidders that bid", S => S.bidders_bid.length],
+    ["Bids received", S => S.bids],
+    ["Ad slots with a bid", S => `${S.units_with_bids} of ${S.ad_units}`, true],
+    ["Top bid per slot, summed (CPM)", S => S.top_bid_sum, false, true],
+    ["Average bid (CPM)", S => S.avg_cpm, false, true],
+    ["Winning bids rendered", S => S.won],
+    ["Bidders timed out", S => S.timed_out.length],
+    ["Bidders errored", S => S.errored.length],
+  ];
+  const cell = (S, f, money_) => {
+    if (!S) return '<td class="num">not open</td>';
+    if (!S.found) return '<td class="num">no Prebid found</td>';
+    const v = f(S);
+    return `<td class="num">${money_ ? money(v, cur) : esc(v)}</td>`;
+  };
+  const body = rows.map(([label, f, text, money_]) =>
+    `<tr><td>${label}</td>${cell(A, f, money_)}${cell(B, f, money_)}` +
+    `<td class="num">${text ? "" : delta(val(A, f), val(B, f), money_)}</td></tr>`).join("");
+  const bidders = [...new Set([...(A && A.found ? A.bidders_requested.concat(Object.keys(A.by_bidder)) : []),
+                               ...(B && B.found ? B.bidders_requested.concat(Object.keys(B.by_bidder)) : [])])].sort();
+  const bcell = (S, name) => {
+    if (!S || !S.found) return '<td class="num">–</td>';
+    const e = S.by_bidder[name];
+    if (e) return `<td class="num">${money(e.max_cpm, cur)} top · ${e.bids} bid${e.bids > 1 ? "s" : ""}</td>`;
+    if (S.timed_out.includes(name)) return '<td class="num down">timed out</td>';
+    if (S.errored.includes(name)) return '<td class="num down">error</td>';
+    if (S.bidders_requested.includes(name)) return '<td class="num">no bid</td>';
+    return '<td class="num">not asked</td>';
+  };
+  const brows = bidders.map(n => `<tr><td>${esc(n)}</td>${bcell(A, n)}${bcell(B, n)}</tr>`).join("");
+  const version = [A, B].find(S => S && S.found);
+  return `<div class="pb-site"><h4>${esc(host)}${version ? ` <span class="cat">Prebid ${esc(version.versions.join(", "))}</span>` : ""}</h4>
+    <div class="pb-grid">
+      <table><thead><tr><th></th><th class="num">A · off</th><th class="num">B · on</th><th class="num">B vs A</th></tr></thead><tbody>${body}</tbody></table>
+      <table><thead><tr><th>Bidder</th><th class="num">A · off</th><th class="num">B · on</th></tr></thead>
+        <tbody>${brows || '<tr><td colspan="3" class="empty">No bidders yet.</td></tr>'}</tbody></table>
+    </div></div>`;
+}
+
 let busy = false;
 async function refresh() {
   if (busy) return;
@@ -218,6 +301,12 @@ async function refresh() {
     w.textContent = st.crumbs_warning || "";
     if (!document.querySelector(".feed:hover")) {  // don't redraw under the pointer while reading
       $("#lanes").innerHTML = st.lanes.map(l => laneCard(l, st.system_dns)).join("");
+    }
+    const sites = prebidByHost(st.lanes);
+    const hosts = Object.keys(sites).sort();
+    if (!document.querySelector("#prebid:hover")) {
+      $("#prebid").innerHTML = hosts.length ? hosts.map(h => prebidSite(h, sites[h])).join("")
+        : '<div class="empty">Open the A/B windows on a site that uses Prebid.</div>';
     }
     $("#events").innerHTML = st.page_events.length
       ? st.page_events.map(eventRow).join("")

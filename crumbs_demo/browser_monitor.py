@@ -19,6 +19,8 @@ from urllib.parse import urlsplit
 
 import websockets
 
+from .prebid_reader import PREBID_SNAPSHOT_JS, summarise
+
 log = logging.getLogger("crumbs.browser")
 
 # Chrome's error text -> what it means in this demo.
@@ -59,9 +61,28 @@ class LaneMonitor:
         self._queued: list[str] = []
         self._bounds: dict | None = None
         self._calls: dict[int, asyncio.Future] = {}
+        self._page_sessions: dict[str, str] = {}  # top-level tab targetId -> sessionId
+        self.prebid: dict[str, dict] = {}  # targetId -> {url, title, summary}
 
     def start(self) -> None:
         self._task = asyncio.ensure_future(self._run())
+        asyncio.ensure_future(self._poll_prebid())
+
+    async def _poll_prebid(self, every: float = 2.0) -> None:
+        """Read each tab's Prebid results every few seconds (lazy-loaded and refreshed slots keep bidding)."""
+        while True:
+            await asyncio.sleep(every)
+            if not self.connected:
+                continue
+            for target_id, session in list(self._page_sessions.items()):
+                reply = await self._call("Runtime.evaluate",
+                                         {"expression": PREBID_SNAPSHOT_JS, "returnByValue": True}, session=session)
+                value = ((reply or {}).get("result", {}).get("result", {}) or {}).get("value")
+                if value is None:
+                    continue
+                tab = self.tabs.get(target_id, {})
+                self.prebid[target_id] = {"url": tab.get("url", ""), "title": tab.get("title", ""),
+                                          "summary": summarise(value)}
 
     def open_urls(self, urls: list[str], bounds: dict | None = None) -> None:
         """Open tabs once attached, so their very first requests are captured.
@@ -98,14 +119,18 @@ class LaneMonitor:
         await self._call("Browser.setWindowBounds", {"windowId": window_id, "bounds": {"windowState": "normal"}})
         await self._call("Browser.setWindowBounds", {"windowId": window_id, "bounds": dict(bounds)})
 
-    async def _call(self, method: str, params: dict | None = None, timeout: float = 5.0) -> dict | None:
+    async def _call(self, method: str, params: dict | None = None, timeout: float = 5.0,
+                    session: str | None = None) -> dict | None:
         """Send a command and wait for its reply. Not for use inside _handle."""
         if not self._ws:
             return None
         msg_id = next(self._ids)
         future = asyncio.get_running_loop().create_future()
         self._calls[msg_id] = future
-        await self._ws.send(json.dumps({"id": msg_id, "method": method, "params": params or {}}))
+        msg = {"id": msg_id, "method": method, "params": params or {}}
+        if session:
+            msg["sessionId"] = session
+        await self._ws.send(json.dumps(msg))
         try:
             return await asyncio.wait_for(future, timeout)
         except asyncio.TimeoutError:
@@ -114,6 +139,7 @@ class LaneMonitor:
             self._calls.pop(msg_id, None)
 
     def reset(self) -> None:
+        self.prebid.clear()
         self.requests.clear()
         self._pending.clear()
         self.counts = {k: 0 for k in self.counts}
@@ -125,6 +151,7 @@ class LaneMonitor:
             "tabs": [t for t in self.tabs.values() if t.get("type") == "page"],
             "counts": self.counts,
             "requests": list(self.requests)[::-1][:80],
+            "prebid": [v for k, v in self.prebid.items() if k in self.tabs],
         }
 
     async def _run(self) -> None:
@@ -154,6 +181,7 @@ class LaneMonitor:
             self.connected = False
             self._ws = None
             self.tabs.clear()
+            self._page_sessions.clear()
             await asyncio.sleep(1.0)
 
     def _browser_ws_url(self) -> str:
@@ -178,9 +206,14 @@ class LaneMonitor:
             self.tabs[info["targetId"]] = {"type": "page", "url": info.get("url", ""), "title": info.get("title", "")}
         elif method == "Target.targetDestroyed":
             self.tabs.pop(params["targetId"], None)
+            self._page_sessions.pop(params["targetId"], None)
+            self.prebid.pop(params["targetId"], None)
         elif method == "Target.attachedToTarget":
             # Pages, plus their cross-site iframes (ad creatives) and workers.
             child = params["sessionId"]
+            info = params.get("targetInfo", {})
+            if info.get("type") == "page":
+                self._page_sessions[info["targetId"]] = child
             await self._send("Network.enable", {}, child)
             await self._send("Target.setAutoAttach",
                              {"autoAttach": True, "waitForDebuggerOnStart": True, "flatten": True}, child)

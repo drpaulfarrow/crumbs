@@ -33,6 +33,16 @@ Background research for the case study is in [`research/RESEARCH_BRIEF.md`](rese
 - The A/B windows use **Edge** by default. Set `"browser": "chrome"` in `demo_config.json` to use Chrome instead.
 - Edge's built-in tracking prevention blocks some trackers on its own, even in window A. Those requests show up as "blocked by the browser itself", not as Crumbs.
 
+**Monetization seen in Prebid**
+- Every 2 seconds the panel reads each window's Prebid.js results from the live page.
+- It shows them per site, with A and B side by side:
+  - bidders asked, bidders that bid, bids received;
+  - the top bid per ad slot added up (a rough header-bidding value of the page view);
+  - average bid, winning bids, and bidders that timed out or errored;
+  - a per-bidder comparison.
+- This works on any site running Prebid (the test page, and big news sites such as the Guardian and the Daily Mail).
+- It covers header bidding only. Google AdX, direct deals and Amazon bids decide outside Prebid. CPMs are bids in the header auction, not final prices.
+
 **Switching a lane**
 - Flipping a switch takes effect immediately: the lane closes its open connections so the browser reconnects through the new setting.
 

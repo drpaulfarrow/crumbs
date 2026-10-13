@@ -355,3 +355,28 @@ def test_browser_outcomes_distinguish_crumbs_from_browser_blocking():
         assert outcomes == ["blocked by Crumbs", "proxy could not connect"]
         assert mon.counts["crumbs"] == 1
     asyncio.run(run())
+
+
+# --- Prebid summary -------------------------------------------------------------
+
+def test_prebid_summary_combines_instances_and_tracks_failures():
+    from crumbs_demo.prebid_reader import summarise
+
+    assert summarise([]) == {"found": False}
+    s = summarise([
+        {"version": "v9.0.0", "ad_units": 2, "auctions": 1,
+         "bids": [{"unit": "top", "bidder": "appnexus", "cpm": 1.2, "currency": "GBP"},
+                  {"unit": "top", "bidder": "rubicon", "cpm": 2.0, "currency": "GBP"},
+                  {"unit": "mpu", "bidder": "appnexus", "cpm": 0.8, "currency": "GBP"}],
+         "won": [{"unit": "top", "bidder": "rubicon", "cpm": 2.0}],
+         "requested": ["appnexus", "rubicon", "criteo"], "timed_out": ["criteo"], "errored": [], "no_bid": []},
+        {"version": "v9.0.0", "ad_units": 1, "auctions": 1, "bids": [], "won": [],
+         "requested": ["ix"], "timed_out": [], "errored": ["ix"], "no_bid": []},
+    ])
+    assert s["bidders_requested"] == ["appnexus", "criteo", "ix", "rubicon"]
+    assert s["bidders_bid"] == ["appnexus", "rubicon"]
+    assert s["top_bid_sum"] == 2.8          # best bid per slot: 2.0 + 0.8
+    assert s["units_with_bids"] == 2 and s["ad_units"] == 3
+    assert s["timed_out"] == ["criteo"] and s["errored"] == ["ix"]
+    assert s["by_bidder"]["appnexus"] == {"bids": 2, "max_cpm": 1.2, "sum_cpm": 2.0}
+    assert s["currency"] == "GBP" and s["won_sum"] == 2.0
