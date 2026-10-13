@@ -1,0 +1,96 @@
+"""Open the two side-by-side browser windows, each wired to its own lane."""
+
+from __future__ import annotations
+
+import os
+import shutil
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+from .blocklist import CACHE_DIR
+
+PROFILE_DIR = CACHE_DIR / "profiles"
+
+
+def find_browser() -> str:
+    override = os.environ.get("CRUMBS_BROWSER")
+    if override:
+        return override
+    candidates = []
+    if os.name == "nt":
+        for base in (os.environ.get("PROGRAMFILES"), os.environ.get("PROGRAMFILES(X86)"),
+                     os.environ.get("LOCALAPPDATA")):
+            if base:
+                candidates += [Path(base, "Google/Chrome/Application/chrome.exe"),
+                               Path(base, "Microsoft/Edge/Application/msedge.exe")]
+    elif sys.platform == "darwin":
+        candidates += [Path("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"),
+                       Path("/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge")]
+    for c in candidates:
+        if c.is_file():
+            return str(c)
+    for name in ("google-chrome", "chromium", "chromium-browser", "chrome", "msedge"):
+        found = shutil.which(name)
+        if found:
+            return found
+    raise FileNotFoundError("No Chrome or Edge found. Set CRUMBS_BROWSER to the browser's path.")
+
+
+def screen_size() -> tuple[int, int]:
+    if os.name == "nt":
+        try:
+            import ctypes
+            user32 = ctypes.windll.user32
+            user32.SetProcessDPIAware()
+            # Work area excludes the taskbar.
+            class RECT(ctypes.Structure):
+                _fields_ = [("left", ctypes.c_long), ("top", ctypes.c_long),
+                            ("right", ctypes.c_long), ("bottom", ctypes.c_long)]
+            rect = RECT()
+            user32.SystemParametersInfoW(0x0030, 0, ctypes.byref(rect), 0)
+            return rect.right - rect.left, rect.bottom - rect.top
+        except Exception:
+            pass
+    return 1920, 1040
+
+
+def browser_args(profile: Path, proxy_port: int, x: int, width: int, height: int, urls: list[str]) -> list[str]:
+    # Chrome never proxies loopback, so the local test page loads directly while
+    # everything it pulls in from the internet goes through the lane.
+    return [
+        f"--user-data-dir={profile}",
+        f"--proxy-server=http://127.0.0.1:{proxy_port}",
+        "--no-first-run",
+        "--no-default-browser-check",
+        "--disable-sync",
+        "--disable-features=PrivacySandboxSettings4,OptimizationHints,MediaRouter",
+        f"--window-position={x},0",
+        f"--window-size={width},{height}",
+        "--new-window",
+        *urls,
+    ]
+
+
+def launch_ab(lanes: dict, urls: list[str]) -> list[str]:
+    """lanes: {"a": port, "b": port}. Window A on the left, B on the right.
+
+    Every launch gets brand-new profiles, so no cached tracker scripts or cookies
+    carry over between runs and a still-open window can't swallow the new flags.
+    """
+    browser = find_browser()
+    width, height = screen_size()
+    half = width // 2
+    stamp = time.strftime("%Y%m%d-%H%M%S")
+    for old in PROFILE_DIR.glob("lane-*") if PROFILE_DIR.exists() else []:
+        shutil.rmtree(old, ignore_errors=True)  # best effort; open windows keep theirs
+    started = []
+    for i, (name, port) in enumerate(lanes.items()):
+        profile = PROFILE_DIR / f"lane-{name}-{stamp}"
+        profile.mkdir(parents=True, exist_ok=True)
+        lane_urls = [u.replace("{lane}", name) for u in urls]
+        subprocess.Popen([browser, *browser_args(profile, port, i * half, half, height, lane_urls)],
+                         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        started.append(name)
+    return started

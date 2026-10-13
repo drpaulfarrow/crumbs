@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crumbs A/B Control</title>
+<style>
+:root {
+  --bg: #f6f7f9; --card: #ffffff; --ink: #16181d; --muted: #646b78; --line: #e3e6eb;
+  --on: #1f8a5b; --on-soft: #e3f4ec; --off: #9aa1ad; --block: #c2410c; --block-soft: #fdeee6;
+  --ad: #2459c7; --ad-soft: #e7eefc; --warn-bg: #fff6db; --warn-ink: #7a5800;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111317; --card: #1a1d23; --ink: #eceef2; --muted: #9aa1ad; --line: #2a2e36;
+    --on: #3ccf8e; --on-soft: #143326; --off: #5c6370; --block: #fb923c; --block-soft: #3a2214;
+    --ad: #7aa5ff; --ad-soft: #1a2647; --warn-bg: #3a2f0b; --warn-ink: #f5d77a;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink);
+  font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+header { padding: 18px 24px 8px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+h1 { font-size: 20px; margin: 0; letter-spacing: -0.01em; }
+.badge { font-size: 12px; padding: 3px 9px; border-radius: 999px; background: var(--card);
+  border: 1px solid var(--line); color: var(--muted); }
+.spacer { flex: 1; }
+button { font: inherit; border: 1px solid var(--line); background: var(--card); color: var(--ink);
+  padding: 7px 12px; border-radius: 8px; cursor: pointer; }
+button:hover { border-color: var(--muted); }
+.warn { margin: 6px 24px 0; padding: 10px 14px; border-radius: 8px; background: var(--warn-bg);
+  color: var(--warn-ink); display: none; }
+main { padding: 12px 24px 32px; display: grid; gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px;
+  display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.card.wide { grid-column: 1 / -1; }
+.lane-head { display: flex; align-items: center; gap: 12px; }
+.lane-title { font-weight: 600; font-size: 15px; }
+.lane-sub { color: var(--muted); font-size: 12px; }
+.switch-wrap { margin-left: auto; display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 13px; }
+.switch { position: relative; width: 112px; height: 40px; border-radius: 999px;
+  background: var(--off); border: none; color: #fff; font-weight: 700; padding: 0; transition: background .2s; }
+.switch[aria-checked="true"] { background: var(--on); }
+.switch .knob { position: absolute; top: 4px; left: 4px; width: 32px; height: 32px; border-radius: 50%;
+  background: #fff; transition: left .2s; }
+.switch[aria-checked="true"] .knob { left: 76px; }
+.switch .txt { position: absolute; top: 0; bottom: 0; display: flex; align-items: center; font-size: 12px; }
+.switch[aria-checked="true"] .txt { left: 22px; }
+.switch[aria-checked="false"] .txt { right: 22px; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.stat { background: var(--bg); border-radius: 10px; padding: 8px 10px; }
+.stat .v { font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.stat .k { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+.stat.block .v { color: var(--block); }
+h3 { margin: 4px 0 0; font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.bars { display: flex; flex-direction: column; gap: 4px; }
+.bar { display: grid; grid-template-columns: 130px 1fr 34px; gap: 8px; align-items: center; font-size: 12px; }
+.bar .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bar .track { height: 8px; background: var(--bg); border-radius: 4px; overflow: hidden; }
+.bar .fill { height: 100%; background: var(--block); border-radius: 4px; }
+.bar.ad .fill { background: var(--ad); }
+.bar .n { text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
+.empty { color: var(--muted); font-size: 12px; }
+.feed { max-height: 220px; overflow: auto; font: 12px/1.5 ui-monospace, SFMono-Regular, Consolas, monospace;
+  border-top: 1px solid var(--line); padding-top: 6px; }
+.feed div { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pill { display: inline-block; min-width: 54px; font-size: 10px; font-weight: 700; text-align: center;
+  border-radius: 4px; padding: 0 4px; margin-right: 6px; }
+.pill.blocked { background: var(--block-soft); color: var(--block); }
+.pill.allowed { background: var(--on-soft); color: var(--on); }
+.pill.ad { background: var(--ad-soft); color: var(--ad); }
+.cat { color: var(--muted); }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--muted); font-weight: 600; font-size: 12px; }
+.hint { color: var(--muted); font-size: 12px; margin: 0; }
+@media (max-width: 520px) {
+  header, main { padding-left: 16px; padding-right: 16px; }
+  .warn { margin-left: 16px; margin-right: 16px; }
+  .bar { grid-template-columns: 96px 1fr 30px; }
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>Crumbs A/B</h1>
+  <span class="badge" id="mode">…</span>
+  <span class="badge" id="lists">…</span>
+  <span class="spacer"></span>
+  <button id="launch-sites">Open A/B: real sites</button>
+  <button id="launch-test">Open A/B: Prebid test page</button>
+  <button id="reset">Reset stats</button>
+</header>
+<div class="warn" id="warn"></div>
+<main id="lanes"></main>
+<main>
+  <section class="card wide">
+    <h3>Test page results (auctions and blocking probes, newest first)</h3>
+    <p class="hint">From the A/B windows and from the Android emulator at <code>http://10.0.2.2:5380/test?lane=emulator</code>.</p>
+    <table>
+      <thead><tr><th>Time</th><th>Lane</th><th>Crumbs</th><th>Auction</th><th>Blocked probes</th></tr></thead>
+      <tbody id="events"><tr><td colspan="5" class="empty">No test page runs yet.</td></tr></tbody>
+    </table>
+  </section>
+</main>
+<script>
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const kb = (n) => n > 1048576 ? (n / 1048576).toFixed(1) + " MB" : Math.round(n / 1024) + " KB";
+const time = (t) => new Date(t * 1000).toLocaleTimeString();
+
+function bars(rows, cls) {
+  if (!rows.length) return '<div class="empty">None yet.</div>';
+  const max = Math.max(...rows.map(r => r[1]));
+  return '<div class="bars">' + rows.map(([name, n]) =>
+    `<div class="bar ${cls}"><span class="name" title="${esc(name)}">${esc(name)}</span>` +
+    `<span class="track"><span class="fill" style="width:${(n / max * 100).toFixed(1)}%;display:block"></span></span>` +
+    `<span class="n">${n}</span></div>`).join("") + "</div>";
+}
+
+function laneCard(l) {
+  const s = l.stats;
+  const pct = s.requests ? Math.round(s.blocked / s.requests * 100) : 0;
+  const unit = l.kind === "dns" ? "lookups" : "requests";
+  const sub = l.kind === "dns" ? `DNS server on port ${l.port}` : `proxy on port ${l.port}`;
+  const running = l.running ? "" : ` · <b style="color:var(--block)">not running: ${esc(l.error)}</b>`;
+  const feed = s.recent.map(e =>
+    `<div><span class="pill ${e.verdict}">${e.verdict}</span>` +
+    `${e.category === "ad" ? '<span class="pill ad">ad</span>' : ""}` +
+    `${esc(e.host)} <span class="cat">${esc(e.company || "")}${e.note ? " · " + esc(e.note) : ""}</span></div>`).join("");
+  return `<section class="card" data-lane="${l.name}">
+    <div class="lane-head">
+      <div><div class="lane-title">${esc(l.label)}</div><div class="lane-sub">${sub}${running}</div></div>
+      <span class="switch-wrap">Crumbs <button class="switch" role="switch" aria-label="Crumbs for ${esc(l.label)}"
+        aria-checked="${l.enabled}" data-toggle="${l.name}">
+        <span class="txt">${l.enabled ? "ON" : "OFF"}</span><span class="knob"></span></button></span>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="v">${s.requests}</div><div class="k">${unit}</div></div>
+      <div class="stat block"><div class="v">${s.blocked}</div><div class="k">blocked (${pct}%)</div></div>
+      <div class="stat"><div class="v">${s.tracker_domains_seen}</div><div class="k">tracker domains seen</div></div>
+    </div>
+    ${l.kind === "proxy" ? `<div class="lane-sub">Data downloaded: ${kb(s.bytes_down)} · uploaded: ${kb(s.bytes_up)}</div>` : ""}
+    <h3>Blocked, by company</h3>${bars(s.blocked_companies, "")}
+    <h3>Ad domains still loading</h3>${bars(s.ad_domains_seen, "ad")}
+    <h3>Live</h3><div class="feed">${feed || '<div class="empty">Waiting for traffic…</div>'}</div>
+  </section>`;
+}
+
+function eventRow(e) {
+  const a = e.auction || {};
+  let auction = "";
+  if (a.status === "won") auction = `Won: $${Number(a.cpm).toFixed(2)} CPM ${esc(a.size || "")} (creative ${esc(a.creativeId || "?")})`;
+  else if (a.status) auction = esc(a.status) + (a.detail ? `: ${esc(a.detail)}` : "");
+  const blocked = (e.probes || []).filter(p => !p.reachable).map(p => esc(p.label));
+  const total = (e.probes || []).length;
+  return `<tr><td>${time(e.t)}</td><td>${esc(e.lane || "?")}</td><td>${esc(e.crumbs ?? "?")}</td>` +
+    `<td>${auction}</td><td>${blocked.length}/${total}${blocked.length ? ": " + blocked.join(", ") : ""}</td></tr>`;
+}
+
+let busy = false;
+async function refresh() {
+  if (busy) return;
+  busy = true;
+  try {
+    const st = await (await fetch("/api/state")).json();
+    $("#mode").textContent = st.mode === "crumbs"
+      ? `Crumbs ON = real Crumbs resolver (${st.crumbs_resolver})`
+      : "Crumbs ON = local EasyPrivacy list";
+    $("#lists").textContent = `${st.lists.trackers.toLocaleString()} tracker domains · ${st.lists.sources.trackers}`;
+    const w = $("#warn");
+    w.style.display = st.crumbs_warning ? "block" : "none";
+    w.textContent = st.crumbs_warning || "";
+    $("#lanes").innerHTML = st.lanes.map(laneCard).join("");
+    $("#events").innerHTML = st.page_events.length
+      ? st.page_events.map(eventRow).join("")
+      : '<tr><td colspan="5" class="empty">No test page runs yet.</td></tr>';
+  } catch (e) { /* server restarting */ }
+  busy = false;
+}
+
+document.addEventListener("click", async (ev) => {
+  const t = ev.target.closest("[data-toggle]");
+  if (t) {
+    const on = t.getAttribute("aria-checked") !== "true";
+    await fetch(`/api/lanes/${t.dataset.toggle}`, { method: "POST", body: JSON.stringify({ enabled: on }) });
+    refresh();
+  }
+});
+async function launch(page) {
+  const r = await (await fetch(`/api/launch?page=${page}`, { method: "POST" })).json();
+  if (r.error) alert(r.error);
+}
+$("#launch-sites").onclick = () => launch("site");
+$("#launch-test").onclick = () => launch("test");
+$("#reset").onclick = async () => { await fetch("/api/reset", { method: "POST" }); refresh(); };
+refresh();
+setInterval(refresh, 1000);
+</script>
+</body>
+</html>

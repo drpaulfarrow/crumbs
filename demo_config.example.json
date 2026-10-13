@@ -1,0 +1,92 @@
+{
+  "_comment": "Copy to demo_config.json and fill in your Microsoft Monetize placement IDs and keywords.",
+  "crumbs_resolver": "2.152.74.48,2.152.74.254",
+  "_crumbs_resolver_note": "From the Crumbs router setup wizard. Set to \"\" to use the local EasyPrivacy list instead. Run `python -m crumbs_demo check-crumbs` on the network you'll demo from.",
+  "ab_sites": [
+    "https://www.theguardian.com/uk",
+    "https://www.dailymail.co.uk/home/index.html"
+  ],
+  "prebid": {
+    "bidder": "appnexus",
+    "timeout_ms": 1500,
+    "use_test_placement": true,
+    "test_placement_id": 13144370,
+    "ad_units": [
+      {
+        "code": "ad-mpu",
+        "sizes": [
+          [
+            300,
+            250
+          ]
+        ],
+        "placement_id": 0,
+        "keywords": {
+          "genre": [
+            "running"
+          ],
+          "crumbs_demo": [
+            "true"
+          ]
+        }
+      }
+    ]
+  },
+  "page": {
+    "title": "Marathon training: the 12-week plan",
+    "section": "Sport / Running",
+    "site_keywords": "running, marathon, training, fitness"
+  },
+  "probes": [
+    {
+      "label": "Xandr auction (ib.adnxs.com)",
+      "url": "https://ib.adnxs.com/getuid",
+      "kind": "ad"
+    },
+    {
+      "label": "Google ad server (GPT)",
+      "url": "https://securepubads.g.doubleclick.net/tag/js/gpt.js",
+      "kind": "ad"
+    },
+    {
+      "label": "Google Analytics",
+      "url": "https://www.google-analytics.com/analytics.js",
+      "kind": "tracker"
+    },
+    {
+      "label": "Google Tag Manager",
+      "url": "https://www.googletagmanager.com/gtag/js",
+      "kind": "tracker"
+    },
+    {
+      "label": "Meta Pixel",
+      "url": "https://connect.facebook.net/en_US/fbevents.js",
+      "kind": "tracker"
+    },
+    {
+      "label": "Comscore",
+      "url": "https://sb.scorecardresearch.com/beacon.js",
+      "kind": "tracker"
+    },
+    {
+      "label": "Criteo",
+      "url": "https://static.criteo.net/js/ld/publishertag.js",
+      "kind": "ad"
+    },
+    {
+      "label": "The Trade Desk sync",
+      "url": "https://match.adsrvr.org/track/cmf/generic",
+      "kind": "tracker"
+    },
+    {
+      "label": "LiveRamp",
+      "url": "https://idsync.rlcdn.com/",
+      "kind": "tracker"
+    },
+    {
+      "label": "Control: Wikipedia",
+      "url": "https://www.wikipedia.org/static/favicon/wikipedia.ico",
+      "kind": "control"
+    }
+  ]
+}

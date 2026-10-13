@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crumbs Test Article</title>
+<style>
+:root { --bg: #ffffff; --ink: #1b1d22; --muted: #666d79; --line: #e4e6ea; --panel: #f5f6f8;
+  --on: #1f8a5b; --off: #8b929e; --block: #c2410c; --ok: #1f8a5b; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #131519; --ink: #eceef2; --muted: #9aa1ad; --line: #2a2e36;
+    --panel: #1b1e24; --on: #3ccf8e; --off: #5c6370; --block: #fb923c; --ok: #3ccf8e; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink);
+  font: 16px/1.6 Georgia, "Times New Roman", serif; }
+.ribbon { position: sticky; top: 0; z-index: 2; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+  padding: 8px 16px; color: #fff; background: var(--off);
+  font: 600 14px/1.3 system-ui, "Segoe UI", sans-serif; }
+.ribbon.on { background: var(--on); }
+.ribbon button { margin-left: auto; font: inherit; font-weight: 500; border: 1px solid rgba(255,255,255,.6);
+  background: transparent; color: #fff; border-radius: 6px; padding: 3px 10px; cursor: pointer; }
+.wrap { max-width: 1040px; margin: 0 auto; padding: 20px 16px 40px; display: grid; gap: 28px;
+  grid-template-columns: minmax(0, 1fr) 300px; }
+@media (max-width: 760px) { .wrap { grid-template-columns: 1fr; } }
+.kicker { font: 600 12px system-ui, sans-serif; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+h1 { font-size: 32px; line-height: 1.15; margin: 6px 0 12px; }
+.adslot { font: 11px system-ui, sans-serif; color: var(--muted); }
+.adslot .label { text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px; }
+.adbox { width: 300px; height: 250px; max-width: 100%; border: 1px dashed var(--line); display: flex;
+  align-items: center; justify-content: center; text-align: center; padding: 12px; background: var(--panel); }
+.adbox iframe { border: 0; display: block; }
+.panel { font: 13px/1.45 system-ui, "Segoe UI", sans-serif; background: var(--panel); border: 1px solid var(--line);
+  border-radius: 10px; padding: 12px 14px; margin-top: 16px; }
+.panel h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 8px; }
+.probe { display: flex; justify-content: space-between; gap: 8px; padding: 2px 0; }
+.probe b.blocked { color: var(--block); } .probe b.ok { color: var(--ok); }
+.result { font-size: 15px; font-weight: 600; }
+code { font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="ribbon" id="ribbon"><span id="ribbon-text">Loading…</span><button onclick="location.reload()">Run again</button></div>
+<div class="wrap">
+  <article>
+    <div class="kicker" id="section">Sport</div>
+    <h1 id="headline">Test article</h1>
+    <p>This page is a stand-in publisher article. It runs a real Prebid.js auction against Microsoft Monetize (Xandr)
+      using the placement and keywords in <code>demo_config.json</code>, and checks which ad and tracking
+      domains this device can reach.</p>
+    <p>Run it with Crumbs on and with Crumbs off. The keyword targeting comes from the page itself (contextual),
+      so if the auction call gets through, those campaigns can still win. What Crumbs takes away is cross-site
+      identity: tracking pixels, ID syncs and analytics.</p>
+    <p>Long-distance training rewards patience. Most plans build mileage by about ten percent a week, with a
+      cut-back week every third or fourth week, and a taper over the final two to three weeks before race day.</p>
+    <div class="panel">
+      <h2>Monetization result</h2>
+      <div class="result" id="auction-result">Auction running…</div>
+      <div id="auction-detail" style="color:var(--muted);margin-top:4px"></div>
+    </div>
+    <div class="panel">
+      <h2>What this device can reach</h2>
+      <div id="probes">Checking…</div>
+    </div>
+  </article>
+  <aside>
+    <div class="adslot"><div class="label">Advertisement</div><div class="adbox" id="ad-mpu">Waiting for auction…</div></div>
+  </aside>
+</div>
+<script>
+const params = new URLSearchParams(location.search);
+const LANE = params.get("lane") || "unknown";
+const API = location.origin;
+let crumbsState = "unknown";
+
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+async function laneState() {
+  try {
+    const st = await (await fetch(`${API}/api/state`)).json();
+    const lane = st.lanes.find(l => l.name === LANE);
+    if (lane) return lane.enabled ? "on" : "off";
+  } catch (e) {}
+  return "unknown";
+}
+
+function setRibbon(text, on) {
+  document.getElementById("ribbon-text").textContent = text;
+  document.getElementById("ribbon").classList.toggle("on", !!on);
+}
+
+async function probe(p, timeoutMs = 4000) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+  const started = performance.now();
+  try {
+    await fetch(p.url + (p.url.includes("?") ? "&" : "?") + "crumbs_probe=" + Date.now(),
+      { mode: "no-cors", cache: "no-store", credentials: "omit", signal: ctrl.signal });
+    return { ...p, reachable: true, ms: Math.round(performance.now() - started) };
+  } catch (e) {
+    return { ...p, reachable: false, error: e.name };
+  } finally { clearTimeout(timer); }
+}
+
+function loadPrebid() {
+  return new Promise((resolve, reject) => {
+    const s = document.createElement("script");
+    s.src = "/static/vendor/prebid-11.41.0-appnexus.js";
+    s.onload = resolve;
+    s.onerror = () => reject(new Error("Prebid bundle failed to load"));
+    document.head.appendChild(s);
+  });
+}
+
+function runAuction(cfg) {
+  return new Promise((resolve) => {
+    const pb = cfg.prebid;
+    const errors = [];
+    const units = pb.ad_units.map(u => ({
+      code: u.code,
+      mediaTypes: { banner: { sizes: u.sizes } },
+      bids: [{
+        bidder: pb.bidder,
+        params: {
+          placementId: pb.use_test_placement || !u.placement_id ? pb.test_placement_id : u.placement_id,
+          keywords: u.keywords || {},
+        },
+      }],
+    }));
+    window.pbjs = window.pbjs || { que: [] };
+    pbjs.que.push(() => {
+      pbjs.setConfig({
+        ortb2: { site: { keywords: cfg.page.site_keywords, name: "Crumbs demo", page: location.href } },
+        userSync: { syncEnabled: true, filterSettings: { all: { bidders: "*", filter: "include" } } },
+      });
+      pbjs.onEvent("bidderError", (e) => errors.push(e?.error?.status ? `Xandr returned HTTP ${e.error.status}` : "request to Xandr failed (blocked or offline)"));
+      pbjs.onEvent("bidTimeout", () => errors.push("bid timeout"));
+      pbjs.addAdUnits(units);
+      pbjs.requestBids({
+        timeout: pb.timeout_ms,
+        bidsBackHandler: (responses) => {
+          const code = units[0].code;
+          const bids = (responses[code] && responses[code].bids) || [];
+          const best = bids.sort((a, b) => b.cpm - a.cpm)[0];
+          const box = document.getElementById(code);
+          if (best) {
+            box.textContent = "";
+            box.style.padding = "0";
+            const frame = document.createElement("iframe");
+            frame.width = best.width; frame.height = best.height; frame.scrolling = "no";
+            box.appendChild(frame);
+            pbjs.renderAd(frame.contentWindow.document, best.adId);
+            resolve({ status: "won", cpm: best.cpm, size: `${best.width}x${best.height}`,
+              creativeId: best.creativeId, dealId: best.dealId || null, bidder: best.bidderCode,
+              placement: units[0].bids[0].params.placementId, test: !!pb.use_test_placement });
+          } else {
+            box.textContent = "No ad";
+            resolve({ status: errors.length ? "auction blocked" : "no bid",
+              detail: errors.join(", ") || "Monetize returned no bid", placement: units[0].bids[0].params.placementId });
+          }
+        },
+      });
+    });
+  });
+}
+
+async function main() {
+  const cfg = await (await fetch(`${API}/api/demo-config`)).json();
+  document.getElementById("headline").textContent = cfg.page.title;
+  document.getElementById("section").textContent = cfg.page.section;
+  crumbsState = await laneState();
+  const label = LANE === "a" ? "Window A" : LANE === "b" ? "Window B" : `Lane: ${LANE}`;
+  setRibbon(`${label} · Crumbs ${crumbsState === "unknown" ? "status set on the device" : crumbsState.toUpperCase()}`,
+    crumbsState === "on");
+
+  const probesPromise = Promise.all(cfg.probes.map(p => probe(p)));
+  let auction;
+  try {
+    await loadPrebid();
+    auction = await runAuction(cfg);
+  } catch (e) {
+    auction = { status: "error", detail: e.message };
+  }
+  const probes = await probesPromise;
+
+  const r = document.getElementById("auction-result");
+  r.textContent = auction.status === "won"
+    ? `Ad served: $${Number(auction.cpm).toFixed(2)} CPM (${auction.size})`
+    : (auction.status === "auction blocked" ? "No ad: the auction request was blocked" : `No ad: ${auction.status}`);
+  document.getElementById("auction-detail").textContent = auction.status === "won"
+    ? `Placement ${auction.placement}${auction.test ? " (Prebid public test placement)" : ""} · creative ${auction.creativeId}${auction.dealId ? " · deal " + auction.dealId : ""}`
+    : (auction.detail || "");
+
+  // If even the control site fails, the network is down: don't call anything "blocked".
+  const networkOk = probes.filter(p => p.kind === "control").every(p => p.reachable);
+  document.getElementById("probes").innerHTML =
+    (networkOk ? "" : '<div class="probe"><b class="blocked">Network problem: the control site is unreachable, so these results are unreliable.</b></div>') +
+    probes.map(p => `<div class="probe"><span>${esc(p.label)}</span>${p.reachable
+      ? '<b class="ok">reachable</b>' : `<b class="blocked">${networkOk ? "blocked" : "unreachable"}</b>`}</div>`).join("");
+
+  if (crumbsState === "unknown") {
+    // On the emulator we can't read the app's switch, so infer it from what got blocked.
+    const trackersBlocked = probes.filter(p => p.kind === "tracker" && !p.reachable).length;
+    const controlOk = probes.filter(p => p.kind === "control").every(p => p.reachable);
+    crumbsState = !controlOk ? "no network" : trackersBlocked > 0 ? "on (inferred)" : "off (inferred)";
+    setRibbon(`${label} · Crumbs ${crumbsState}`, crumbsState.startsWith("on"));
+  }
+
+  fetch(`${API}/api/page-event`, {
+    method: "POST",
+    body: JSON.stringify({ lane: LANE, crumbs: crumbsState, auction,
+      probes: probes.map(p => ({ label: p.label, kind: p.kind, reachable: p.reachable })) }),
+  }).catch(() => {});
+}
+main();
+</script>
+</body>
+</html>
