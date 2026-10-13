@@ -151,7 +151,8 @@ function laneCard(l) {
 function eventRow(e) {
   const a = e.auction || {};
   let auction = "";
-  if (a.status === "won") auction = `Won: $${Number(a.cpm).toFixed(2)} CPM ${esc(a.size || "")} (creative ${esc(a.creativeId || "?")})`;
+  if (a.status === "won") auction = `Filled ${a.filled}/${a.total}: ` +
+    (a.units || []).filter(u => u.status === "won").map(u => `$${Number(u.cpm).toFixed(2)} ${esc(u.size)}`).join(", ");
   else if (a.status) auction = esc(a.status) + (a.detail ? `: ${esc(a.detail)}` : "");
   const blocked = (e.probes || []).filter(p => !p.reachable).map(p => esc(p.label));
   const total = (e.probes || []).length;

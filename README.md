@@ -80,28 +80,27 @@ The control panel opens at <http://127.0.0.1:5380/>. Its buttons reopen the A/B 
 
 ## Your Monetize placement and keyword targeting
 
-Edit `demo_config.json`:
+`demo_config.example.json` already uses the setup from the drpaulfarrow.com Prebid test page:
 
-```json
-"prebid": {
-  "bidder": "appnexus",
-  "use_test_placement": false,
-  "ad_units": [
-    { "code": "ad-mpu", "sizes": [[300, 250]], "placement_id": 12345678,
-      "keywords": { "genre": ["running"], "crumbs_demo": ["true"] } }
-  ]
-}
-```
+| | |
+|---|---|
+| Publisher | 1557389 |
+| Live placement | **22983564** |
+| Ad units | leaderboard 728x90, medium rectangle 300x250, wide skyscraper 160x600 |
+| Bidder / timeout | `appnexus`, 1000 ms |
+| Keywords per ad unit | `genre=running`, `crumbs_demo=true` |
 
-**In Monetize**
-1. Create a 300x250 placement.
-2. Create a line item targeting the key-value `genre=running` (or `crumbs_demo=true`), with a creative and a CPM.
-3. Prebid's Xandr adapter (`appnexus`) sends the keywords on the ad request, as you'd see in the network tab.
+**Before relying on it:**
+- **Check that 22983564 returns live bids.** On drpaulfarrow.com the "Mock Bids" toggle was on, so the prices shown there were mocked.
+  - Turn mock off on that page first.
+  - If you get no bids, set `"use_test_placement": true` to fall back to Prebid's public test placement 13144370. It always returns a sample ad.
+- **Member ID 958** shown on that page is also the ID used in Prebid's sample responses. Bids here are requested by placement ID only, so it isn't needed.
 
-**Things to check before the meeting**
-- The test page runs on `127.0.0.1` / `10.0.2.2`. If Monetize filters requests by referring domain, allow those for the demo placement, or set the line item to run on any domain.
+**In Monetize:**
+- Make sure placement 22983564 accepts all three sizes.
+- Add line items targeting the key-value `genre=running` (or `crumbs_demo=true`), each with a creative and a CPM, so you control what wins.
+- The test page runs on `127.0.0.1` / `10.0.2.2`. If the placement or line items are limited to drpaulfarrow.com, allow any domain for the demo.
 - If the adapter has been renamed, change `bidder`.
-- With `"use_test_placement": true`, Prebid's public test placement `13144370` is used instead. It always returns the same sample ad, which is handy as a sanity check.
 
 ## Real Crumbs app in the Android emulator
 

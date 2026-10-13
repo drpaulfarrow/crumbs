@@ -27,8 +27,12 @@ body { margin: 0; background: var(--bg); color: var(--ink);
 h1 { font-size: 32px; line-height: 1.15; margin: 6px 0 12px; }
 .adslot { font: 11px system-ui, sans-serif; color: var(--muted); }
 .adslot .label { text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px; }
-.adbox { width: 300px; height: 250px; max-width: 100%; border: 1px dashed var(--line); display: flex;
+.adbox { max-width: 100%; border: 1px dashed var(--line); display: flex; overflow: hidden;
   align-items: center; justify-content: center; text-align: center; padding: 12px; background: var(--panel); }
+.adslot { margin-bottom: 20px; }
+.top-slot { max-width: 1040px; margin: 16px auto 0; padding: 0 16px; display: flex; flex-direction: column; align-items: center; }
+.top-slot:empty { display: none; }
+.unit-row { display: flex; justify-content: space-between; gap: 8px; padding: 2px 0; }
 .adbox iframe { border: 0; display: block; }
 .panel { font: 13px/1.45 system-ui, "Segoe UI", sans-serif; background: var(--panel); border: 1px solid var(--line);
   border-radius: 10px; padding: 12px 14px; margin-top: 16px; }
@@ -41,6 +45,7 @@ code { font-size: 12px; }
 </head>
 <body>
 <div class="ribbon" id="ribbon"><span id="ribbon-text">Loading…</span><button onclick="location.reload()">Run again</button></div>
+<div class="top-slot" id="slots-top"></div>
 <div class="wrap">
   <article>
     <div class="kicker" id="section">Sport</div>
@@ -57,15 +62,14 @@ code { font-size: 12px; }
       <h2>Monetization result</h2>
       <div class="result" id="auction-result">Auction running…</div>
       <div id="auction-detail" style="color:var(--muted);margin-top:4px"></div>
+      <div id="auction-units" style="margin-top:8px"></div>
     </div>
     <div class="panel">
       <h2>What this device can reach</h2>
       <div id="probes">Checking…</div>
     </div>
   </article>
-  <aside>
-    <div class="adslot"><div class="label">Advertisement</div><div class="adbox" id="ad-mpu">Waiting for auction…</div></div>
-  </aside>
+  <aside id="slots-side"></aside>
 </div>
 <script>
 const params = new URLSearchParams(location.search);
@@ -112,6 +116,21 @@ function loadPrebid() {
   });
 }
 
+function placementFor(pb, u) {
+  return pb.use_test_placement || !u.placement_id ? pb.test_placement_id : u.placement_id;
+}
+
+function buildSlots(cfg) {
+  for (const u of cfg.prebid.ad_units) {
+    const [w, h] = u.sizes[0];
+    const slot = document.createElement("div");
+    slot.className = "adslot";
+    slot.innerHTML = `<div class="label">Advertisement · ${esc(u.label || u.code)}</div>` +
+      `<div class="adbox" id="${esc(u.code)}" style="width:${w}px;height:${h}px">Waiting…</div>`;
+    document.getElementById(u.position === "top" ? "slots-top" : "slots-side").appendChild(slot);
+  }
+}
+
 function runAuction(cfg) {
   return new Promise((resolve) => {
     const pb = cfg.prebid;
@@ -119,13 +138,7 @@ function runAuction(cfg) {
     const units = pb.ad_units.map(u => ({
       code: u.code,
       mediaTypes: { banner: { sizes: u.sizes } },
-      bids: [{
-        bidder: pb.bidder,
-        params: {
-          placementId: pb.use_test_placement || !u.placement_id ? pb.test_placement_id : u.placement_id,
-          keywords: u.keywords || {},
-        },
-      }],
+      bids: [{ bidder: pb.bidder, params: { placementId: placementFor(pb, u), keywords: u.keywords || {} } }],
     }));
     window.pbjs = window.pbjs || { que: [] };
     pbjs.que.push(() => {
@@ -139,25 +152,33 @@ function runAuction(cfg) {
       pbjs.requestBids({
         timeout: pb.timeout_ms,
         bidsBackHandler: (responses) => {
-          const code = units[0].code;
-          const bids = (responses[code] && responses[code].bids) || [];
-          const best = bids.sort((a, b) => b.cpm - a.cpm)[0];
-          const box = document.getElementById(code);
-          if (best) {
+          const results = pb.ad_units.map(u => {
+            const bids = (responses[u.code] && responses[u.code].bids) || [];
+            const best = bids.sort((a, b) => b.cpm - a.cpm)[0];
+            const box = document.getElementById(u.code);
+            if (!best) {
+              box.textContent = "No ad";
+              return { code: u.code, label: u.label || u.code, status: "no bid", placement: placementFor(pb, u) };
+            }
             box.textContent = "";
             box.style.padding = "0";
             const frame = document.createElement("iframe");
             frame.width = best.width; frame.height = best.height; frame.scrolling = "no";
             box.appendChild(frame);
             pbjs.renderAd(frame.contentWindow.document, best.adId);
-            resolve({ status: "won", cpm: best.cpm, size: `${best.width}x${best.height}`,
-              creativeId: best.creativeId, dealId: best.dealId || null, bidder: best.bidderCode,
-              placement: units[0].bids[0].params.placementId, test: !!pb.use_test_placement });
-          } else {
-            box.textContent = "No ad";
-            resolve({ status: errors.length ? "auction blocked" : "no bid",
-              detail: errors.join(", ") || "Monetize returned no bid", placement: units[0].bids[0].params.placementId });
-          }
+            if (frame.contentWindow.document.body) frame.contentWindow.document.body.style.margin = "0";
+            return { code: u.code, label: u.label || u.code, status: "won", cpm: best.cpm,
+              size: `${best.width}x${best.height}`, creativeId: best.creativeId, dealId: best.dealId || null,
+              placement: placementFor(pb, u) };
+          });
+          const filled = results.filter(r => r.status === "won");
+          resolve({
+            status: filled.length ? "won" : (errors.length ? "auction blocked" : "no bid"),
+            filled: filled.length, total: results.length,
+            revenue_cpm_sum: filled.reduce((t, r) => t + r.cpm, 0),
+            units: results, test: !!pb.use_test_placement,
+            detail: errors.length ? [...new Set(errors)].join(", ") : (filled.length ? "" : "Monetize returned no bid"),
+          });
         },
       });
     });
@@ -167,6 +188,7 @@ function runAuction(cfg) {
 async function main() {
   const cfg = await (await fetch(`${API}/api/demo-config`)).json();
   document.getElementById("headline").textContent = cfg.page.title;
+  buildSlots(cfg);
   document.getElementById("section").textContent = cfg.page.section;
   crumbsState = await laneState();
   const label = LANE === "a" ? "Window A" : LANE === "b" ? "Window B" : `Lane: ${LANE}`;
@@ -185,11 +207,14 @@ async function main() {
 
   const r = document.getElementById("auction-result");
   r.textContent = auction.status === "won"
-    ? `Ad served: $${Number(auction.cpm).toFixed(2)} CPM (${auction.size})`
-    : (auction.status === "auction blocked" ? "No ad: the auction request was blocked" : `No ad: ${auction.status}`);
-  document.getElementById("auction-detail").textContent = auction.status === "won"
-    ? `Placement ${auction.placement}${auction.test ? " (Prebid public test placement)" : ""} · creative ${auction.creativeId}${auction.dealId ? " · deal " + auction.dealId : ""}`
-    : (auction.detail || "");
+    ? `Ads served: ${auction.filled} of ${auction.total} slots (combined $${auction.revenue_cpm_sum.toFixed(2)} CPM per page view)`
+    : (auction.status === "auction blocked" ? "No ads: the auction request was blocked" : `No ads: ${auction.status}`);
+  document.getElementById("auction-detail").textContent =
+    [auction.test ? "Using Prebid's public test placement" : "", auction.detail || ""].filter(Boolean).join(" · ");
+  document.getElementById("auction-units").innerHTML = (auction.units || []).map(u =>
+    `<div class="unit-row"><span>${esc(u.label)} <span style="color:var(--muted)">(placement ${esc(u.placement)})</span></span>` +
+    (u.status === "won" ? `<b class="ok" style="color:var(--ok)">$${u.cpm.toFixed(2)} · ${esc(u.size)}</b>`
+                        : `<b style="color:var(--block)">${esc(u.status)}</b>`) + "</div>").join("");
 
   // If even the control site fails, the network is down: don't call anything "blocked".
   const networkOk = probes.filter(p => p.kind === "control").every(p => p.reachable);

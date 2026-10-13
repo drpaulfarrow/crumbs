@@ -1,5 +1,5 @@
 {
-  "_comment": "Copy to demo_config.json and fill in your Microsoft Monetize placement IDs and keywords.",
+  "_comment": "Copy to demo_config.json. Xandr values taken from the drpaulfarrow.com Prebid test page (publisher 1557389).",
   "crumbs_resolver": "2.152.74.48,2.152.74.254",
   "_crumbs_resolver_note": "From the Crumbs router setup wizard. Set to \"\" to use the local EasyPrivacy list instead. Run `python -m crumbs_demo check-crumbs` on the network you'll demo from.",
   "ab_sites": [
@@ -8,19 +8,62 @@
   ],
   "prebid": {
     "bidder": "appnexus",
-    "timeout_ms": 1500,
-    "use_test_placement": true,
+    "timeout_ms": 1000,
+    "use_test_placement": false,
     "test_placement_id": 13144370,
+    "_note": "placement 22983564 is the live placement from the drpaulfarrow.com test page; its bids there were mocked, so confirm it returns live bids. Set use_test_placement to true to fall back to Prebid's public test placement.",
     "ad_units": [
       {
-        "code": "ad-mpu",
+        "code": "div-leaderboard",
+        "label": "Leaderboard",
+        "position": "top",
+        "sizes": [
+          [
+            728,
+            90
+          ]
+        ],
+        "placement_id": 22983564,
+        "keywords": {
+          "genre": [
+            "running"
+          ],
+          "crumbs_demo": [
+            "true"
+          ]
+        }
+      },
+      {
+        "code": "div-rectangle",
+        "label": "Medium rectangle",
+        "position": "side",
         "sizes": [
           [
             300,
             250
           ]
         ],
-        "placement_id": 0,
+        "placement_id": 22983564,
+        "keywords": {
+          "genre": [
+            "running"
+          ],
+          "crumbs_demo": [
+            "true"
+          ]
+        }
+      },
+      {
+        "code": "div-skyscraper",
+        "label": "Wide skyscraper",
+        "position": "side",
+        "sizes": [
+          [
+            160,
+            600
+          ]
+        ],
+        "placement_id": 22983564,
         "keywords": {
           "genre": [
             "running"
@@ -88,5 +131,10 @@
       "url": "https://www.wikipedia.org/static/favicon/wikipedia.ico",
       "kind": "control"
     }
-  ]
+  ],
+  "xandr_account": {
+    "member_id": 958,
+    "publisher_id": 1557389,
+    "_note": "For reference only; bids are requested by placement ID."
+  }
 }
