@@ -408,3 +408,35 @@ def test_logos_fall_back_to_letter_badge_and_reject_bad_names(tmp_path, monkeypa
     assert ctype == "image/svg+xml" and not list(tmp_path.glob("*passwd*"))
     assert logos.logo_map()["bidders"]["msft"] == "microsoft.com"
     assert company_for("t.dailymail.co.uk") == "dailymail.co.uk"
+
+
+# --- measurement report ---------------------------------------------------------
+
+def test_report_pairs_visits_and_builds_html(tmp_path):
+    from crumbs_demo.report import analyse, build_report
+
+    def row(rnd, host, lane, value, bidders):
+        return {"round": rnd, "site": f"https://{host}/", "host": host, "lane": lane, "crumbs": lane == "on",
+                "prebid": {"found": True, "top_bid_sum": value, "bids": len(bidders), "units_with_bids": 1,
+                           "bidders_requested": ["ozone", "ttd"], "bidders_bid": bidders, "currency": "USD",
+                           "by_bidder": {b: {"bids": 1, "max_cpm": value, "sum_cpm": value} for b in bidders}},
+                "gpt": {"found": True, "slots": 2, "filled": 2}, "requests": {"ok": 10, "crumbs": 3 if lane == "on" else 0},
+                "by_company": [["Ozone", "crumbs", 2]] if lane == "on" else [["Ozone", "ok", 2]],
+                "sync": {"crumbs": 2} if lane == "on" else {"ok": 2}}
+
+    rows = []
+    for rnd in range(4):
+        rows += [row(rnd, "a.example", "off", 2.0, ["ozone", "ttd"]), row(rnd, "a.example", "on", 1.0, ["ttd"]),
+                 row(rnd, "b.example", "off", 1.0, ["ttd"]), row(rnd, "b.example", "on", 1.0, ["ttd"])]
+    rows.append(row(9, "a.example", "off", 5.0, ["ozone"]))  # unpaired: must be ignored
+    result = analyse(rows)
+    assert result["pairs"] == 8
+    assert abs(result["headline"]["change"] - (-0.25)) < 1e-9   # mean of -50% and 0%
+    ozone = next(b for b in result["bidders"] if b["bidder"] == "ozone")
+    assert ozone["bid_rate_off"] == 0.5 and ozone["bid_rate_on"] == 0.0
+    assert result["companies"][0]["company"] == "Ozone"
+
+    (tmp_path / "visits.jsonl").write_text("\n".join(json.dumps(r) for r in rows), encoding="utf-8")
+    html_path = build_report(tmp_path)
+    assert "Crumbs monetization impact" in html_path.read_text(encoding="utf-8")
+    assert (tmp_path / "sites.csv").exists() and (tmp_path / "bidders.csv").exists()

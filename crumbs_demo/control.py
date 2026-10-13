@@ -13,6 +13,7 @@ from urllib.parse import parse_qs, urlsplit
 
 from .blocklist import PACKAGE_DIR
 from .engine import Engine
+from .launcher import warm_profile_state
 from .logos import get_logo, logo_map
 from .system_dns import run_elevated, system_dns_state
 
@@ -48,8 +49,9 @@ def load_demo_config() -> dict:
 
 
 class ControlServer:
-    def __init__(self, engine: Engine, port: int, launcher=None, bind: str = "127.0.0.1"):
+    def __init__(self, engine: Engine, port: int, launcher=None, bind: str = "127.0.0.1", warmup=None):
         self.engine = engine
+        self.warmup = warmup
         self.port = port
         self.bind = bind
         self.launcher = launcher
@@ -101,6 +103,7 @@ class ControlServer:
         if method == "GET" and path == "/api/state":
             state = self.engine.state()
             state["system_dns"] = system_dns_state()
+            state["warm_profile"] = warm_profile_state()
             return self._json(state)
         if method == "GET" and path == "/api/verdicts":
             # What the lane decided per hostname, so the test page can say
@@ -135,10 +138,20 @@ class ControlServer:
                 return self._json({"error": "launcher unavailable"}, "500 Internal Server Error")
             opts = parse_qs(url.query)
             try:
-                started = self.launcher(page=opts.get("page", ["site"])[0])
+                warm = opts.get("warm", [None])[0]
+                started = self.launcher(page=opts.get("page", ["site"])[0],
+                                        warm=None if warm is None else warm == "1")
             except Exception as e:  # surfaced in the panel
                 return self._json({"error": str(e)}, "500 Internal Server Error")
             return self._json({"ok": True, "started": started})
+        if method == "POST" and path == "/api/warmup":
+            if not self.warmup:
+                return self._json({"error": "warm-up unavailable"}, "500 Internal Server Error")
+            try:
+                self.warmup()
+            except Exception as e:
+                return self._json({"error": str(e)}, "500 Internal Server Error")
+            return self._json({"ok": True})
         if method == "POST" and path == "/api/page-event":
             event = json.loads(body or b"{}")
             event["t"] = time.time()

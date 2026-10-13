@@ -112,6 +112,9 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
   <span class="badge" id="mode">…</span>
   <span class="badge" id="lists">…</span>
   <span class="spacer"></span>
+  <button id="warmup" title="A normal browser window on the warm-up profile: browse, accept cookie banners, then close it">Warm-up browser</button>
+  <label class="badge" id="warm-wrap" title="Start both windows as copies of the warm-up profile (same cookies, IDs and consent)">
+    <input type="checkbox" id="use-warm"> <span id="warm-label">from warm profile</span></label>
   <button id="launch-sites">Open A/B: real sites</button>
   <button id="launch-test">Open A/B: Prebid test page</button>
   <button id="reset">Reset stats</button>
@@ -328,6 +331,7 @@ async function refresh() {
   try {
     const st = await (await fetch("/api/state")).json();
     mode = st.mode;
+    showWarm(st.warm_profile);
     $("#mode").textContent = st.mode === "crumbs"
       ? `Crumbs ON = real Crumbs resolver (${st.crumbs_resolver})`
       : "Crumbs ON = local EasyPrivacy list";
@@ -365,9 +369,25 @@ document.addEventListener("click", async (ev) => {
   }
 });
 async function launch(page) {
-  const r = await (await fetch(`/api/launch?page=${page}`, { method: "POST" })).json();
+  const warm = $("#use-warm").checked ? 1 : 0;
+  const r = await (await fetch(`/api/launch?page=${page}&warm=${warm}`, { method: "POST" })).json();
   if (r.error) alert(r.error);
 }
+let warmInit = false;
+function showWarm(w) {
+  if (!w) return;
+  const box = $("#use-warm");
+  box.disabled = !w.exists;
+  if (!warmInit && w.exists) { box.checked = true; warmInit = true; }
+  if (!w.exists) box.checked = false;
+  $("#warm-label").textContent = !w.exists ? "no warm profile yet"
+    : w.in_use ? "warm profile (close warm-up window first)"
+    : `from warm profile (updated ${new Date(w.updated * 1000).toLocaleString()})`;
+}
+$("#warmup").onclick = async () => {
+  const r = await (await fetch("/api/warmup", { method: "POST" })).json();
+  if (r.error) alert(r.error);
+};
 $("#launch-sites").onclick = () => launch("site");
 $("#launch-test").onclick = () => launch("test");
 $("#reset").onclick = async () => { await fetch("/api/reset", { method: "POST" }); refresh(); };

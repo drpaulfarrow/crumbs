@@ -134,6 +134,53 @@ Set `"use_test_placement": true` to switch every unit to placement 13144370 inst
    - Every run appears in the panel's "Test page results" table.
    - The table records whether **Xandr's own domain (`ib.adnxs.com`) gets through real Crumbs**. If it doesn't, the auction fails outright.
 
+## Warm profile: a realistic returning user
+
+Fresh profiles look like brand-new users with no cookies, IDs or consent, and many bidders pass on them. To compare like with like:
+
+1. In the panel, press **Warm-up browser**. A normal Edge window opens on a dedicated profile, with no proxy and no Crumbs.
+2. Browse the sites you'll test for a few minutes and **accept the cookie banners**.
+3. **Close that window**, so its cookies are saved.
+4. With **"from warm profile"** ticked (the default once one exists), every A/B launch starts **both** windows as identical copies of it: same cookies, IDs and consent.
+
+This deliberately does not copy your work or personal Edge profile. Those hold sign-in sessions, and the demo windows run with a debugging port that exposes cookies to local programs.
+
+## Measuring at scale
+
+```powershell
+.venv\Scripts\python -m crumbs_demo measure --rounds 1     # first: a quick pass to prune sites without Prebid
+.venv\Scripts\python -m crumbs_demo measure --rounds 10    # then the real run
+.venv\Scripts\python -m crumbs_demo report results\<folder> # rebuild the report any time
+```
+
+**What a run does**
+1. For each round, it opens two browsers from the warm profile: Crumbs off (A) and Crumbs on (B).
+2. Both load the same page at the same moment and accept the cookie banner the same way.
+3. Both scroll for 10 seconds, so lazy-loaded slots run their auctions, then wait 12 seconds.
+4. It records the page's Prebid results, Google Ad Manager slot fill, and every request's outcome, grouped by company.
+
+Site order is shuffled each round.
+
+**Inputs and outputs**
+- **Site list:** `crumbs_demo/data/sites_uk.txt` by default, or `--sites your_list.txt`.
+- **Output:** `results/<timestamp>/`, containing:
+  - `visits.jsonl`, the raw data;
+  - `report.html`, the report;
+  - `sites.csv`, `bidders.csv`, `companies.csv`.
+
+**The report shows**
+- **Publisher view:** header-bidding value per page view, A vs B, per site and on average, with a 95% range. Also bids, bidders that bid, and Ad Manager slots filled.
+- **Ad-tech view:** each Prebid bidder's bid rate and typical top bid, with Crumbs off vs on.
+- **Network view:** which companies' requests Crumbs blocked, and the share of ID-sync requests blocked.
+
+**Timing:** a visit takes about 30 to 40 seconds, so 30 sites x 10 rounds is roughly 3 hours. It's safe to stop with Ctrl+C; partial results are kept.
+
+**Limits**
+- **It covers the Prebid share of revenue only.** Google AdX, direct deals and Amazon decide outside Prebid. Bids are offers, not final prices.
+- **One machine, one IP address, one country.**
+- **Automated browsers.** `--headless` is faster, but ad stacks may treat headless browsers differently.
+- **Keep volumes modest.** Ads shown to automated browsers are invalid traffic that advertisers pay for. `--max-visits` (default 2,000) is a deliberate cap, and the tool never clicks ads.
+
 ## Whole-PC lane (optional, needs admin)
 
 The Whole PC card says whether Windows is using the demo's DNS server.

@@ -15,7 +15,7 @@ from .control import ControlServer, load_demo_config
 from .dns_server import start_dns
 from .engine import Engine, Lane
 from .browser_monitor import LaneMonitor
-from .launcher import launch_ab, window_bounds
+from .launcher import launch_ab, launch_warmup, warm_profile_state, window_bounds
 from .system_dns import system_dns_state
 from .proxy import LaneProxy
 from .upstream import Upstream
@@ -53,6 +53,31 @@ def build_parser() -> argparse.ArgumentParser:
     sub.add_parser("update-lists", help="download EasyPrivacy and EasyList")
     check = sub.add_parser("check-crumbs", help="see how the Crumbs resolver answers from this network")
     check.add_argument("--crumbs-resolver", default=None)
+
+    m = sub.add_parser("measure", help="paired A/B visits over a list of sites, logged for a report")
+    m.add_argument("--sites", default=None, help="file with one URL per line (default: bundled UK list)")
+    m.add_argument("--rounds", type=int, default=10, help="paired visits per site")
+    m.add_argument("--settle", type=float, default=6, help="seconds after navigation before consent/scroll")
+    m.add_argument("--scroll", type=float, default=10, help="seconds spent scrolling (lazy-loaded slots)")
+    m.add_argument("--dwell", type=float, default=12, help="seconds to wait after scrolling for auctions to finish")
+    m.add_argument("--pause", type=float, default=3, help="seconds between sites")
+    m.add_argument("--max-visits", type=int, default=2000, help="safety cap on paired visits")
+    m.add_argument("--headless", action="store_true", help="run without visible windows (ad stacks may behave differently)")
+    m.add_argument("--no-warm", action="store_true", help="fresh profiles instead of the warm-up profile")
+    m.add_argument("--out", default=None, help="results folder (default: results/<timestamp>)")
+    m.add_argument("--seed", type=int, default=1)
+    m.add_argument("--crumbs-resolver", default=None)
+    m.add_argument("--upstream", default="auto")
+    m.add_argument("--browser", choices=["edge", "chrome"], default=None)
+    m.add_argument("--port-off", type=int, default=8091)
+    m.add_argument("--port-on", type=int, default=8092)
+    m.add_argument("--cdp-off", type=int, default=9241)
+    m.add_argument("--cdp-on", type=int, default=9242)
+    m.add_argument("--no-report", action="store_true")
+
+    r = sub.add_parser("report", help="build report.html and CSVs from a measure results folder")
+    r.add_argument("results", help="results folder (or its visits.jsonl)")
+    r.add_argument("--no-open", action="store_true")
     return p
 
 
@@ -150,17 +175,20 @@ async def serve(args) -> None:
         lane.monitor.start()
     browser = args.browser or load_demo_config().get("browser", "edge")
 
-    def launcher(page: str = args.page):
+    def launcher(page: str = args.page, warm: bool | None = None):
         # Windows start blank; each monitor opens the pages once it's attached,
         # so the live request view sees the very first request.
         urls = ab_urls(args.panel_port, page)
+        if warm is None:
+            warm = warm_profile_state()["exists"]
         started = launch_ab({"a": (args.lane_a_port, args.cdp_a_port),
-                             "b": (args.lane_b_port, args.cdp_b_port)}, [], prefer=browser)
+                             "b": (args.lane_b_port, args.cdp_b_port)}, [], prefer=browser, warm=warm)
         for i, name in enumerate(started):
             monitors[name].open_urls([u.replace("{lane}", name) for u in urls], window_bounds(i, len(started)))
         return started
 
-    control = ControlServer(engine, args.panel_port, launcher=launcher)
+    control = ControlServer(engine, args.panel_port, launcher=launcher,
+                            warmup=lambda: launch_warmup(ab_urls(args.panel_port, "site"), prefer=browser))
     closers.append(await control.start())
     panel = f"http://127.0.0.1:{args.panel_port}/"
 
@@ -201,6 +229,34 @@ def main(argv=None) -> int:
     if not argv or argv[0].startswith("-"):
         argv = ["run", *argv]
     args = build_parser().parse_args(argv)
+    if args.command == "measure":
+        from .measure import DEFAULT_SITES, run as run_measure
+        from .report import build_report
+        args.sites = args.sites or str(DEFAULT_SITES)
+        spec = crumbs_spec(args.crumbs_resolver)
+        if spec:
+            warning = asyncio.run(health_check(Upstream(spec, os_fallback=False), Upstream(args.upstream)))
+            if warning:
+                print(f"WARNING: {warning}\nUse --crumbs-resolver local to measure with the local list instead.")
+                return 1
+        browser = args.browser or load_demo_config().get("browser", "edge")
+        try:
+            out = asyncio.run(run_measure(args, spec, browser))
+        except KeyboardInterrupt:
+            print("\nStopped. Partial results are kept; run `python -m crumbs_demo report <folder>`.")
+            return 1
+        if not args.no_report:
+            path = build_report(out)
+            print(f"\nReport: {path}")
+            webbrowser.open(path.resolve().as_uri())
+        return 0
+    if args.command == "report":
+        from .report import build_report
+        path = build_report(args.results)
+        print(f"Report: {path}")
+        if not args.no_open:
+            webbrowser.open(path.resolve().as_uri())
+        return 0
     if args.command == "check-crumbs":
         spec = crumbs_spec(args.crumbs_resolver)
         if not spec:

@@ -1,0 +1,35 @@
+# Starter list of ad-funded UK sites for `python -m crumbs_demo measure`.
+# Not verified to all run Prebid.js: the report shows "no Prebid found" for any
+# that don't, so prune after a first short run (e.g. --rounds 1).
+# One URL per line; lines starting with # are ignored.
+
+https://www.theguardian.com/uk
+https://www.dailymail.co.uk/home/index.html
+https://www.independent.co.uk/
+https://www.mirror.co.uk/
+https://www.express.co.uk/
+https://www.standard.co.uk/
+https://metro.co.uk/
+https://www.manchestereveningnews.co.uk/
+https://www.liverpoolecho.co.uk/
+https://www.birminghammail.co.uk/
+https://www.walesonline.co.uk/
+https://www.dailyrecord.co.uk/
+https://www.gbnews.com/
+https://www.huffingtonpost.co.uk/
+https://www.newstatesman.com/
+https://www.radiotimes.com/
+https://www.digitalspy.com/
+https://www.cosmopolitan.com/uk/
+https://www.goodhousekeeping.com/uk/
+https://www.techradar.com/
+https://www.tomsguide.com/
+https://www.whathifi.com/
+https://www.goal.com/en-gb
+https://www.ladbible.com/
+https://www.joe.co.uk/
+https://www.pistonheads.com/
+https://www.whatcar.com/
+https://www.bbcgoodfood.com/
+https://www.thesun.co.uk/
+https://www.yorkshirepost.co.uk/

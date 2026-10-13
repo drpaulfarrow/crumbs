@@ -14,11 +14,13 @@ import json
 import logging
 import time
 import urllib.request
-from collections import deque
+import re
+from collections import Counter, deque
 from urllib.parse import urlsplit
 
 import websockets
 
+from .companies import company_for
 from .prebid_reader import PREBID_SNAPSHOT_JS, summarise
 
 log = logging.getLogger("crumbs.browser")
@@ -38,6 +40,11 @@ ERROR_LABELS = {
     "net::ERR_CONNECTION_CLOSED": "connection dropped",
     "net::ERR_CONNECTION_RESET": "connection dropped",
 }
+
+
+# Rough match for ID-sync / cookie-match requests (user syncs, pixels that swap IDs).
+SYNC_URL = re.compile(r"(usersync|user_sync|/usync|cookiesync|cookie_sync|/sync[/?.]|/match[/?]|"
+                      r"setuid|getuid|/cm[/?]|/pixel/sync|idsync|/ups/|ixmatch|syncframe|async_usersync)", re.I)
 
 
 def outcome_for(error_text: str | None, blocked_reason: str | None) -> str:
@@ -62,11 +69,52 @@ class LaneMonitor:
         self._bounds: dict | None = None
         self._calls: dict[int, asyncio.Future] = {}
         self._page_sessions: dict[str, str] = {}  # top-level tab targetId -> sessionId
+        self._sessions: dict[str, dict] = {}  # every attached session -> {type, url}
+        self.tally: Counter = Counter()  # (company, outcome kind) -> requests, since last reset
+        self.sync_tally: Counter = Counter()  # outcome kind -> ID-sync requests, since last reset
         self.prebid: dict[str, dict] = {}  # targetId -> {url, title, summary}
 
-    def start(self) -> None:
+    def start(self, poll_prebid: bool = True) -> None:
         self._task = asyncio.ensure_future(self._run())
-        asyncio.ensure_future(self._poll_prebid())
+        self._poll_task = asyncio.ensure_future(self._poll_prebid()) if poll_prebid else None
+
+    def stop(self) -> None:
+        for task in (self._task, getattr(self, "_poll_task", None)):
+            if task:
+                task.cancel()
+
+    # --- helpers for scripted runs (measure.py) ---------------------------------
+
+    def page_session(self) -> str | None:
+        for target_id, session in self._page_sessions.items():
+            url = self.tabs.get(target_id, {}).get("url", "")
+            if not url.startswith(("devtools://", "edge://", "chrome://")):
+                return session
+        return None
+
+    async def wait_ready(self, timeout: float = 45.0) -> bool:
+        deadline = time.monotonic() + timeout
+        while time.monotonic() < deadline:
+            if self.connected and self.page_session():
+                return True
+            await asyncio.sleep(0.3)
+        return False
+
+    async def call(self, method: str, params: dict | None = None, session: str | None = None,
+                   timeout: float = 15.0) -> dict | None:
+        return await self._call(method, params, timeout=timeout, session=session)
+
+    async def evaluate(self, expression: str, session: str | None = None, timeout: float = 15.0):
+        reply = await self._call("Runtime.evaluate", {"expression": expression, "returnByValue": True,
+                                                      "awaitPromise": True},
+                                 timeout=timeout, session=session or self.page_session())
+        return ((reply or {}).get("result", {}).get("result", {}) or {}).get("value")
+
+    async def evaluate_everywhere(self, expression: str) -> list:
+        """Run in the page and every attached iframe (consent banners often live in iframes)."""
+        sessions = [s for s, info in list(self._sessions.items()) if info.get("type") in ("page", "iframe")]
+        return await asyncio.gather(*(self.evaluate(expression, s, timeout=5) for s in sessions),
+                                    return_exceptions=True)
 
     async def _poll_prebid(self, every: float = 2.0) -> None:
         """Read each tab's Prebid results every few seconds (lazy-loaded and refreshed slots keep bidding)."""
@@ -139,6 +187,8 @@ class LaneMonitor:
             self._calls.pop(msg_id, None)
 
     def reset(self) -> None:
+        self.tally.clear()
+        self.sync_tally.clear()
         self.prebid.clear()
         self.requests.clear()
         self._pending.clear()
@@ -182,6 +232,7 @@ class LaneMonitor:
             self._ws = None
             self.tabs.clear()
             self._page_sessions.clear()
+            self._sessions.clear()
             await asyncio.sleep(1.0)
 
     def _browser_ws_url(self) -> str:
@@ -212,6 +263,7 @@ class LaneMonitor:
             # Pages, plus their cross-site iframes (ad creatives) and workers.
             child = params["sessionId"]
             info = params.get("targetInfo", {})
+            self._sessions[child] = {"type": info.get("type"), "url": info.get("url", "")}
             if info.get("type") == "page":
                 self._page_sessions[info["targetId"]] = child
             await self._send("Network.enable", {}, child)
@@ -219,6 +271,8 @@ class LaneMonitor:
                              {"autoAttach": True, "waitForDebuggerOnStart": True, "flatten": True}, child)
             if params.get("waitingForDebugger"):
                 await self._send("Runtime.runIfWaitingForDebugger", {}, child)
+        elif method == "Target.detachedFromTarget":
+            self._sessions.pop(params.get("sessionId"), None)
         elif method == "Network.requestWillBeSent":
             req = params["request"]
             url = req.get("url", "")
@@ -255,3 +309,7 @@ class LaneMonitor:
     def _finish(self, entry: dict) -> None:
         self.counts[entry["kind"]] += 1
         self.requests.append(entry)
+        if entry["host"]:
+            self.tally[(company_for(entry["host"]), entry["kind"])] += 1
+            if SYNC_URL.search(entry["url"]):
+                self.sync_tally[entry["kind"]] += 1
