@@ -15,7 +15,7 @@ from .control import ControlServer, load_demo_config
 from .dns_server import start_dns
 from .engine import Engine, Lane
 from .browser_monitor import LaneMonitor
-from .launcher import launch_ab
+from .launcher import launch_ab, window_bounds
 from .system_dns import system_dns_state
 from .proxy import LaneProxy
 from .upstream import Upstream
@@ -156,8 +156,8 @@ async def serve(args) -> None:
         urls = ab_urls(args.panel_port, page)
         started = launch_ab({"a": (args.lane_a_port, args.cdp_a_port),
                              "b": (args.lane_b_port, args.cdp_b_port)}, [], prefer=browser)
-        for name in started:
-            monitors[name].open_urls([u.replace("{lane}", name) for u in urls])
+        for i, name in enumerate(started):
+            monitors[name].open_urls([u.replace("{lane}", name) for u in urls], window_bounds(i, len(started)))
         return started
 
     control = ControlServer(engine, args.panel_port, launcher=launcher)

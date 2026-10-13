@@ -45,11 +45,15 @@ def find_browser(prefer: str = "edge") -> str:
 
 
 def screen_size() -> tuple[int, int]:
+    """Usable screen area in the scaled units browsers position windows in.
+
+    Deliberately not DPI-aware: with display scaling (e.g. 150%) Windows then
+    reports scaled sizes, which match the browser's own coordinates.
+    """
     if os.name == "nt":
         try:
             import ctypes
             user32 = ctypes.windll.user32
-            user32.SetProcessDPIAware()
             # Work area excludes the taskbar.
             class RECT(ctypes.Structure):
                 _fields_ = [("left", ctypes.c_long), ("top", ctypes.c_long),
@@ -83,6 +87,12 @@ def browser_args(profile: Path, proxy_port: int, cdp_port: int, x: int, width: i
     ]
 
 
+def window_bounds(index: int, count: int = 2) -> dict:
+    width, height = screen_size()
+    part = width // count
+    return {"left": index * part, "top": 0, "width": part, "height": height}
+
+
 def launch_ab(lanes: dict, urls: list[str], prefer: str = "edge") -> list[str]:
     """lanes: {"a": (proxy_port, cdp_port), ...}. Window A on the left, B on the right.
 
@@ -93,8 +103,6 @@ def launch_ab(lanes: dict, urls: list[str], prefer: str = "edge") -> list[str]:
     carry over between runs and a still-open window can't swallow the new flags.
     """
     browser = find_browser(prefer)
-    width, height = screen_size()
-    half = width // 2
     stamp = time.strftime("%Y%m%d-%H%M%S")
     for old in PROFILE_DIR.glob("lane-*") if PROFILE_DIR.exists() else []:
         shutil.rmtree(old, ignore_errors=True)  # best effort; open windows keep theirs
@@ -103,7 +111,8 @@ def launch_ab(lanes: dict, urls: list[str], prefer: str = "edge") -> list[str]:
         profile = PROFILE_DIR / f"lane-{name}-{stamp}"
         profile.mkdir(parents=True, exist_ok=True)
         lane_urls = [u.replace("{lane}", name) for u in urls] or ["about:blank"]
-        subprocess.Popen([browser, *browser_args(profile, port, cdp_port, i * half, half, height, lane_urls)],
+        b = window_bounds(i, len(lanes))
+        subprocess.Popen([browser, *browser_args(profile, port, cdp_port, b["left"], b["width"], b["height"], lane_urls)],
                          stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         started.append(name)
     return started

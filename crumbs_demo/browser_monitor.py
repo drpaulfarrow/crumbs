@@ -57,13 +57,20 @@ class LaneMonitor:
         self._ws = None
         self._task: asyncio.Task | None = None
         self._queued: list[str] = []
+        self._bounds: dict | None = None
+        self._calls: dict[int, asyncio.Future] = {}
 
     def start(self) -> None:
         self._task = asyncio.ensure_future(self._run())
 
-    def open_urls(self, urls: list[str]) -> None:
-        """Open tabs once attached, so their very first requests are captured."""
+    def open_urls(self, urls: list[str], bounds: dict | None = None) -> None:
+        """Open tabs once attached, so their very first requests are captured.
+
+        bounds places the window ({left, top, width, height} in the browser's
+        own units), which is reliable whatever the Windows display scaling.
+        """
         self._queued = list(urls)
+        self._bounds = bounds
         if self.connected:
             asyncio.ensure_future(self._open_queued())
 
@@ -71,12 +78,40 @@ class LaneMonitor:
         urls, self._queued = self._queued, []
         if not urls:
             return
+        first = None
         for url in urls:
-            await self._send("Target.createTarget", {"url": url})
+            reply = await self._call("Target.createTarget", {"url": url})
+            first = first or (reply or {}).get("result", {}).get("targetId")
         await asyncio.sleep(0.8)
         for target_id, tab in list(self.tabs.items()):
             if tab.get("url") in ("about:blank", "") or tab.get("url", "").startswith(("chrome://newtab", "edge://newtab")):
                 await self._send("Target.closeTarget", {"targetId": target_id})
+        if first and self._bounds:
+            await self._place_window(first, self._bounds)
+
+    async def _place_window(self, target_id: str, bounds: dict) -> None:
+        reply = await self._call("Browser.getWindowForTarget", {"targetId": target_id})
+        window_id = (reply or {}).get("result", {}).get("windowId")
+        if window_id is None:
+            return
+        # A maximised or minimised window ignores size changes until it's normal.
+        await self._call("Browser.setWindowBounds", {"windowId": window_id, "bounds": {"windowState": "normal"}})
+        await self._call("Browser.setWindowBounds", {"windowId": window_id, "bounds": dict(bounds)})
+
+    async def _call(self, method: str, params: dict | None = None, timeout: float = 5.0) -> dict | None:
+        """Send a command and wait for its reply. Not for use inside _handle."""
+        if not self._ws:
+            return None
+        msg_id = next(self._ids)
+        future = asyncio.get_running_loop().create_future()
+        self._calls[msg_id] = future
+        await self._ws.send(json.dumps({"id": msg_id, "method": method, "params": params or {}}))
+        try:
+            return await asyncio.wait_for(future, timeout)
+        except asyncio.TimeoutError:
+            return None
+        finally:
+            self._calls.pop(msg_id, None)
 
     def reset(self) -> None:
         self.requests.clear()
@@ -105,7 +140,13 @@ class LaneMonitor:
                                      {"autoAttach": True, "waitForDebuggerOnStart": True, "flatten": True})
                     asyncio.ensure_future(self._open_queued())
                     async for raw in ws:
-                        await self._handle(json.loads(raw))
+                        msg = json.loads(raw)
+                        future = self._calls.get(msg.get("id"))
+                        if future is not None:
+                            if not future.done():
+                                future.set_result(msg)
+                            continue
+                        await self._handle(msg)
             except (OSError, websockets.WebSocketException, asyncio.TimeoutError, ValueError):
                 pass
             except Exception:
