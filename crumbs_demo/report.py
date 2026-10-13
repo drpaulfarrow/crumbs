@@ -50,7 +50,21 @@ def metrics(r: dict) -> dict:
         "sync_ok": r.get("sync", {}).get("ok", 0),
         "sync_blocked": r.get("sync", {}).get("crumbs", 0),
         "currency": p.get("currency", ""),
+        "consent": bool(r.get("consent_clicked")),
+        "auctions": p.get("auctions", 0) if found else 0,
     }
+
+
+def diagnose(ms: list[tuple[dict, dict]]) -> str:
+    """Why a site is (or isn't) measurable, from window A's point of view."""
+    a = [x for x, _ in ms]
+    if any(x["hb_value"] > 0 for x in a):
+        return "measured"
+    if not any(x["prebid_found"] or y["prebid_found"] for x, y in ms):
+        return "no Prebid found" + ("" if any(x["consent"] for x in a) else " (consent not accepted)")
+    if not any(x["auctions"] for x in a):
+        return "Prebid loaded, no auction ran" + ("" if any(x["consent"] for x in a) else " (consent not accepted)")
+    return "auctions ran, no bids in A"
 
 
 def _ci(values: list[float], rng: random.Random) -> tuple[float, float] | None:
@@ -78,6 +92,11 @@ def analyse(rows: list[dict], seed: int = 7) -> dict:
             "host": host, "pairs": len(ms),
             "prebid_share": sum(a["prebid_found"] or b["prebid_found"] for a, b in ms) / len(ms),
             "currency": next((a["currency"] for a, _ in ms if a["currency"]), ""),
+            "status": diagnose(ms),
+            "consent_a": statistics.fmean(a["consent"] for a, _ in ms),
+            "consent_b": statistics.fmean(b["consent"] for _, b in ms),
+            "auctions_a": statistics.fmean(a["auctions"] for a, _ in ms),
+            "auctions_b": statistics.fmean(b["auctions"] for _, b in ms),
             "hb_a": mean_a, "hb_b": mean_b,
             "hb_change": (mean_b / mean_a - 1) if mean_a > 0 else None,
             "hb_diff_ci": ci,
@@ -109,7 +128,8 @@ def analyse(rows: list[dict], seed: int = 7) -> dict:
         boot.sort()
         headline = {"change": statistics.fmean(changes), "ci": (boot[int(0.025 * BOOTSTRAP)],
                                                                  boot[int(0.975 * BOOTSTRAP) - 1]),
-                    "sites": len(measurable), "pairs": sum(len(m) for m in site_pairs.values())}
+                    "sites": len(measurable), "pairs": sum(len(m) for m in site_pairs.values()),
+                    "min_pairs": min(len(m) for m in site_pairs.values())}
 
     def rel(key):
         a = sum(s[f"{key}_a"] for s in measurable)
@@ -197,13 +217,13 @@ def write_csvs(result: dict, out: Path) -> None:
         w.writerows(result["companies"])
 
 
-def _diverging_rows(items: list[tuple[str, float | None, str]]) -> str:
+def _diverging_rows(items: list[tuple[str, float | None, str, str]]) -> str:
     """Horizontal bars around a zero line; negative = red, positive = blue."""
-    scale = max([abs(v) for _, v, _ in items if v is not None] + [0.05])
+    scale = max([abs(v) for _, v, _, _ in items if v is not None] + [0.05])
     out = []
-    for label, v, tip in items:
+    for label, v, tip, status in items:
         if v is None:
-            bar = '<span class="na">no Prebid value in A</span>'
+            bar = f'<span class="na">{html.escape(status)}</span>'
         else:
             width = abs(v) / scale * 50
             side = "neg" if v < 0 else "pos"
@@ -237,12 +257,22 @@ def write_html(result: dict, run: dict, out: Path) -> Path:
     headline = (f'{_pct(h["change"])}' if h else "–")
     ci = (f'95% range {_pct(h["ci"][0])} to {_pct(h["ci"][1])} · {h["sites"]} sites · {h["pairs"]} paired page views'
           if h else "Not enough sites with Prebid bids in A yet.")
+    if h and h["min_pairs"] < 5:
+        ci += f' · <b>low sample</b> ({h["min_pairs"]} pair{"s" if h["min_pairs"] != 1 else ""} on some sites; aim for 5+)'
+    counts = {}
+    for s_ in result["sites"]:
+        key = s_["status"].split(" (")[0]
+        counts[key] = counts.get(key, 0) + 1
+    coverage = " · ".join(f"{n} {k}" for k, n in sorted(counts.items(), key=lambda kv: -kv[1]))
     site_items = [(s["host"], s["hb_change"],
-                   f'{s["host"]}: {_num(s["hb_a"])} vs {_num(s["hb_b"])} {s["currency"]} per page view, {s["pairs"]} pairs')
+                   f'{s["host"]}: {_num(s["hb_a"])} vs {_num(s["hb_b"])} {s["currency"]} per page view, {s["pairs"]} pairs',
+                   s["status"])
                   for s in sorted(result["sites"], key=lambda s: (s["hb_change"] is None, s["hb_change"] or 0))]
     site_table = "".join(
-        f'<tr><td>{html.escape(s["host"])}</td><td class="num">{s["pairs"]}</td>'
+        f'<tr><td>{html.escape(s["host"])}</td><td>{html.escape(s["status"])}</td><td class="num">{s["pairs"]}</td>'
         f'<td class="num">{_pct(s["prebid_share"], False)}</td>'
+        f'<td class="num">{_pct(s["consent_a"], False)} / {_pct(s["consent_b"], False)}</td>'
+        f'<td class="num">{_num(s["auctions_a"], 1)} → {_num(s["auctions_b"], 1)}</td>'
         f'<td class="num">{_num(s["hb_a"])}</td><td class="num">{_num(s["hb_b"])}</td>'
         f'<td class="num">{_pct(s["hb_change"])}</td><td class="num">{html.escape(s["currency"])}</td>'
         f'<td class="num">{_num(s["bids_a"], 1)} → {_num(s["bids_b"], 1)}</td>'
@@ -327,7 +357,10 @@ Crumbs on = {html.escape(str(run.get("crumbs", "?")))} · warm profile: {"yes" i
 <th class="num">Loaded (A)</th><th class="num">Loaded (B)</th></tr></thead><tbody>{company_table}</tbody></table></div>
 
 <h2>Per site</h2>
-<div class="card"><table><thead><tr><th>Site</th><th class="num">Pairs</th><th class="num">Prebid seen</th>
+<p class="sub">Coverage: {coverage}. Sites that aren't "measured" are left out of the headline;
+"consent not accepted" usually means the cookie banner wasn't clicked (warm the profile on that site).</p>
+<div class="card"><table><thead><tr><th>Site</th><th>Status</th><th class="num">Pairs</th><th class="num">Prebid seen</th>
+<th class="num">Consent A / B</th><th class="num">Auctions A → B</th>
 <th class="num">HB value A</th><th class="num">HB value B</th><th class="num">Change</th><th class="num">Cur.</th>
 <th class="num">Bids A → B</th><th class="num">Bidders A → B</th><th class="num">GAM filled A → B</th>
 <th class="num">Blocked (B)</th></tr></thead><tbody>{site_table}</tbody></table></div>
@@ -346,12 +379,25 @@ Sites where A had no Prebid value are left out of it.</li>
     return path
 
 
+def write_site_lists(result: dict, rows: list[dict], out: Path) -> None:
+    """prebid_sites.txt: sites where Prebid was seen, ready for the next run's --sites."""
+    urls = {}
+    for r in rows:
+        if r.get("prebid", {}).get("found"):
+            urls[r["host"]] = r["site"]
+    lines = ["# Sites where Prebid.js was found in this run. Use with: measure --sites <this file>"]
+    lines += [urls[h] for h in sorted(urls)]
+    (out / "prebid_sites.txt").write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def build_report(results: Path) -> Path:
     results = Path(results)
     out = results if results.is_dir() else results.parent
     run_file = out / "run.json"
     run = json.loads(run_file.read_text(encoding="utf-8")) if run_file.exists() else {}
-    result = analyse(load(results))
+    rows = load(results)
+    result = analyse(rows)
     write_csvs(result, out)
+    write_site_lists(result, rows, out)
     (out / "summary.json").write_text(json.dumps(result, indent=2, default=str), encoding="utf-8")
     return write_html(result, run, out)
