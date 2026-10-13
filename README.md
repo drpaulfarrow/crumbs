@@ -84,17 +84,13 @@ The control panel opens at <http://127.0.0.1:5380/>. Its buttons reopen the A/B 
 
 | | |
 |---|---|
-| Publisher | 1557389 |
+| Member / publisher | 958 / 1557389 |
 | Live placement | **22983564** |
 | Ad units | leaderboard 728x90, medium rectangle 300x250, wide skyscraper 160x600 |
 | Bidder / timeout | `appnexus`, 1000 ms |
 | Keywords per ad unit | `genre=running`, `crumbs_demo=true` |
 
-**Before relying on it:**
-- **Check that 22983564 returns live bids.** On drpaulfarrow.com the "Mock Bids" toggle was on, so the prices shown there were mocked.
-  - Turn mock off on that page first.
-  - If you get no bids, set `"use_test_placement": true` to fall back to Prebid's public test placement 13144370. It always returns a sample ad.
-- **Member ID 958** shown on that page is also the ID used in Prebid's sample responses. Bids here are requested by placement ID only, so it isn't needed.
+Set `"use_test_placement": true` to switch every unit to placement 13144370 instead.
 
 **In Monetize:**
 - Make sure placement 22983564 accepts all three sizes.

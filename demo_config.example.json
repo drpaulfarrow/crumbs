@@ -11,7 +11,7 @@
     "timeout_ms": 1000,
     "use_test_placement": false,
     "test_placement_id": 13144370,
-    "_note": "placement 22983564 is the live placement from the drpaulfarrow.com test page; its bids there were mocked, so confirm it returns live bids. Set use_test_placement to true to fall back to Prebid's public test placement.",
+    "_note": "Placements from the drpaulfarrow.com Prebid test page. use_test_placement switches every unit to placement 13144370.",
     "ad_units": [
       {
         "code": "div-leaderboard",
@@ -134,7 +134,6 @@
   ],
   "xandr_account": {
     "member_id": 958,
-    "publisher_id": 1557389,
-    "_note": "For reference only; bids are requested by placement ID."
+    "publisher_id": 1557389
   }
 }
