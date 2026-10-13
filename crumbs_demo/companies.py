@@ -73,7 +73,38 @@ COMPANIES = {
     "optimizely.com": "Optimizely",
     "teads.tv": "Teads",
     "media.net": "Media.net",
+    "kargo.com": "Kargo",
+    "the-ozone-project.com": "Ozone",
+    "gumgum.com": "GumGum",
+    "bouncex.net": "Wunderkind",
+    "bounceexchange.com": "Wunderkind",
+    "cdnwidget.com": "Wunderkind",
+    "visualwebsiteoptimizer.com": "VWO",
+    "go-mpulse.net": "Akamai",
+    "akstat.io": "Akamai",
+    "stackadapt.com": "StackAdapt",
+    "adtrafficquality.google": "Google",
+    "googlesyndication.com": "Google",
+    "intentiq.com": "Intent IQ",
+    "sharethrough.com": "Sharethrough",
+    "lijit.com": "Sovrn",
+    "openx.com": "OpenX",
+    "pubmatic.com": "PubMatic",
+    "adform.net": "Adform",
+    "amazon.com": "Amazon",
 }
+
+# Two-label public suffixes, so t.dailymail.co.uk belongs to dailymail.co.uk, not "co.uk".
+_TWO_LABEL_SUFFIXES = {
+    "co.uk", "org.uk", "ac.uk", "gov.uk", "com.au", "net.au", "org.au", "co.nz", "co.jp",
+    "co.kr", "com.br", "com.mx", "com.tr", "co.in", "co.za", "com.sg", "com.hk", "com.cn",
+}
+
+
+def registrable_domain(host: str) -> str:
+    labels = host.lower().rstrip(".").split(".")
+    keep = 3 if ".".join(labels[-2:]) in _TWO_LABEL_SUFFIXES else 2
+    return ".".join(labels[-keep:])
 
 
 def company_for(domain: str) -> str:
@@ -82,4 +113,4 @@ def company_for(domain: str) -> str:
         name = COMPANIES.get(".".join(labels[i:]))
         if name:
             return name
-    return ".".join(labels[-2:])
+    return registrable_domain(domain)

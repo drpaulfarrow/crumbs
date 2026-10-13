@@ -13,6 +13,7 @@ from urllib.parse import parse_qs, urlsplit
 
 from .blocklist import PACKAGE_DIR
 from .engine import Engine
+from .logos import get_logo, logo_map
 from .system_dns import run_elevated, system_dns_state
 
 log = logging.getLogger("crumbs.control")
@@ -75,7 +76,8 @@ class ControlServer:
             status, ctype, payload = await self.route(method, target, body, headers, peer)
             writer.write(
                 f"HTTP/1.1 {status}\r\nContent-Type: {ctype}\r\nContent-Length: {len(payload)}\r\n"
-                "Cache-Control: no-store\r\nAccess-Control-Allow-Origin: *\r\n"
+                f"Cache-Control: {'max-age=86400' if target.startswith('/logo/') else 'no-store'}\r\n"
+                "Access-Control-Allow-Origin: *\r\n"
                 "Connection: close\r\n\r\n".encode() + payload)
             await writer.drain()
         except (asyncio.IncompleteReadError, asyncio.LimitOverrunError, ConnectionError, ValueError):
@@ -111,6 +113,11 @@ class ControlServer:
             except Exception as e:
                 return self._json({"error": str(e)}, "500 Internal Server Error")
             return self._json({"ok": True})
+        if method == "GET" and path.startswith("/logo/"):
+            ctype, data = await asyncio.get_running_loop().run_in_executor(None, get_logo, path[len("/logo/"):])
+            return "200 OK", ctype, data
+        if method == "GET" and path == "/api/logo-map":
+            return self._json(logo_map())
         if method == "GET" and path == "/api/demo-config":
             return self._json(load_demo_config())
 

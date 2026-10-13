@@ -392,3 +392,19 @@ def test_prebid_summary_counts_won_bids_missing_from_the_log():
     assert s["bids"] == 2 and s["won"] == 2          # x1 not double counted, x2 added
     assert s["units_with_bids"] == 2 and s["ad_units"] == 2
     assert s["top_bid_sum"] == 1.6
+
+
+# --- logos ----------------------------------------------------------------------
+
+def test_logos_fall_back_to_letter_badge_and_reject_bad_names(tmp_path, monkeypatch):
+    from crumbs_demo import logos
+    from crumbs_demo.companies import company_for
+
+    monkeypatch.setattr(logos, "LOGO_DIR", tmp_path)
+    monkeypatch.setattr(logos, "SOURCES", ["http://127.0.0.1:9/{domain}"])  # nothing listens here
+    ctype, data = logos.get_logo("criteo.com", timeout=0.5)
+    assert ctype == "image/svg+xml" and b">C<" in data
+    ctype, data = logos.get_logo("../../etc/passwd")
+    assert ctype == "image/svg+xml" and not list(tmp_path.glob("*passwd*"))
+    assert logos.logo_map()["bidders"]["msft"] == "microsoft.com"
+    assert company_for("t.dailymail.co.uk") == "dailymail.co.uk"
