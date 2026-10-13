@@ -16,7 +16,8 @@ PREBID_SNAPSHOT_JS = r"""
 (() => {
   const names = new Set([...(window._pbjsGlobals || []), "pbjs"]);
   const out = [];
-  const bidOf = (b) => ({ auction: b.auctionId || "", unit: b.adUnitCode, bidder: b.bidderCode || b.bidder,
+  const bidOf = (b) => ({ id: b.adId || b.requestId || "", auction: b.auctionId || "", unit: b.adUnitCode,
+    bidder: b.bidderCode || b.bidder,
     cpm: Number(b.cpm) || 0, currency: b.currency || "", size: b.size || `${b.width}x${b.height}`,
     ms: b.timeToRespond });
   for (const name of names) {
@@ -65,7 +66,15 @@ def summarise(snapshots: list[dict]) -> dict:
     """Combine every Prebid instance on a page into one summary."""
     if not snapshots:
         return {"found": False}
-    bids = [b for s in snapshots for b in s.get("bids", [])]
+    # A winning bid was also a received bid. Some sites' event logs drop
+    # bidResponse entries but keep bidWon, so merge the two (deduplicated by ad id).
+    bids, seen = [], set()
+    for s in snapshots:
+        for b in s.get("bids", []) + s.get("won", []):
+            key = b.get("id") or (b.get("auction"), b.get("unit"), b.get("bidder"), b.get("cpm"))
+            if key not in seen:
+                seen.add(key)
+                bids.append(b)
     won = [b for s in snapshots for b in s.get("won", [])]
     requested = sorted({x for s in snapshots for x in s.get("requested", [])})
     bidders_bid = sorted({b["bidder"] for b in bids if b.get("bidder")})
@@ -79,20 +88,21 @@ def summarise(snapshots: list[dict]) -> dict:
         entry["bids"] += 1
         entry["sum_cpm"] += b["cpm"]
         entry["max_cpm"] = max(entry["max_cpm"], b["cpm"])
+    units_with_bids = {unit for _, unit in top_per_unit}
     currencies = sorted({b["currency"] for b in bids if b.get("currency")})
     return {
         "found": True,
         "versions": sorted({s.get("version", "") for s in snapshots}),
-        "ad_units": sum(s.get("ad_units", 0) for s in snapshots),
+        "ad_units": max(sum(s.get("ad_units", 0) for s in snapshots), len(units_with_bids)),
         "auctions": sum(s.get("auctions", 0) for s in snapshots),
-        "bidders_requested": requested,
+        "bidders_requested": sorted(set(requested) | set(bidders_bid)),
         "bidders_bid": bidders_bid,
         "timed_out": sorted({x for s in snapshots for x in s.get("timed_out", [])}),
         "errored": sorted({x for s in snapshots for x in s.get("errored", [])}),
         "bids": len(bids),
         "avg_cpm": round(sum(b["cpm"] for b in bids) / len(bids), 3) if bids else 0.0,
         "top_bid_sum": round(sum(top_per_unit.values()), 3),
-        "units_with_bids": len({unit for _, unit in top_per_unit}),
+        "units_with_bids": len(units_with_bids),
         "won": len(won),
         "won_sum": round(sum(b["cpm"] for b in won), 3),
         "currency": "/".join(currencies) or "",

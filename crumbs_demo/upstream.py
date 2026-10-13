@@ -12,7 +12,7 @@ import json
 import socket
 import time
 import urllib.request
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from dnslib import QTYPE, RCODE, DNSRecord
 
@@ -67,6 +67,7 @@ class Lookup:
     ips: list[str]
     cnames: list[str]
     sinkholed: bool
+    cached: bool = False
 
 
 class _Exchange(asyncio.DatagramProtocol):
@@ -132,7 +133,7 @@ class Upstream:
         now = time.monotonic()
         hit = self._cache.get(host)
         if hit and hit[0] > now:
-            return hit[1]
+            return replace(hit[1], cached=True)
         result, ttl = Lookup([], [], False), 60
         try:
             reply = DNSRecord.parse(await self.forward(DNSRecord.question(host, "A").pack()))

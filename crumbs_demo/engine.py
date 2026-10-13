@@ -40,6 +40,7 @@ class LaneStats:
     ad_domains_seen: Counter = field(default_factory=Counter)
     recent: deque = field(default_factory=lambda: deque(maxlen=150))
     last_verdict: dict = field(default_factory=dict)
+    lookup_ms: deque = field(default_factory=lambda: deque(maxlen=500))  # uncached lookups only
 
     def to_dict(self) -> dict:
         return {
@@ -54,7 +55,16 @@ class LaneStats:
             "blocked_domains": self.blocked_domains.most_common(15),
             "ad_domains_seen": self.ad_domains_seen.most_common(10),
             "recent": list(self.recent)[::-1][:60],
+            "lookups": _timing(self.lookup_ms),
         }
+
+
+def _timing(samples) -> dict:
+    if not samples:
+        return {"count": 0}
+    ordered = sorted(samples)
+    pick = lambda q: round(ordered[min(len(ordered) - 1, int(q * len(ordered)))], 1)
+    return {"count": len(ordered), "median_ms": pick(0.5), "p95_ms": pick(0.95)}
 
 
 class Lane:
@@ -144,7 +154,10 @@ class Engine:
         if is_ip(host):
             return Decision(host, False, "other", None, None), Lookup([host.strip("[]")], [], False)
         if self.uses_crumbs(lane):
+            started = time.perf_counter()
             result = await self.crumbs.lookup(host)
+            if not result.cached:
+                lane.stats.lookup_ms.append((time.perf_counter() - started) * 1000)
             decision = self.labelled(host, result.sinkholed, "Crumbs resolver")
             self.record(lane, decision)
             return decision, None if decision.blocked else result
@@ -152,7 +165,10 @@ class Engine:
         if decision.blocked:
             self.record(lane, decision)
             return decision, None
+        started = time.perf_counter()
         result = await self.upstream.lookup(host)
+        if not result.cached:
+            lane.stats.lookup_ms.append((time.perf_counter() - started) * 1000)
         if lane.enabled:
             for cname in result.cnames:
                 cloaked = self.decide(lane, cname, record=False)

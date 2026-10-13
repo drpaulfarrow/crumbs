@@ -380,3 +380,15 @@ def test_prebid_summary_combines_instances_and_tracks_failures():
     assert s["timed_out"] == ["criteo"] and s["errored"] == ["ix"]
     assert s["by_bidder"]["appnexus"] == {"bids": 2, "max_cpm": 1.2, "sum_cpm": 2.0}
     assert s["currency"] == "GBP" and s["won_sum"] == 2.0
+
+
+def test_prebid_summary_counts_won_bids_missing_from_the_log():
+    from crumbs_demo.prebid_reader import summarise
+
+    s = summarise([{"ad_units": 0, "auctions": 2, "requested": ["ozone"], "timed_out": [], "errored": [],
+                    "bids": [{"id": "x1", "auction": "a1", "unit": "mpu", "bidder": "ozone", "cpm": 1.1, "currency": "USD"}],
+                    "won": [{"id": "x1", "auction": "a1", "unit": "mpu", "bidder": "ozone", "cpm": 1.1, "currency": "USD"},
+                            {"id": "x2", "auction": "a2", "unit": "top", "bidder": "ozone", "cpm": 0.5, "currency": "USD"}]}])
+    assert s["bids"] == 2 and s["won"] == 2          # x1 not double counted, x2 added
+    assert s["units_with_bids"] == 2 and s["ad_units"] == 2
+    assert s["top_bid_sum"] == 1.6

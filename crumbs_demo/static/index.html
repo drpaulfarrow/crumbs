@@ -198,6 +198,8 @@ function laneCard(l, sys) {
       <div class="stat"><div class="v">${s.tracker_domains_seen}</div><div class="k">tracker domains seen</div></div>
     </div>
     ${l.kind === "proxy" ? `<div class="lane-sub">Data downloaded: ${kb(s.bytes_down)} · uploaded: ${kb(s.bytes_up)}</div>` : ""}
+    ${l.kind === "proxy" && s.lookups.count ? `<div class="lane-sub">DNS lookups (${s.lookups.count} fresh, ${l.enabled && mode === "crumbs" ? "via Crumbs resolver" : "via normal DNS"}): ` +
+      `median ${s.lookups.median_ms} ms, slowest 5% ${s.lookups.p95_ms} ms</div>` : ""}
     ${browserSection(l.browser)}
     <h3>Blocked, by company</h3>${bars(s.blocked_companies, "")}
     <h3>Ad domains still loading</h3>${bars(s.ad_domains_seen, "ad")}
@@ -288,11 +290,13 @@ function prebidSite(host, pair) {
 }
 
 let busy = false;
+let mode = "local";
 async function refresh() {
   if (busy) return;
   busy = true;
   try {
     const st = await (await fetch("/api/state")).json();
+    mode = st.mode;
     $("#mode").textContent = st.mode === "crumbs"
       ? `Crumbs ON = real Crumbs resolver (${st.crumbs_resolver})`
       : "Crumbs ON = local EasyPrivacy list";
