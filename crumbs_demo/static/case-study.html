@@ -332,6 +332,7 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
 .alert p{margin:6px 0 0;font-size:16px;max-width:80ch}
 .gotos{display:flex;flex-direction:column;gap:8px}
 .goto.ghost{background:transparent;color:var(--signal)}
+a.goto{text-decoration:none;text-align:center;display:inline-block}
 #router-setup{scroll-margin-top:80px}
 .goto{border:1px solid var(--signal);background:var(--signal);color:#fff;border-radius:999px;padding:10px 16px;font-weight:600;cursor:pointer;font-size:14px;white-space:nowrap}
 .tile .v.bad{color:var(--bad)} .tile .v.warn{color:var(--warn)} .tile .v.good{color:var(--good)} .tile .v.ink{color:var(--ink)}
@@ -883,6 +884,17 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
       <div><span class="n">Step 4</span><b>Test page</b><p>A test publisher page runs a real Prebid auction and also works from the Android emulator running the Crumbs app.</p></div>
     </div>
     <p class="note">Source code: <a href="https://github.com/drpaulfarrow/crumbs" target="_blank" rel="noopener">github.com/drpaulfarrow/crumbs</a></p>
+  </div>
+
+  <div class="card" id="demo-script" style="margin-top:16px">
+    <div class="label">Demo script</div>
+    <h3>Three steps, about five minutes</h3>
+    <ol class="steps" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+      <li><b>Today</b><span>Open A/B on the real sites with the fix switched off. Window B loses auctions to Crumbs' blocking.</span></li>
+      <li><b>Proposed policy</b><span>Tick "Proposed policy: allow auctions" and reload. Window B's auctions come back while syncs and trackers stay blocked.</span></li>
+      <li><b>Crumbs module</b><span>Tick "Crumbs Prebid module", pick a group and reload. Window B's bid requests now carry the group and no user IDs. Window A is unchanged.</span></li>
+    </ol>
+    <p class="note">The switches are in the strip under the control panel's header. The Prebid section of the panel shows what each window's bid request told bidders.</p>
   </div>
 </section>
 
@@ -1439,6 +1451,33 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
     <p>Prebid is the open-source header-bidding library most independent publishers use. This tab follows one ad slot through a Prebid auction, so you can see where Crumbs blocks, allows and adds data in each version of the plan.</p>
   </div>
 
+
+  <div class="card" id="pb-module" style="margin-bottom:16px">
+    <div class="sec-head" style="margin-bottom:12px"><div><div class="label">Built and running · prototype</div><h3>The Crumbs Prebid module</h3></div><p>A working version of the in-page fix, injected into real sites in the demo's window B. It uses only public Prebid functions, so it works on any site that runs Prebid.</p></div>
+    <ol class="steps four" style="margin-top:0">
+      <li><b>Asks Crumbs</b><span>Looks up a signal name that only the Crumbs resolver answers. No answer means the reader isn't a Crumbs user, and the module does nothing.</span></li>
+      <li><b>Reads the group</b><span>Crumbs answers with one address per interest group. A small request to that address returns the reader's opted-in group.</span></li>
+      <li><b>Turns on Crumbs mode</b><span>No ID syncs, no Prebid storage, and no user IDs where the site's Prebid has activity controls. The auction still runs.</span></li>
+      <li><b>Adds the group</b><span>As a seller-defined audience in the bid request, a Xandr key-value and a Google Ad Manager key-value.</span></li>
+    </ol>
+    <div class="grid2" style="margin-top:16px">
+      <div class="code-card new"><span class="label">What window B's bid request carried in testing</span><pre><code>"user": {
+  "data": [{
+    "name": "crumbs.com",
+    "ext": { "segtax": 4 },
+    "segment": [{ "id": "<span class="hl-new">410</span>" }]
+  }],
+  "keywords": "<span class="hl-new">crumbs_grp=running</span>"
+}
+// user IDs: none</code></pre><p class="note">410 is "Running and Jogging" in the IAB Audience Taxonomy 1.1. Xandr received <code>crumbs_grp=running</code> as a key-value.</p></div>
+      <div class="code-card"><span class="label">Window A, the same page without Crumbs</span><pre><code>"user": {}
+// module inactive: no Crumbs answer
+// for the signal name</code></pre>
+        <p class="note">Tested with two browser windows through the demo's proxies. Real bids depend on the live network.</p>
+        <div class="gotos" style="margin-top:6px"><button type="button" class="goto" data-goto="demo" data-anchor="demo-script">See it in the live demo</button><a class="goto ghost" href="https://github.com/drpaulfarrow/crumbs/blob/ccr-dd01651e-w1d70v/crumbs_demo/static/crumbs-prebid.js" target="_blank" rel="noopener">Read the code</a></div>
+      </div>
+    </div>
+  </div>
   <div class="card" id="pb-flow">
     <div class="sec-head" style="margin-bottom:12px">
       <div><div class="label">Ad call flow</div><h3 id="pbTitle"></h3></div>
@@ -1475,7 +1514,7 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
       <li><b>Prebid needs the SSP</b><span>Prebid.js is about to send a bid request to <code>bid.ssp.example</code>, so the phone asks where that host is.</span></li>
       <li><b>Crumbs answers with the group's address</b><span>This user opted in and chose personal finance, so the answer is <code>2001:db8:ab::7</code>. Everyone else gets <code>::1</code>. To the browser it is a normal address.</span></li>
       <li><b>The request is unchanged</b><span>The browser sends Prebid's normal bid request to <code>::7</code>. The certificate is for the hostname, so it is valid on every address.</span></li>
-      <li><b>The SSP decodes the address</b><span>Its server notes it was reached on <code>::7</code>, looks up group 7, and writes <code>user.data</code> segment <code>ig-personal-finance</code> into the OpenRTB request. A curator rule can attach deal <code>crumbs-fintech-installers</code>.</span></li>
+      <li><b>The SSP decodes the address</b><span>Its server notes it was reached on <code>::7</code>, looks up group 7, and writes <code>user.data</code> segment <code>534</code> into the OpenRTB request. A curator rule can attach deal <code>crumbs-fintech-installers</code>.</span></li>
       <li><b>The deal comes back as a key-value</b><span>DSPs bid on the group or deal. If that bid wins, its deal ID returns in the bid response, and Prebid passes it to the ad server as <code>hb_deal</code>, alongside <code>hb_pb</code> and <code>hb_bidder</code>.</span></li>
     </ol>
     <div class="grid2" style="margin-top:16px">
@@ -1483,7 +1522,7 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
   "data": [{
     "name": "crumbs.com",
     "ext": { "segtax": 4 },
-    "segment": [{ "id": "<span class="hl-new">ig-personal-finance</span>" }]
+    "segment": [{ "id": "<span class="hl-new">534</span>" }]
   }]
 },
 "imp": [{ "pmp": { "deals": [
@@ -1493,7 +1532,7 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
 hb_pb     = "2.40"
 hb_deal   = "<span class="hl-new">crumbs-fintech-installers</span>"
 hb_size   = "300x250"</code></pre>
-      <p class="note">The group itself never becomes an ad server key-value. Only the deal ID of a winning bid does, which lets the publisher prioritise Crumbs deals in its ad server.</p></div>
+      <p class="note">In this server-side version, the group itself never becomes an ad server key-value. Only the deal ID of a winning bid does, which lets the publisher prioritise Crumbs deals in its ad server.</p></div>
     </div>
     <div class="callout" style="margin-top:16px"><b>Who has to know the group.</b> Step 2 only works if whatever answers the lookup knows the user's group. The best place is the phone: if the Crumbs app handles DNS on the device, it swaps in the group's address itself, and the group never reaches Crumbs' servers. If lookups go straight to Crumbs' resolver, Crumbs would have to hold each device's group, which weakens the privacy design. On a router, the group would be a household group held by the router. How the iOS app handles DNS today is a week-one question.</div>
   </div>
@@ -1527,7 +1566,7 @@ hb_size   = "300x250"</code></pre>
     "data": [{
       "name": "<span class="hl-new">crumbs.com</span>",
       "ext": { "segtax": 4 },
-      "segment": [{ "id": "<span class="hl-new">ig-personal-finance</span>" }]
+      "segment": [{ "id": "<span class="hl-new">534</span>" }]
     }]
   }
 }</code></pre>
