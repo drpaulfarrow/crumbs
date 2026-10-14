@@ -672,6 +672,12 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
 .next-wrap{display:flex;justify-content:flex-end;padding-top:8px}
 .next-btn{display:inline-flex;align-items:center;gap:10px;border:1.5px solid var(--ink);background:var(--signal);color:#fff;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;box-shadow:2px 2px 0 var(--ink);font-size:14.5px}
 
+.strat-line{background:color-mix(in srgb,var(--signal) 8%,var(--surface))}
+.strat-line p{margin:0;font-family:var(--f-display);font-size:24px;line-height:1.4}
+.strat-line b{color:var(--signal)}
+.strat-no{margin:8px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:7px;font-size:15px}
+.verdicts .linkish{padding:2px 0 0;font-size:13.5px;color:var(--signal)}
+@media (max-width:760px){ .strat-line p{font-size:19px} }
 /* Revenue model */
 .rev-bars{display:flex;flex-direction:column;gap:6px}
 .rev-row{display:grid;grid-template-columns:minmax(0,190px) minmax(0,1fr) 72px;gap:10px;align-items:center;font-size:14px}
@@ -737,6 +743,43 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
     <div class="hero-art" id="heroArt"></div>
   </div>
 
+  <div>
+    <div class="sec-head"><div><div class="eyebrow">Strategy in one sentence</div><h2>Diagnosis, guiding policy and coherent actions</h2></div><p>Written to the test in Richard Rumelt's <i>Good Strategy Bad Strategy</i>: say what the problem is, make choices that rule things out, and take actions that support each other.</p></div>
+  <div class="card strat-line" id="strategy">
+    <p>Crumbs can see which apps people use without knowing who they are, but today it costs publishers their auctions and has too few users to measure anything, so we will <b>block tracking but not auctions</b>, <b>grow through routers rather than app downloads</b>, and <b>sell privacy-safe measurement through the measurement and curation companies advertisers already pay</b>.</p>
+  </div>
+  <div class="verdicts" style="margin-top:14px">
+    <div class="card">
+      <div class="label">1 · Diagnosis</div>
+      <h3>One unique asset, two blockers</h3>
+      <ul>
+        <li>The asset: a view of app activity at the network level, where other measurement has been weak since ATT.</li>
+        <li>Blocker one: Crumbs blocks auctions that publishers depend on. <button type="button" class="linkish" data-goto="findings">Blocking findings</button></li>
+        <li>Blocker two: too few users to report anything accurately. <button type="button" class="linkish" data-goto="today">Crumbs today</button></li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="label">2 · Guiding policy</div>
+      <h3>Three choices</h3>
+      <ul>
+        <li>Block tracking, not auctions. Publishers become supporters instead of opponents.</li>
+        <li>Grow through routers and ISPs. Setup becomes one click instead of a manual DNS change.</li>
+        <li>Sell through measurement companies and curators. eyeo doesn't need its own advertiser sales team.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="label">3 · Coherent actions</div>
+      <h3>Each step makes the next one possible</h3>
+      <ul>
+        <li>Fix the blocking policy, and publishers support Crumbs. <button type="button" class="linkish" data-goto="prebid">How it works in Prebid</button></li>
+        <li>Sign one router or ISP partner, and the panel grows large enough to measure. <button type="button" class="linkish" data-goto="customers">Customers</button></li>
+        <li>Pilot measurement data with two measurement companies, and the first revenue arrives. <button type="button" class="linkish" data-goto="revenue">Revenue model</button></li>
+        <li>Use the same data to describe the audiences of apps and sites for curators. <button type="button" class="linkish" data-goto="plan">First 30 days and beyond</button></li>
+      </ul>
+    </div>
+  </div>
+  </div>
+
   <div class="card alert">
     <div>
       <div class="eyebrow">From today</div>
@@ -776,6 +819,9 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
       <li>User-level segments in the bidstream</li>
       <li>Conquesting cohorts and anything built on sensitive categories</li>
       <li>Selling data to funds or brokers</li>
+      <li>Selling to advertisers directly, instead of through measurement companies and curators</li>
+      <li>Paying users cash for their data</li>
+      <li>Relying on people finding the app and changing their DNS settings</li>
       <li>DNS-level ad replacement</li>
       <li>Any product that makes protection depend on opting in</li>
       <li>Blocking that decides which companies get paid rather than what data the user shares</li></ul></div>
