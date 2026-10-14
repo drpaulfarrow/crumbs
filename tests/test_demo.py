@@ -333,6 +333,20 @@ def test_control_api_toggle_state_and_page_events():
     asyncio.run(run())
 
 
+def test_case_study_page_and_launch_beside():
+    async def run():
+        calls = []
+        engine = Engine(lists())
+        ctl = ControlServer(engine, 0, launcher=lambda **kw: calls.append(kw) or ["a", "b"])
+        status, ctype, html = await ctl.route("GET", "/case-study", b"", {}, None)
+        assert status.startswith("200") and ctype.startswith("text/html") and b'id="tab-demo"' in html
+        await ctl.route("POST", "/api/launch?page=test&beside=1", b"", {}, None)
+        await ctl.route("POST", "/api/launch?page=site", b"", {}, None)
+        assert calls[0] == {"page": "test", "warm": None, "beside": True}
+        assert calls[1] == {"page": "site", "warm": None}
+    asyncio.run(run())
+
+
 # --- browser monitor ------------------------------------------------------------
 
 def test_browser_outcomes_distinguish_crumbs_from_browser_blocking():

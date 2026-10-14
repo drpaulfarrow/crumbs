@@ -125,14 +125,17 @@ def clone_warm_profile(dest: Path) -> None:
     shutil.copytree(WARM_DIR, dest, ignore=_CLONE_SKIP, dirs_exist_ok=True)
 
 
-def window_bounds(index: int, count: int = 2) -> dict:
+def window_bounds(index: int, count: int = 2, reserve: float = 0.0) -> dict:
+    """Split the screen between the windows. reserve keeps that share of the
+    screen's left side free, for the case-study page beside the A/B windows."""
     width, height = screen_size()
-    part = width // count
-    return {"left": index * part, "top": 0, "width": part, "height": height}
+    start = int(width * max(0.0, min(reserve, 0.8)))
+    part = (width - start) // count
+    return {"left": start + index * part, "top": 0, "width": part, "height": height}
 
 
 def launch_ab(lanes: dict, urls: list[str], prefer: str = "edge", warm: bool = False,
-              extra: list[str] | None = None, tag: str = "lane") -> list[str]:
+              extra: list[str] | None = None, tag: str = "lane", reserve: float = 0.0) -> list[str]:
     """lanes: {"a": (proxy_port, cdp_port), ...}. Window A on the left, B on the right.
 
     Pass urls=[] to open blank windows and let the browser monitor open the
@@ -153,7 +156,7 @@ def launch_ab(lanes: dict, urls: list[str], prefer: str = "edge", warm: bool = F
             clone_warm_profile(profile)
         profile.mkdir(parents=True, exist_ok=True)
         lane_urls = [u.replace("{lane}", name) for u in urls] or ["about:blank"]
-        b = window_bounds(i, len(lanes))
+        b = window_bounds(i, len(lanes), reserve)
         subprocess.Popen([browser, *browser_args(profile, port, cdp_port, b["left"], b["width"], b["height"],
                                                  lane_urls, extra)],
                          stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)

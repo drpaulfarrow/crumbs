@@ -370,7 +370,7 @@ document.addEventListener("click", async (ev) => {
 });
 async function launch(page) {
   const warm = $("#use-warm").checked ? 1 : 0;
-  const r = await (await fetch(`/api/launch?page=${page}&warm=${warm}`, { method: "POST" })).json();
+  const r = await (await fetch(`/api/launch?page=${page}&warm=${warm}${window.top !== window ? "&beside=1" : ""}`, { method: "POST" })).json();
   if (r.error) alert(r.error);
 }
 let warmInit = false;

@@ -29,6 +29,8 @@ def build_parser() -> argparse.ArgumentParser:
 
     run = sub.add_parser("run", help="start the lanes, DNS server and control panel (default)")
     run.add_argument("--panel-port", type=int, default=5380)
+    run.add_argument("--open-site", action="store_true",
+                     help="open the case-study page (with the panel inside it) instead of the bare panel")
     run.add_argument("--lane-a-port", type=int, default=8081)
     run.add_argument("--lane-b-port", type=int, default=8082)
     run.add_argument("--cdp-a-port", type=int, default=9231, help="DevTools port window A is watched on")
@@ -175,24 +177,30 @@ async def serve(args) -> None:
         lane.monitor.start()
     browser = args.browser or load_demo_config().get("browser", "edge")
 
-    def launcher(page: str = args.page, warm: bool | None = None):
+    def launcher(page: str = args.page, warm: bool | None = None, beside: bool = False):
         # Windows start blank; each monitor opens the pages once it's attached,
         # so the live request view sees the very first request.
         urls = ab_urls(args.panel_port, page)
         if warm is None:
             warm = warm_profile_state()["exists"]
+        # beside=True (launch from the case-study page) leaves the left part of the screen for the case-study page.
+        reserve = float(load_demo_config().get("site_share", 0.34)) if beside else 0.0
         started = launch_ab({"a": (args.lane_a_port, args.cdp_a_port),
-                             "b": (args.lane_b_port, args.cdp_b_port)}, [], prefer=browser, warm=warm)
+                             "b": (args.lane_b_port, args.cdp_b_port)}, [], prefer=browser, warm=warm,
+                            reserve=reserve)
         for i, name in enumerate(started):
-            monitors[name].open_urls([u.replace("{lane}", name) for u in urls], window_bounds(i, len(started)))
+            monitors[name].open_urls([u.replace("{lane}", name) for u in urls],
+                                     window_bounds(i, len(started), reserve))
         return started
 
     control = ControlServer(engine, args.panel_port, launcher=launcher,
                             warmup=lambda: launch_warmup(ab_urls(args.panel_port, "site"), prefer=browser))
     closers.append(await control.start())
     panel = f"http://127.0.0.1:{args.panel_port}/"
+    site = f"http://127.0.0.1:{args.panel_port}/case-study#demo"
 
     print(f"\n  Crumbs demo running. Control panel: {panel}")
+    print(f"  Case study with live panel: {site}")
     print(f"  Prebid test page:          http://127.0.0.1:{args.panel_port}/test")
     print(f"  From the Android emulator: http://10.0.2.2:{args.panel_port}/test?lane=emulator")
     print(f"  Lists: {len(lists.trackers)} tracker / {len(lists.ads)} ad domains ({lists.sources['trackers']})")
@@ -208,7 +216,7 @@ async def serve(args) -> None:
     print("  Ctrl+C to stop.\n")
 
     if not args.no_open:
-        webbrowser.open(panel)
+        webbrowser.open(site if args.open_site else panel)
     if args.launch:
         try:
             launcher()

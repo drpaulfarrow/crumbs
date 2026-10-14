@@ -50,6 +50,16 @@ Background research for the case study is in [`research/RESEARCH_BRIEF.md`](rese
 - This lane is a real DNS server.
 - `system-dns-on.ps1` points Windows at it; `system-dns-off.ps1` puts everything back.
 
+## Case-study page with the panel inside it
+
+The demo also serves the case-study site at **http://127.0.0.1:5380/case-study**. Its "Live demo" tab shows the control panel, so you can present and demo from one page.
+
+- Start the demo as usual, or with `--open-site` to open the case-study page instead of the bare panel.
+- Put the case-study window on the left third of the screen.
+- Use the "Open A/B" buttons in the Live demo tab. When the panel is inside the case-study page, the A/B windows open on the right two-thirds, leaving the page visible.
+- `"site_share"` in `demo_config.json` sets how much of the screen's left side is kept free (default `0.34`).
+- The file is `crumbs_demo/static/case-study.html`, a copy of the published case-study site.
+
 ## Updating
 
 ```powershell

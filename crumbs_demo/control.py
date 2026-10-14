@@ -35,6 +35,8 @@ STATIC_ROUTES = {
     "/": "index.html",
     "/test": "testpage.html",
     "/test/": "testpage.html",
+    "/case-study": "case-study.html",
+    "/case-study/": "case-study.html",
 }
 
 
@@ -139,8 +141,11 @@ class ControlServer:
             opts = parse_qs(url.query)
             try:
                 warm = opts.get("warm", [None])[0]
-                started = self.launcher(page=opts.get("page", ["site"])[0],
-                                        warm=None if warm is None else warm == "1")
+                kwargs = {"page": opts.get("page", ["site"])[0],
+                          "warm": None if warm is None else warm == "1"}
+                if opts.get("beside", ["0"])[0] == "1":
+                    kwargs["beside"] = True
+                started = self.launcher(**kwargs)
             except Exception as e:  # surfaced in the panel
                 return self._json({"error": str(e)}, "500 Internal Server Error")
             return self._json({"ok": True, "started": started})
