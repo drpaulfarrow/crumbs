@@ -125,6 +125,7 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
     <input type="checkbox" id="use-warm"> <span id="warm-label">from warm profile</span></label>
   <button id="launch-sites">Open A/B: real sites</button>
   <button id="launch-test">Open A/B: Prebid test page</button>
+  <button id="close-ab" title="Close both A/B browser windows">Close A/B</button>
   <button id="reset">Reset stats</button>
 </header>
 <div class="warn" id="warn"></div>
@@ -447,6 +448,7 @@ $("#warmup").onclick = async () => {
 };
 $("#launch-sites").onclick = () => launch("site");
 $("#launch-test").onclick = () => launch("test");
+$("#close-ab").onclick = async () => { await fetch("/api/close-ab", { method: "POST" }); refresh(); };
 $("#reset").onclick = async () => { await fetch("/api/reset", { method: "POST" }); refresh(); };
 refresh();
 setInterval(refresh, 1000);

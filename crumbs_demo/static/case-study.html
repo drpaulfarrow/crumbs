@@ -332,6 +332,11 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
 .alert p{margin:6px 0 0;font-size:16px;max-width:80ch}
 .gotos{display:flex;flex-direction:column;gap:8px}
 .goto.ghost{background:transparent;color:var(--signal)}
+.demo-bar{padding:14px 16px;margin-bottom:14px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.demo-bar p{margin:0;flex:1 1 320px}
+.demo-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.demo-msg{font-size:13.5px;color:var(--muted)}
+a.goto{text-decoration:none;text-align:center;display:inline-block}
 #router-setup{scroll-margin-top:80px}
 .goto{border:1px solid var(--signal);background:var(--signal);color:#fff;border-radius:999px;padding:10px 16px;font-weight:600;cursor:pointer;font-size:14px;white-space:nowrap}
 .tile .v.bad{color:var(--bad)} .tile .v.warn{color:var(--warn)} .tile .v.good{color:var(--good)} .tile .v.ink{color:var(--ink)}
@@ -696,6 +701,74 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
 .opts td.rn{font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
 .opts tr.tot td{font-weight:700;border-top:1.5px solid var(--ink)}
 @media (max-width:560px){ .rev-row{grid-template-columns:minmax(0,1fr) 64px} .rev-row .rb{grid-column:1/-1;grid-row:2} }
+/* Why me badges */
+.ag-badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.ag-badges span{font-family:var(--f-mono);font-size:12px;font-weight:700;background:var(--mint);color:var(--mint-ink);border:1.5px solid var(--ink);border-radius:999px;padding:3px 10px;box-shadow:2px 2px 0 var(--ink)}
+/* Zero trust diagram */
+.zt-wrap{overflow-x:auto}
+.zt-svg{display:block;width:100%;min-width:860px;height:auto}
+.zt-box{fill:var(--node);stroke:var(--ink);stroke-width:1.5}
+.zt-tee{fill:var(--zone);stroke:var(--signal);stroke-width:2;stroke-dasharray:6 4}
+.zt-log{fill:var(--surface);stroke:var(--ink);stroke-width:1.5}
+.zt-h{font-family:var(--f-display);font-weight:700;font-size:15px;fill:var(--ink)}
+.zt-s{font-family:var(--f-body);font-size:12px;fill:var(--muted)}
+.zt-b{font-family:var(--f-mono);font-size:10.5px;font-weight:700;fill:var(--signal)}
+.zt-k{font-family:var(--f-body);font-size:12.5px;font-weight:700;fill:var(--signal)}
+.zt-l{font-family:var(--f-mono);font-size:11px;fill:var(--muted)}
+.zt-a{stroke:var(--ink);stroke-width:1.8;fill:none}
+.zt-a2{stroke:var(--muted);stroke-width:1.5;fill:none;stroke-dasharray:4 4}
+.zt-at{stroke:var(--signal);stroke-width:1.5;fill:none;stroke-dasharray:3 4}
+.zt-n circle{fill:var(--mint);stroke:var(--ink);stroke-width:1.5}
+.zt-n text{font-family:var(--f-mono);font-size:11px;font-weight:700;fill:var(--mint-ink)}
+/* Documents */
+.doc-list{display:flex;flex-direction:column;margin-top:6px}
+.doc-row{border-top:1px solid var(--line);padding:12px 0}
+.doc-row:first-child{border-top:0}
+.doc-head{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:12px;align-items:center}
+.doc-n{font-family:var(--f-mono);font-weight:700;font-size:12px;color:var(--muted)}
+.doc-head b{font-family:var(--f-display);font-size:16.5px}
+.doc-head p{margin:2px 0 0;font-size:14px;color:var(--muted)}
+.doc-wk{font-family:var(--f-mono);font-size:11px;border:1.5px solid var(--ink);border-radius:999px;padding:1px 8px;margin-left:8px;white-space:nowrap;vertical-align:2px}
+.doc-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.doc-btn{border:1.5px solid var(--ink);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;cursor:pointer;box-shadow:2px 2px 0 var(--ink)}
+.doc-btn.dl{background:var(--signal);color:#fff}
+.doc-msg{font-size:13px;color:var(--muted);text-align:right;min-height:1em}
+.doc-prev{margin:12px 0 4px 52px;background:var(--node);border:1.5px solid var(--ink);border-radius:12px;padding:16px 20px;max-height:520px;overflow:auto;font-size:14.5px;min-width:0}
+.doc-prev h1{font-size:24px;max-width:none;margin:0 0 6px}
+.doc-prev h2{font-size:19px;margin:16px 0 6px}
+.doc-prev h3{font-size:16px;margin:12px 0 4px}
+.doc-prev p{margin:6px 0}
+.doc-prev ul,.doc-prev ol{margin:6px 0;padding-left:20px}
+.doc-prev table{border-collapse:collapse;width:100%;margin:8px 0;font-size:13.5px}
+.doc-prev th,.doc-prev td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+.doc-prev th{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.doc-prev hr{border:0;border-top:1px solid var(--line);margin:14px 0}
+.doc-prev .tw{overflow-x:auto}
+@media (max-width:640px){ .doc-head{grid-template-columns:30px minmax(0,1fr)} .doc-actions{grid-column:1/-1;justify-content:flex-start} .doc-prev{margin-left:0} }
+/* Agenda */
+.ag-hero h1{max-width:28ch}
+.ag-line em{font-style:normal;color:var(--signal)}
+.ag-usp{font-family:var(--f-display);font-weight:700;font-size:24px;margin:0 0 6px}
+.ag-sub{color:var(--muted);font-size:16px;margin:0 0 14px}
+.ag-three{margin:6px 0 0;padding:0;list-style:none;counter-reset:a;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.ag-three li{counter-increment:a;background:var(--node);border:1.5px solid var(--ink);border-radius:12px;box-shadow:2px 2px 0 var(--ink);padding:14px 16px;font-size:15px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.ag-three li::before{content:counter(a);display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--mint);color:var(--mint-ink);border:1.5px solid var(--ink);font-family:var(--f-mono);font-weight:700;font-size:13px}
+.ag-run{margin:0;padding:0;list-style:none;display:flex;flex-direction:column}
+.ag-run li{display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:16px;align-items:center;padding:14px 0;border-top:1px solid var(--line)}
+.ag-run li:first-child{border-top:0}
+.ag-t{font-family:var(--f-mono);font-weight:700;font-size:13px;font-variant-numeric:tabular-nums}
+.ag-run b{font-family:var(--f-display);font-size:18px}
+.ag-run p{margin:2px 0 0;font-size:14.5px}
+.ag-run p.ag-q{color:var(--signal);font-size:14px}
+.ag-router{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.ag-card{background:var(--surface);border:1.5px solid var(--ink);border-radius:12px;box-shadow:2px 2px 0 var(--ink);padding:12px 14px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.ag-card p{margin:0;font-size:14px;flex:1}
+.ag-card .linkish{color:var(--signal);font-size:13.5px;padding-top:6px}
+.tab .tn.minor{background:transparent;color:var(--muted);border-color:var(--line)}
+.tab.tab-agenda{color:var(--ink);font-weight:700}
+.tab.tab-agenda[aria-selected="true"]{color:var(--paper)}
+@media (max-width:1080px){ .ag-router{grid-template-columns:repeat(2,minmax(0,1fr))} .ag-three{grid-template-columns:minmax(0,1fr)} }
+@media (max-width:560px){ .ag-router{grid-template-columns:minmax(0,1fr)} .ag-run li{grid-template-columns:minmax(0,1fr)} }
 </style>
 
 <header class="site-head">
@@ -704,28 +777,76 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
       <div><b>Crumbs Outcomes</b></div>
     </div>
     <nav class="tabs" role="tablist" aria-label="Sections">
-      <button class="tab" role="tab" data-tab="thesis" aria-selected="true"><span class="tn">1</span>Thesis</button>
-      <button class="tab" role="tab" data-tab="today" aria-selected="false"><span class="tn">2</span>Crumbs today</button>
-      <button class="tab" role="tab" data-tab="findings" aria-selected="false"><span class="tn">3</span>Blocking findings</button>
-      <button class="tab" role="tab" data-tab="demo" aria-selected="false"><span class="tn">4</span>Live demo</button>
-      <button class="tab" role="tab" data-tab="customers" aria-selected="false"><span class="tn">5</span>Customers</button>
+      <button class="tab tab-agenda" role="tab" data-tab="agenda" aria-selected="true">Agenda</button>
+      <button class="tab" role="tab" data-tab="today" aria-selected="false"><span class="tn">1</span>Crumbs today</button>
+      <button class="tab" role="tab" data-tab="thesis" aria-selected="false"><span class="tn minor">2</span>Thesis</button>
+      <button class="tab" role="tab" data-tab="demo" aria-selected="false"><span class="tn">3</span>Live demo</button>
+      <button class="tab" role="tab" data-tab="findings" aria-selected="false"><span class="tn">4</span>Blocking findings</button>
+      <button class="tab" role="tab" data-tab="options" aria-selected="false"><span class="tn minor">5</span>Options</button>
       <button class="tab" role="tab" data-tab="market" aria-selected="false"><span class="tn">6</span>Where to start</button>
-      <button class="tab" role="tab" data-tab="revenue" aria-selected="false"><span class="tn">7</span>Revenue model</button>
-      <button class="tab" role="tab" data-tab="prebid" aria-selected="false"><span class="tn">8</span>How it works in Prebid</button>
-      <button class="tab" role="tab" data-tab="how" aria-selected="false"><span class="tn">9</span>What has to be true</button>
-      <button class="tab" role="tab" data-tab="plan" aria-selected="false"><span class="tn">10</span>First 30 days and beyond</button>
-      <span class="tab-div" aria-hidden="true">Appendix</span>
-      <button class="tab app-tab" role="tab" data-tab="chain" aria-selected="false">Signal chain</button>
-      <button class="tab app-tab" role="tab" data-tab="launch" aria-selected="false">Launch notes</button>
-      <button class="tab app-tab" role="tab" data-tab="compete" aria-selected="false">Competition</button>
-      <button class="tab app-tab" role="tab" data-tab="options" aria-selected="false">Options</button>
-      <button class="tab app-tab" role="tab" data-tab="trust" aria-selected="false">Zero trust</button>
-      <button class="tab app-tab" role="tab" data-tab="why" aria-selected="false">Why me</button>
+      <button class="tab" role="tab" data-tab="customers" aria-selected="false"><span class="tn minor">7</span>Customers</button>
+      <button class="tab" role="tab" data-tab="compete" aria-selected="false"><span class="tn minor">8</span>Competition</button>
+      <button class="tab" role="tab" data-tab="chain" aria-selected="false"><span class="tn minor">9</span>Signal chain</button>
+      <button class="tab" role="tab" data-tab="prebid" aria-selected="false"><span class="tn minor">10</span>How it works in Prebid</button>
+      <button class="tab" role="tab" data-tab="trust" aria-selected="false"><span class="tn minor">11</span>Zero trust</button>
+      <button class="tab" role="tab" data-tab="revenue" aria-selected="false"><span class="tn minor">12</span>Revenue model</button>
+      <button class="tab" role="tab" data-tab="launch" aria-selected="false"><span class="tn minor">13</span>Launch notes</button>
+      <button class="tab" role="tab" data-tab="plan" aria-selected="false"><span class="tn">14</span>First 30 days and beyond</button>
+      <button class="tab" role="tab" data-tab="why" aria-selected="false"><span class="tn minor">15</span>Why me</button>
     </nav>
   </div>
 </header>
 
 <main class="wrap">
+
+<!-- AGENDA -->
+<section class="tabpanel" id="tab-agenda" role="tabpanel" hidden>
+  <div class="card ag-hero">
+    <div class="eyebrow">Agenda · about 60 minutes</div>
+    <h1 class="ag-line">Measure on phones first, create audiences <em>everywhere</em> later</h1>
+    <p class="ag-usp">Privacy and accuracy are our USP.</p>
+    <p class="ag-sub">Where I'd start, how it works, and what I'd do in the first 30 days.</p>
+    <ol class="ag-three">
+      <li><b>Verify Crumbs' behaviour and improve it.</b> Measure what it blocks today, then block identity, not auctions, so publishers stop losing revenue. Grow through routers and ISPs, because the panel is too small to measure today.</li>
+      <li><b>Start with app installs, by measuring results rather than selling ads.</b> Crumbs can see real app opens on iOS, where measurement has been weakest since Apple's privacy changes. Sell that through the companies that already measure app installs, then move to curation. Publishers and curators are the advocates.</li>
+      <li><b>Five numbers in 30 days decide our approach.</b> Publisher revenue gap, real user base, fingerprint coverage, reportable apps, and whether two measurement companies would pay.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <div class="sec-head" style="margin-bottom:12px"><div><div class="label">The run</div><h3>Five tabs, in order, with a question for you at each stop</h3></div><p>Times are a guide. Your questions take priority, and the cards below jump straight to the tab that answers them. The Thesis tab holds the one-page strategy for reference.</p></div>
+    <ol class="ag-run">
+      <li><span class="ag-t">5 min</span><div><b>Crumbs today</b><p>What exists, who uses it, and why router setup is the bottleneck.</p><p class="ag-q">Question for you: how many opted-in users do we have by market, and where is the router work?</p></div><button type="button" class="goto" data-goto="today">Open</button></li>
+      <li><span class="ag-t">10 min</span><div><b>Live demo</b><p>Three steps from the demo script: today, the proposed policy, then the working Crumbs Prebid module.</p><p class="ag-q">Question for you: is this what you expected the blocklist to do?</p></div><button type="button" class="goto" data-goto="demo" data-anchor="demo-script">Open</button></li>
+      <li><span class="ag-t">7 min</span><div><b>Blocking findings</b><p>Identity mostly reaches Google while independent auctions are cut. Block identity, not auctions.</p><p class="ag-q">Question for you: is the blocklist a deliberate policy, or inherited from filter lists?</p></div><button type="button" class="goto" data-goto="findings">Open</button></li>
+      <li><span class="ag-t">15 min</span><div><b>Where to start</b><p>App installs are the right place to start, by measuring results rather than selling ads. App measurement is not my deepest area, so I would test this with partners first.</p><p class="ag-q">Question for you: who on your side knows app measurement best, and would they test this with two measurement companies?</p></div><button type="button" class="goto" data-goto="market">Open</button></li>
+      <li><span class="ag-t">15 min</span><div><b>First 30 days and beyond</b><p>Five measurements, four weeks, and a memo on which approach to take. Where we go from here.</p><p class="ag-q">Question for you: what would you change, and who should I talk to first?</p></div><button type="button" class="goto" data-goto="plan">Open</button></li>
+    </ol>
+  </div>
+
+  <div>
+    <div class="sec-head"><div><div class="eyebrow">Likely questions</div><h2>Jump to an answer</h2></div><p>The first six follow the areas in the brief: product, testing, metrics, scale, distribution and business model. Each has a short answer and a link to the tab with the detail.</p></div>
+    <div class="ag-router">
+      <div class="ag-card"><span class="label">Product</span><p>Measure app installs on iOS first, sold through app measurement companies. Curation is the main prize later.</p><button type="button" class="linkish" data-goto="market">Where to start</button></div>
+      <div class="ag-card"><span class="label">Testing</span><p>Paired Crumbs-on and off measurement now, then a fingerprint lab and a privacy and accuracy simulator in the first month, and pre-registered lift tests.</p><button type="button" class="linkish" data-goto="plan">First 30 days</button></div>
+      <div class="ag-card"><span class="label">Metrics</span><p>To us: the five numbers. To others: published method, confidence intervals and pre-registered lift.</p><button type="button" class="linkish" data-goto="plan">First 30 days</button></div>
+      <div class="ag-card"><span class="label">Scale</span><p>Panel size caps everything, so routers and ISPs come first. Privacy hardware is phased in as volume grows.</p><button type="button" class="linkish" data-goto="trust">Zero trust</button></div>
+      <div class="ag-card"><span class="label">Distribution</span><p>Users through routers and ISPs. Buyers through MMPs, SSPs and curators. Publishers as advocates.</p><button type="button" class="linkish" data-goto="customers">Customers</button></div>
+      <div class="ag-card"><span class="label">Business model</span><p>Data licences and lift fees, a data fee of about 4% on curated media, and a revenue share to routers and ISPs.</p><button type="button" class="linkish" data-goto="revenue">Revenue model</button></div>
+      <div class="ag-card"><span class="label">Won't publishers hate this?</span><p>They lose most today. Fixing the policy turns them into the strongest advocates.</p><button type="button" class="linkish" data-goto="customers" data-anchor="advocates">Our advocates</button></div>
+      <div class="ag-card"><span class="label">How does it work in an auction?</span><p>A working Crumbs Prebid module removes user IDs and adds the group. A server-side option carries the group in the DNS answer.</p><button type="button" class="linkish" data-goto="prebid" data-anchor="pb-module">The Prebid module</button></div>
+      <div class="ag-card"><span class="label">Who else does this?</span><p>DNS blockers compete for users. Data providers, publisher platforms and telcos compete for curation budgets.</p><button type="button" class="linkish" data-goto="compete">Competition</button></div>
+      <div class="ag-card"><span class="label">What did you rule out?</span><p>29 options scored on three tests. Data for funds, conquesting and DNS ad replacement are out.</p><button type="button" class="linkish" data-goto="options">Options</button></div>
+      <div class="ag-card"><span class="label">How does the signal flow end to end?</span><p>From an opted-in phone through the privacy engine to MMPs, curators and advertisers.</p><button type="button" class="linkish" data-goto="chain">Signal chain</button></div>
+      <div class="ag-card"><span class="label">What does launch look like?</span><p>A release note and go-to-market plan for each customer, written before we build.</p><button type="button" class="linkish" data-goto="launch">Launch notes</button></div>
+      <div class="ag-card"><span class="label">What's the strategy in one line?</span><p>Measure on phones first and create audiences everywhere later, with privacy and accuracy as the difference. Block tracking but not auctions, grow through routers, and sell through measurement companies and curators.</p><button type="button" class="linkish" data-goto="thesis" data-anchor="strategy">Thesis</button></div>
+      <div class="ag-card"><span class="label">Are we an ads platform?</span><p>Not at first. Start as a data provider to curators and SSPs, and decide later whether to curate.</p><button type="button" class="linkish" data-goto="revenue" data-anchor="ads-platform">Revenue model: are we an ads platform?</button></div>
+      <div class="ag-card"><span class="label">What would you write first?</span><p>Twelve draft documents for the first month, from the fact-finding request to the risk register.</p><button type="button" class="linkish" data-goto="plan" data-anchor="documents">Documents</button></div>
+      <div class="ag-card"><span class="label">Where are you stuck?</span><p>The iOS DNS route, how a group reaches the page, and the real opt-in numbers.</p><button type="button" class="linkish" data-goto="thesis" data-anchor="questions-card">Questions for the team</button></div>
+      <div class="ag-card"><span class="label">Why you?</span><p>Board seats at Prebid, IAB Europe and the NAI, a career inside the auction, and a working builder's toolkit.</p><button type="button" class="linkish" data-goto="why">Why me</button></div>
+    </div>
+  </div>
+</section>
 
 <!-- THESIS -->
 <section class="tabpanel" id="tab-thesis" role="tabpanel">
@@ -746,7 +867,7 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
   <div>
     <div class="sec-head"><div><div class="eyebrow">Strategy in one sentence</div><h2>Diagnosis, guiding policy and coherent actions</h2></div><p>Written to the test in Richard Rumelt's <i>Good Strategy Bad Strategy</i>: say what the problem is, make choices that rule things out, and take actions that support each other.</p></div>
   <div class="card strat-line" id="strategy">
-    <p>Crumbs can see which apps people use without knowing who they are, but today it costs publishers their auctions and has too few users to measure anything, so we will <b>block tracking but not auctions</b>, <b>grow through routers rather than app downloads</b>, and <b>sell privacy-safe measurement through the measurement and curation companies advertisers already pay</b>.</p>
+    <p>Crumbs can see which apps people use without knowing who they are, but today it costs publishers their auctions and has too few users to measure anything, so we will <b>block tracking but not auctions</b>, <b>grow through routers rather than app downloads</b>, <b>measure app outcomes on phones first</b> through the measurement companies advertisers already pay, and <b>create audiences everywhere later</b>, for web, CTV and router households. Privacy and accuracy are what make it different.</p>
   </div>
   <div class="verdicts" style="margin-top:14px">
     <div class="card">
@@ -802,7 +923,7 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
   <div class="card">
     <div class="eyebrow">Why app first, when web is bigger</div>
     <h2>We start with app outcomes and extend to web later</h2>
-    <p class="lede" style="max-width:none">Web outcome pools are several times the size of app marketing. We still start with apps for three reasons. The measurement gap is widest on iOS apps. DNS sees app traffic clearly. iCloud Private Relay hides much of Safari's traffic from any DNS resolver. Once app measurement is trusted, it can extend to household and cross-screen measurement, because a router can see every device in a home. The Market sizing tab shows the split.</p>
+    <p class="lede" style="max-width:none">Web outcome pools are several times the size of app marketing. We still start with apps for three reasons. The measurement gap is widest on iOS apps. DNS sees app traffic clearly. iCloud Private Relay hides much of Safari's traffic from any DNS resolver. Once app measurement is trusted, it can extend to household and cross-screen measurement, because a router can see every device in a home. The Where to start tab shows the split.</p>
   </div>
 
   <div class="scope">
@@ -812,14 +933,14 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
       <li>Router and ISP partnerships for one-click setup</li>
       <li>Opt-in, aggregate outcome measurement and fraud signals</li>
       <li>Pre-registered lift readouts</li>
-      <li>Inventory-level curation with an Acceptable Ads quality bar</li>
+      <li>Later, curation using inventory labels and opt-in interest groups of at least 100 people, with an Acceptable Ads quality bar</li>
       <li>The trust stack: on-device processing, split aggregation, attestation</li>
-      <li>ISP and router distribution, because panel size caps everything</li></ul></div>
+</ul></div>
     <div class="card out"><div class="eyebrow">Out of scope</div><h3>What we refuse</h3><ul>
-      <li>User-level segments in the bidstream</li>
+      <li>Individual user IDs, or segments smaller than 100 people, in the bidstream</li>
       <li>Conquesting cohorts and anything built on sensitive categories</li>
       <li>Selling data to funds or brokers</li>
-      <li>Selling to advertisers directly, instead of through measurement companies and curators</li>
+      <li>Building an advertiser sales team. Apart from a few reference lift studies, we sell through measurement companies and curators</li>
       <li>Paying users cash for their data</li>
       <li>Relying on people finding the app and changing their DNS settings</li>
       <li>DNS-level ad replacement</li>
@@ -848,10 +969,11 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
       <li>How do we think about neutrality between Google and independent ad tech companies?</li>
       <li>What is the route for getting an interest-group signal into the auction, and is DNS meant to enforce privacy long-term or mainly to distribute Crumbs?</li>
       <li>How many opted-in iOS users do we have today, by market? This number changes every sizing estimate by a factor of two or more.</li>
-      <li>What is the status of the router work, and could Whalebone's ISP customers become a distribution route?</li>
+      <li>What is the status of the router work, and which router makers or ISPs is eyeo already talking to?</li>
       <li>Would eyeo want the protection service itself to run on attested hardware, as well as the ad products?</li>
       <li>Where do we draw the line on inventory labels and on install suppression?</li>
       <li>Does the brief deliberately exclude the desktop extension? It sees more of the web than DNS does.</li>
+      <li>Should eyeo be an ads platform, or a data provider to the platforms that already exist? <button type="button" class="linkish" data-goto="revenue" data-anchor="ads-platform">See the options</button></li>
     </ol>
   </div>
 </section>
@@ -864,8 +986,13 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
   </div>
 
   <div id="demo-live" hidden>
-    <div class="card" style="padding:14px 16px;margin-bottom:14px">
-      <p style="margin:0">The control panel below is running on this laptop. Its "Open A/B" buttons open the two windows on the right of the screen, so this page can stay on the left.</p>
+    <div class="card demo-bar">
+      <p>The control panel below is running on this laptop. Its "Open A/B" buttons open the two windows on the right of the screen, so this page can stay on the left.</p>
+      <div class="demo-actions">
+        <button type="button" class="goto" id="demo-close">Close A/B windows</button>
+        <button type="button" class="goto ghost" id="demo-hide" aria-expanded="true" aria-controls="demo-frame">Hide panel</button>
+        <span class="demo-msg" id="demo-msg" role="status"></span>
+      </div>
     </div>
     <iframe id="demo-frame" title="Crumbs demo control panel" style="width:100%;height:calc(100vh - 230px);min-height:640px;border:1.5px solid var(--ink);border-radius:16px;box-shadow:3px 3px 0 var(--ink);background:#fff"></iframe>
   </div>
@@ -882,14 +1009,43 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
       <div><span class="n">Step 3</span><b>Prebid compared</b><p>Every two seconds the panel reads each window's Prebid results: bidders asked, bids received and the top bid per slot.</p></div>
       <div><span class="n">Step 4</span><b>Test page</b><p>A test publisher page runs a real Prebid auction and also works from the Android emulator running the Crumbs app.</p></div>
     </div>
-    <p class="note">Source code: <a href="https://github.com/drpaulfarrow/crumbs" target="_blank" rel="noopener">github.com/drpaulfarrow/crumbs</a></p>
+  </div>
+  <div class="card" id="demo-script" style="margin-top:16px">
+    <div class="label">Demo script</div>
+    <h3>Three steps, about five minutes</h3>
+    <ol class="steps" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+      <li><b>Today</b><span>Open A/B on the real sites with the fix switched off. Window B loses auctions to Crumbs' blocking.</span></li>
+      <li><b>Proposed policy</b><span>Tick "Proposed policy: allow auctions" and reload. Window B's auctions come back while syncs and trackers stay blocked.</span></li>
+      <li><b>Crumbs module</b><span>Tick "Crumbs Prebid module", pick a group and reload. Window B's bid requests now carry the group and no user IDs. Window A is unchanged.</span></li>
+    </ol>
+    <p class="note">The switches are in the strip under the control panel's header. The Prebid section of the panel shows what each window's bid request told bidders.</p>
+  </div>
+  <div class="card" id="run-it" style="margin-top:16px">
+    <div class="sec-head" style="margin-bottom:10px"><div><div class="label">Run it yourself</div><h3>Clone the repo and reproduce the findings on your own machine</h3></div><p>Everything on the Blocking findings tab came from this code. Running it is the quickest way to check the numbers.</p></div>
+    <p style="margin:0 0 12px"><a href="https://github.com/drpaulfarrow/crumbs" target="_blank" rel="noopener"><b>github.com/drpaulfarrow/crumbs</b></a></p>
+    <div class="grid2">
+      <div class="code-card"><span class="label">Windows: set up once, then start</span><pre><code>git clone https://github.com/drpaulfarrow/crumbs
+cd crumbs
+powershell -ExecutionPolicy Bypass -File scripts\windows\setup.ps1
+
+scripts\windows\start-demo.ps1              # real sites
+scripts\windows\start-demo.ps1 -Page test   # Prebid test page
+scripts\windows\start-demo.ps1 -Local       # local EasyPrivacy list</code></pre></div>
+      <div class="code-card"><span class="label">macOS or Linux: development mode</span><pre><code>git clone https://github.com/drpaulfarrow/crumbs
+cd crumbs
+pip install -r requirements-dev.txt
+python -m pytest -q tests
+python -m crumbs_demo run --no-dns --crumbs-resolver local</code></pre>
+      <p class="note">Development mode skips the DNS port that needs admin rights and uses a local blocklist rather than eyeo's resolver.</p></div>
+    </div>
+    <p class="note">Needs Python 3.10 or later and Chrome or Edge. The control panel opens at <code>http://127.0.0.1:5380/</code>, and this site is served from it at <code>/case-study</code>. Admin rights are only needed for the optional whole-PC test, and Android Studio only for the emulator test.</p>
   </div>
 </section>
 
 <section class="tabpanel" id="tab-customers" role="tabpanel" hidden>
   <div class="sec-head">
     <div><div class="eyebrow">Customers</div><h2>Three primary customers keep Crumbs running, and two secondary customers decide whether the market accepts it</h2></div>
-    <p>Primary customers choose Crumbs directly: users install it, router companies ship it, and tech providers license what it produces. Secondary customers benefit downstream. Publishers and curators matter most, because they are the groups most likely to advocate for Crumbs.</p>
+    <p>Primary customers choose Crumbs directly: users install it, router companies ship it, and tech providers license what it produces. Secondary customers benefit downstream. Publishers (secondary) and curators (primary, as tech providers) matter most, because they are the groups most likely to advocate for Crumbs.</p>
   </div>
 
   <div>
@@ -900,7 +1056,7 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
         <h3>Users</h3>
         <p class="cust-lede">They pay with trust, not money. Every other customer depends on how many of them install Crumbs and choose to opt in.</p>
         <dl>
-          <div><dt>Why they choose us</dt><dd>Free protection from trackers and malware, and a clear view of who tried to track them.</dd></div>
+          <div><dt>How we win</dt><dd><b>Transparency and control.</b> Free protection from trackers and malware, a clear view of who tried to track them, and the choice of what to share.</dd></div>
           <div><dt>What they give</dt><dd>An opt-in to aggregate research, separate from protection and revocable at any time.</dd></div>
           <div><dt>What they get back</dt><dd>Control over interests, ads that meet the Acceptable Ads Standard, and a tested value exchange.</dd></div>
           <div><dt>First move</dt><dd>Confirm real user and opt-in counts, then test opt-in wording and value-exchange variants.</dd></div>
@@ -912,10 +1068,10 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
         <h3>Router companies and ISPs</h3>
         <p class="cust-lede">The distribution customer. Self-setup will not reach enough homes, so they decide how large the panel can grow.</p>
         <dl>
-          <div><dt>Why they choose us</dt><dd>A security feature their customers want, which earns a revenue share instead of only costing money.</dd></div>
+          <div><dt>How we win</dt><dd><b>Revenue.</b> A security feature their customers want, which earns a revenue share instead of only costing money.</dd></div>
           <div><dt>What they give</dt><dd>One-click or default Crumbs on their routers, mesh systems and ISP gateways.</dd></div>
           <div><dt>What they get back</dt><dd>A share of measurement and curation revenue from the households they bring, and a consumer privacy brand.</dd></div>
-          <div><dt>First move</dt><dd>One mesh maker such as eero or TP-Link, one UK ISP, and Whalebone's ISP customers.</dd></div>
+          <div><dt>First move</dt><dd>One mesh maker such as eero or TP-Link, and one UK ISP.</dd></div>
           <div><dt>Measure</dt><dd>Households switchable, households live, partner revenue share paid.</dd></div>
         </dl>
       </article>
@@ -924,8 +1080,8 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
         <h3>Tech providers</h3>
         <p class="cust-lede">The paying customer at launch. They already sell to advertisers, so eyeo does not need its own advertiser sales team.</p>
         <dl>
-          <div><dt>Who</dt><dd>MMPs, verification and incrementality vendors first. SSPs, curators and DSPs once targeting arrives. Whalebone as the infrastructure partner.</dd></div>
-          <div><dt>Why they choose us</dt><dd>Independent iOS outcome data where they have relied on modelling since ATT, plus fraud flags and neutral lift reads.</dd></div>
+          <div><dt>Who</dt><dd>MMPs, verification and incrementality vendors first. SSPs, curators and DSPs once targeting arrives.</dd></div>
+          <div><dt>How we win</dt><dd><b>Accuracy.</b> Independent iOS outcome data where they have relied on modelling since ATT, plus fraud flags and neutral lift reads.</dd></div>
           <div><dt>What they pay</dt><dd>Data licences, per-study fees, and a share of curated media.</dd></div>
           <div><dt>First move</dt><dd>Two MMP conversations, one incrementality vendor, one SSP curator.</dd></div>
           <div><dt>Measure</dt><dd>Signed pilots, licence revenue, renewal.</dd></div>
@@ -942,7 +1098,7 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
         <h3>Brands and advertisers</h3>
         <p class="cust-lede">They hold the budget, but reach Crumbs through the tools they already buy. They are the end customer, not the first one.</p>
         <dl>
-          <div><dt>What they want</dt><dd>Outcomes they can check: real iOS installs, fewer fake ones, lift on any media.</dd></div>
+          <div><dt>How we win</dt><dd><b>Proof.</b> Outcomes they can check: real iOS installs, fewer fake ones, lift on any media.</dd></div>
           <div><dt>How they reach us</dt><dd>MMP dashboards, lift studies through incrementality vendors, curated deals in their DSP.</dd></div>
           <div><dt>Where we go direct</dt><dd>A small number of reference advertisers for pre-registered lift studies, to create case studies.</dd></div>
         </dl>
@@ -952,7 +1108,7 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
         <h3>Publishers</h3>
         <p class="cust-lede">The group most hurt by Crumbs today, and the group with the most to gain once it is fixed. If Crumbs is good for publishers, the open web makes the case for it.</p>
         <dl>
-          <div><dt>What they want</dt><dd>Auction revenue back, audience value without tracking, and a say in the rules.</dd></div>
+          <div><dt>How we win</dt><dd><b>Fairness.</b> Auction revenue back, audience value without tracking, and a say in the rules.</dd></div>
           <div><dt>What they give</dt><dd>Advocacy, promotion of the opt-in to their readers, Prebid integration and quality inventory.</dd></div>
           <div><dt>What they get back</dt><dd>Restored auctions, a privacy-safe audience signal, higher curated CPMs and a seat on the policy.</dd></div>
         </dl>
@@ -994,7 +1150,7 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
         <div class="tile"><span class="label">PubMatic Connect, 2025</span><span class="v app">+25%</span><p>Higher eCPMs for publishers on curated deals</p></div>
       </div>
     </div>
-    <p class="note">The sizing on the Market sizing tab uses a narrower definition, curated marketplaces at about 11% of programmatic in 2026, to stay conservative.</p>
+    <p class="note">The sizing on the Where to start tab uses a narrower definition, curated marketplaces at about 11% of programmatic in 2026, to stay conservative.</p>
   </div>
 
   <div class="card">
@@ -1045,7 +1201,7 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
       <li>Perform Digital, citing Jounce Media's analysis of 1.5 billion bid requests: 73% multi-seller curated deals, 18.6% open auction. <a href="https://perform.digital/blogs/programmatic-curation/">perform.digital</a></li>
       <li>UK Competition and Markets Authority case page: investigation into Google's Privacy Sandbox browser changes, including commitments accepted from Google. <a href="https://www.gov.uk/cma-cases/investigation-into-googles-privacy-sandbox-browser-changes">gov.uk</a></li>
       <li>Publisher revenue gap, blocked auctions and Ozone as the Guardian's top bidder: see the Blocking findings tab.</li>
-      <li>Router and ISP reach, and Whalebone's role: see the Crumbs today tab.</li>
+      <li>Router and ISP reach: see the Crumbs today tab.</li>
       <li>The characterisation of where Privacy Sandbox opposition came from is the author's view from industry standards work.</li>
     </ol>
   </div>
@@ -1087,16 +1243,16 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
       <p class="pm">This matters most for the plan, because partnerships are the only route to a household panel at scale.</p>
     </div>
     <div class="prod">
-      <div class="prod-top"><span class="pi" data-ic="server"></span><span class="status live">Confirmed</span></div>
+      <div class="prod-top"><span class="pi" data-ic="server"></span><span class="status open">To confirm</span></div>
       <h3>Resolver infrastructure</h3>
-      <p>crumbs.com says Crumbs is built with Whalebone's DNS services. Whalebone also runs the resolver layer behind the Adblock Plus iOS app, while eyeo controls the blocking policy. crumbs.com also states ISO 27001:2022 certification.</p>
-      <p class="pm">This affects the privacy claims, because logging and any move to attested hardware need Whalebone's involvement. It also gives Crumbs a route to Whalebone's ISP customers.</p>
+      <p>Crumbs answers lookups from its own DNS servers, and eyeo sets the blocking policy. crumbs.com states ISO 27001:2022 certification.</p>
+      <p class="pm">Who operates the resolver, and how it logs, affects every privacy claim and any move to attested hardware. This is a week-one question.</p>
     </div>
   </div>
   <div class="card">
     <div class="label">What this means for the plan</div>
     <h3>The panel is very small today</h3>
-    <p class="lede" style="font-size:16px;max-width:none">If the third-party estimate is close, the iOS user base is in the hundreds, not the millions, and Android is unlikely to change that by an order of magnitude. The outcome panel cannot be sold until the opt-in base is much larger. Growing distribution therefore comes before the measurement products. Router and ISP partnerships matter most, because self-setup is too hard for most users. Publishers promoting Crumbs to their readers can also help. Fixing the blocking policy comes first of all, because it affects how publishers and ad tech partners see Crumbs.</p>
+    <p class="lede" style="font-size:16px;max-width:none">If the third-party estimate is close, the iOS user base is in the hundreds, not the millions, and Android is unlikely to change that by an order of magnitude. The outcome panel can be piloted on a small base, but it cannot be sold at scale until the opt-in base is much larger. Router and ISP partnerships therefore start on day one, alongside the first measurement pilot. Router and ISP partnerships matter most, because self-setup is too hard for most users. Publishers promoting Crumbs to their readers can also help. Fixing the blocking policy comes first of all, because it affects how publishers and ad tech partners see Crumbs.</p>
     <p class="note">The user estimate covers iOS only. eyeo's own figures for iOS, Android and router users are the first thing to confirm.</p>
   </div>
 
@@ -1117,7 +1273,7 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
     <div class="eyebrow">Day one priority</div>
     <h2>Router and ISP partnerships should make Crumbs a one-click setup</h2>
     <p class="lede" style="font-size:16px;max-width:none">The household panel, CTV measurement and any scale in the ad products all depend on routers. Self-setup will not reach enough homes, so partnerships need to start immediately rather than in a later phase.</p>
-    <div class="routes">
+    <div class="routes" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
       <div class="route">
         <span class="pi" data-ic="network"></span>
         <h3>ISPs</h3>
@@ -1130,12 +1286,6 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
         <p>People who buy their own router or mesh system can turn Crumbs on in the maker's app with one tap. In the US, eero, TP-Link and Netgear each account for about 10% of routers in Ookla's speed-test data.</p>
         <p class="how">Route: a Crumbs option inside the eero, TP-Link Deco, Netgear or Asus app. This also reaches households whose ISP router is locked, because the mesh system becomes the router.</p>
       </div>
-      <div class="route">
-        <span class="pi" data-ic="server"></span>
-        <h3>DNS platform partners</h3>
-        <p>Crumbs is built on Whalebone's DNS services, according to crumbs.com. Whalebone also sells DNS security services to ISPs.</p>
-        <p class="how">Route: offer Crumbs to Whalebone's ISP customers as an option. This needs a commercial conversation with Whalebone.</p>
-      </div>
     </div>
     <p class="note">ISP gateways are mostly built by manufacturers such as Arcadyan, Askey, Sagemcom, Calix and Arris, but the ISP decides what runs on them. For ISP routers, the ISP is the partner to approach.</p>
   </div>
@@ -1146,9 +1296,8 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
       <li>Observed blocking by company, from the Guardian, Daily Mail, test page and 30-site runs. <a href="https://github.com/drpaulfarrow/crumbs/blob/ccr-dd01651e-w1d70v/research/crumbs_blocking_observed.md">crumbs_blocking_observed.md</a></li>
       <li>Review of the net effect against Crumbs' goals. <a href="https://github.com/drpaulfarrow/crumbs/blob/ccr-dd01651e-w1d70v/research/crumbs_blocking_review.md">crumbs_blocking_review.md</a></li>
       <li>AppGoblin listing for Crumbs: DNS Privacy, with release date and modelled install and user estimates. <a href="https://appgoblin.info/apps/6771163116">appgoblin.info</a></li>
-      <li>Whalebone: eyeo selected Whalebone to run the DNS resolver layer for the Adblock Plus iOS app, December 2025. <a href="https://www.whalebone.io/post/whalebone-now-powers-dns-infrastructure-behind-adblock-plus">whalebone.io</a></li>
       <li>Crumbs website router setup page, including encrypted DNS (DoH) for modern routers. Reported by the author.</li>
-      <li>crumbs.com homepage, captured October 2026: built with Whalebone DNS services, ISO 27001:2022, App Store and Google Play links, and the list of trackers Crumbs blocks. <a href="https://crumbs.com/">crumbs.com</a></li>
+      <li>crumbs.com homepage, captured October 2026: ISO 27001:2022, App Store and Google Play links, and the list of trackers Crumbs blocks. <a href="https://crumbs.com/">crumbs.com</a></li>
       <li>Router setup test on a Sky hub and TP-Link Deco X20, October 2026. Carried out by the author.</li>
       <li>Sky Community forum: Sky hubs do not permit manual DNS selection. <a href="https://helpforum.sky.com/t5/Broadband/Change-my-DNS/m-p/4974824">helpforum.sky.com</a></li>
       <li>Broadband Switch, UK broadband market share reference, June 2026: BT Group about 8.8 million, Sky about 6.7 million, Virgin Media O2 5.69 million customers. <a href="https://broadbandswitch.uk/reports/uk-broadband-market-share/">broadbandswitch.uk</a></li>
@@ -1211,7 +1360,7 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
     <div class="label">Goal 2: ads without trackers, but personalised</div>
     <h3>Crumbs does not yet add a privacy-safe signal</h3>
     <p class="lede" style="font-size:16px;max-width:none">Nothing from Crumbs reaches a bid request today. Buyers see a less identifiable user, so there are fewer bids at lower prices. Crumbs currently improves privacy by removing data, without offering a replacement signal.</p>
-    <p class="lede" style="font-size:16px;max-width:none">One route needs no code in the page. DNS cannot change what is inside a request, but the resolver chooses which IP address the request is sent to. If a partner SSP reserves a block of addresses, Crumbs can answer each opted-in device with the address that stands for its audience group. The SSP reads the address its server was reached on and adds the group to the bid request as audience data. This is what the CTO has suggested, and it is covered on the How it works tab.</p>
+    <p class="lede" style="font-size:16px;max-width:none">One route needs no code in the page. DNS cannot change what is inside a request, but the resolver chooses which IP address the request is sent to. If a partner SSP reserves a block of addresses, Crumbs can answer each opted-in device with the address that stands for its audience group. The SSP reads the address its server was reached on and adds the group to the bid request as audience data. This is what the CTO has suggested, and it is covered on the How it works in Prebid tab.</p>
   </div>
 
   <div class="card">
@@ -1250,9 +1399,8 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
       <li>Observed blocking by company, from the Guardian, Daily Mail, test page and 30-site runs. <a href="https://github.com/drpaulfarrow/crumbs/blob/ccr-dd01651e-w1d70v/research/crumbs_blocking_observed.md">crumbs_blocking_observed.md</a></li>
       <li>Review of the net effect against Crumbs' goals. <a href="https://github.com/drpaulfarrow/crumbs/blob/ccr-dd01651e-w1d70v/research/crumbs_blocking_review.md">crumbs_blocking_review.md</a></li>
       <li>AppGoblin listing for Crumbs: DNS Privacy, with release date and modelled install and user estimates. <a href="https://appgoblin.info/apps/6771163116">appgoblin.info</a></li>
-      <li>Whalebone: eyeo selected Whalebone to run the DNS resolver layer for the Adblock Plus iOS app, December 2025. <a href="https://www.whalebone.io/post/whalebone-now-powers-dns-infrastructure-behind-adblock-plus">whalebone.io</a></li>
       <li>Crumbs website router setup page, including encrypted DNS (DoH) for modern routers. Reported by the author.</li>
-      <li>crumbs.com homepage, captured October 2026: built with Whalebone DNS services, ISO 27001:2022, App Store and Google Play links, and the list of trackers Crumbs blocks. <a href="https://crumbs.com/">crumbs.com</a></li>
+      <li>crumbs.com homepage, captured October 2026: ISO 27001:2022, App Store and Google Play links, and the list of trackers Crumbs blocks. <a href="https://crumbs.com/">crumbs.com</a></li>
       <li>Router setup test on a Sky hub and TP-Link Deco X20, October 2026. Carried out by the author.</li>
       <li>Sky Community forum: Sky hubs do not permit manual DNS selection. <a href="https://helpforum.sky.com/t5/Broadband/Change-my-DNS/m-p/4974824">helpforum.sky.com</a></li>
       <li>Broadband Switch, UK broadband market share reference, June 2026: BT Group about 8.8 million, Sky about 6.7 million, Virgin Media O2 5.69 million customers. <a href="https://broadbandswitch.uk/reports/uk-broadband-market-share/">broadbandswitch.uk</a></li>
@@ -1285,153 +1433,6 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
   <section class="mpanel" id="mpanel" aria-live="polite"></section>
 </section>
 
-<!-- HOW IT WORKS -->
-<section class="tabpanel" id="tab-how" role="tabpanel" hidden>
-  <div class="sec-head">
-    <div><div class="eyebrow">How it works · measurement and targeting</div><h2>Both products run on one consented signal, and neither needs a record about a person</h2></div>
-    <p>This tab follows one opted-in phone through measurement, then through targeting. The simulator at the end estimates how much of the market can be reported accurately for a given panel size and privacy budget.</p>
-  </div>
-
-  <div class="tests">
-    <div><b>Detect on the device</b><p>Outcomes such as a first app open are recognised on the phone or router. Raw lookups are not sent anywhere for analysis.</p></div>
-    <div><b>Aggregate privately</b><p>Devices send capped, encrypted contributions. Two independent operators combine them, and noise is added before any total is released.</p></div>
-    <div><b>Publish the schema</b><p>The cells we report, the noise level and the minimum cell size are published before launch. There are no ad hoc queries.</p></div>
-  </div>
-
-  <div class="card">
-    <div class="sec-head" style="margin-bottom:8px"><div><div class="label">Measurement</div><h3>From a first open to a feed an MMP can use</h3></div><p>The first product is the iOS outcome panel. The same pipeline produces the fraud flags and the outcome side of lift tests.</p></div>
-    <ol class="steps">
-      <li><b>Detect the first open</b><span>Each app makes a recognisable burst of DNS lookups the first time it launches. The device matches that burst against app fingerprints shipped to it and notes a first open of that app this week. Retention milestones work the same way.</span></li>
-      <li><b>Send one capped contribution</b><span>The device splits its report into two encrypted shares, one per aggregator. Each device counts at most once per app per week, which limits how far any one person can move a total.</span></li>
-      <li><b>Combine across two operators</b><span>eyeo and an independent operator each sum their shares, following the IETF DAP design. Neither sees an individual report. Together they produce totals for fixed cells: app, country, device type and week.</span></li>
-      <li><b>Add noise, withhold small cells</b><span>Calibrated noise is added to every total and cells below a minimum size are withheld. The noise level is published, so every number ships with a confidence interval.</span></li>
-      <li><b>Calibrate and deliver</b><span>Panel totals are weighted against partners' real install counts to estimate installs, retention and installs that never open. MMPs show the result in dashboards advertisers already use.</span></li>
-    </ol>
-  </div>
-
-  <div class="card">
-    <div class="sec-head" style="margin-bottom:12px"><div><div class="label">What a buyer receives</div><h3>Totals with confidence intervals, never a row about a person</h3></div><p>Illustrative, synthetic numbers for one UK week with a 50,000-user panel.</p></div>
-    <div class="tablewrap"><table class="opts"><thead><tr><th>App</th><th>Panel first opens, 95%</th><th>Estimated installs, 95%</th><th>Day-7 retention</th><th>Reported installs never opened</th></tr></thead><tbody>
-      <tr><td><b>Puzzle game</b></td><td class="rn">1,312 ± 71</td><td class="rn">18,400 to 21,300</td><td class="rn">31%</td><td class="rn">14%</td></tr>
-      <tr><td><b>Fitness subscription app</b></td><td class="rn">418 ± 40</td><td class="rn">5,700 to 6,900</td><td class="rn">22%</td><td class="rn">6%</td></tr>
-      <tr><td><b>Budgeting app</b></td><td class="rn">96 ± 19</td><td class="rn">1,100 to 1,600</td><td class="rn">38%</td><td class="rn">3%</td></tr>
-      <tr><td><b>Niche strategy game</b></td><td colspan="4" class="muted">Withheld: below the minimum cell size of 50</td></tr>
-    </tbody></table></div>
-    <p class="note">The last column is the fraud flag. It compares the installs a network reported with the first opens the panel saw, so it needs the partner's install counts. Withheld rows are what stop small apps, and the people using them, being singled out.</p>
-  </div>
-
-  <div class="grid2">
-    <div class="card">
-      <div class="label">Lift, route one</div>
-      <h3>Geo and holdout tests on any media</h3>
-      <p class="lede" style="font-size:15.5px">The advertiser holds back spend in matched regions or time periods. Crumbs counts first opens in the test and control groups from the same aggregate cells. Crumbs never needs to know who saw an ad, so this works on media eyeo had nothing to do with. The design and the success threshold are registered before the test starts.</p>
-    </div>
-    <div class="card">
-      <div class="label">Lift, route two</div>
-      <h3>Exposure matched on the phone</h3>
-      <p class="lede" style="font-size:15.5px">Where Crumbs is in the ad path, on eyeo's Acceptable Ads inventory or through a Prebid Crumbs mode, the device notes locally that it saw campaign C. If it later first-opens the advertiser's app, it adds one count to campaign C's cell. Exposure and outcome are joined on the phone and never on a server. DNS alone cannot see which campaign served, so this route needs a partner in the page.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="label">The question that decides the architecture</div>
-    <h3>Where does detection actually run on iOS?</h3>
-    <p class="lede" style="font-size:16px;max-width:none">iOS gives a DNS app two broad routes. As an encrypted DNS settings provider, the system sends queries straight to the Crumbs resolver and the app never sees them. As a local tunnel or DNS proxy, the app sees each query on the phone. The first route is lighter on battery, but detection then has to happen in the resolver, which turns the attested resolver from a later phase into a day-one requirement. The second keeps detection on the device, as this plan assumes, at some cost in battery and engineering. Which route the Crumbs app uses today is a week-one question.</p>
-  </div>
-
-  <div class="card">
-    <div class="sec-head" style="margin-bottom:8px"><div><div class="label">Targeting</div><h3>Interests stay on the device, and only large groups reach the auction</h3></div><p>Targeting arrives after measurement, so the same panel can show whether it works.</p></div>
-    <ol class="steps four">
-      <li><b>The user chooses interests</b><span>Opted-in users pick interests in the Crumbs app. Crumbs can suggest some from the app categories used on the phone, and the user confirms or removes them. The choice is stored only on the device.</span></li>
-      <li><b>Join only groups of 100 or more</b><span>The device checks a published list of interest groups that currently have at least 100 opted-in members. If its group is smaller, it sends nothing. This is the k-anonymity idea browsers designed for on-device ad auctions.</span></li>
-      <li><b>Add the group to the bid request</b><span>Through a Prebid Crumbs mode, the page adds the group ID as audience data in the bid request, with no user identifier alongside it. A buyer learns that this is one of at least 100 people with an interest, and nothing more.</span></li>
-      <li><b>Package and measure</b><span>Curators also label inventory by audience composition, such as placements whose opted-in readers over-index for a group. Buyers target the deal IDs, and the outcome panel measures whether the deals worked.</span></li>
-    </ol>
-  </div>
-
-  <div class="scope">
-    <div class="card">
-      <div class="label">Open question for the team</div>
-      <h3>How does the group get from the phone into the page?</h3>
-      <p class="lede" style="font-size:15.5px">DNS cannot change what is inside a request, so the group needs a path. I see four candidates. eyeo's browser components, the extension or a browser SDK, could pass it to Prebid. An eyeo SDK in partner apps could pass it in-app. If Crumbs runs a local proxy on the phone, it could answer a well-known hostname on the device with the group. Or Crumbs can encode the group in the DNS answer itself, described below. Each has different reach and privacy properties, and I'd want the team's view before choosing.</p>
-    </div>
-    <div class="card out"><div class="label">What never happens</div><h3>Lines targeting does not cross</h3><ul>
-      <li>No user identifier travels with a group ID</li>
-      <li>No group smaller than 100 people</li>
-      <li>No sensitive categories: health, religion, sexuality, politics or financial hardship</li>
-      <li>No segments sold or shared with data brokers</li>
-      <li>No conquesting cohorts built from competitors' users</li>
-      <li>No change to protection for anyone who does not opt in</li></ul></div>
-  </div>
-
-  <div class="card" id="dns-steer">
-    <div class="sec-head" style="margin-bottom:8px"><div><div class="label">Targeting through the DNS answer</div><h3>Crumbs can carry an audience group in the IP address it returns</h3></div><p>This needs no code in the page, but it does need each receiving SSP to take part.</p></div>
-    <ol class="steps">
-      <li><b>The SSP reserves addresses</b><span>A partner SSP sets aside a block of IP addresses for its bidding endpoint, one per audience group. IPv6 makes this cheap, because a single block holds billions of addresses.</span></li>
-      <li><b>Crumbs answers by group</b><span>When an opted-in phone looks up the SSP's bidding hostname, Crumbs returns the address that stands for the phone's group. Users who have not opted in get the default address.</span></li>
-      <li><b>The request arrives on that address</b><span>The browser or app connects as normal. The hostname and security certificate are unchanged, so nothing in the page or app needs to change.</span></li>
-      <li><b>The SSP adds the group</b><span>The SSP's server reads which address it was reached on and adds the matching group to the bid request as audience data, alongside other curated-deal signals.</span></li>
-      <li><b>Buyers target the group</b><span>Curators package the groups into deals, and the outcome panel measures whether those deals worked.</span></li>
-    </ol>
-    <div class="adv">
-      <div><h3>What makes it workable</h3><ul>
-        <li>It reaches apps and browsers on every device behind the resolver, including routers, without an SDK.</li>
-        <li>It extends the "steer instead of block" idea: the same answer that sends an auction to a cookieless endpoint can also carry a group.</li>
-        <li>Only opted-in devices are ever given a group address, and only for groups of at least 100 people.</li></ul></div>
-      <div><h3>What limits it</h3><ul>
-        <li>Each SSP must reserve addresses, read the arrival address and map it to a group. Endpoints behind a CDN also need the CDN to pass that address on.</li>
-        <li>The SSP still sees the user's own IP address. Over time it could record which group each IP address belongs to, so groups need to be broad, rotated and covered by contract.</li>
-        <li>Answers are cached and connections are reused, so a group changes slowly. On IPv4, address scarcity limits how many groups are practical.</li>
-        <li>It only works when Crumbs resolves the lookup, so Safari with Private Relay and apps with their own DNS are excluded.</li></ul></div>
-    </div>
-    <p class="note">Suggested by eyeo's CTO. I would test it with one SSP partner on IPv6 before relying on it.</p>
-  </div>
-
-  <div class="card" id="fp-lab">
-    <div class="sec-head" style="margin-bottom:8px"><div><div class="label">Fingerprint lab · version 0</div><h3>We can test app fingerprinting on an ordinary iPhone today</h3></div><p>The outcome panel only works if Crumbs can tell which app made a lookup. iOS already records this for privacy reasons, so a first test needs no lab equipment.</p></div>
-    <ol class="steps">
-      <li><b>Turn on App Privacy Report</b><span>Settings, then Privacy and Security, then App Privacy Report. iOS starts recording which domains each app contacts.</span></li>
-      <li><b>Open the apps to test</b><span>For a first-open test, delete an app, reinstall it, then open it and use it for about a minute. Repeat for 20 to 50 apps across categories.</span></li>
-      <li><b>Export the report</b><span>At the bottom of the App Privacy Report screen, tap Save App Privacy Report. This produces an .ndjson file of each app's domains. Apple's support page does not document the export, so check it on your iOS version.</span></li>
-      <li><b>Run the analysis</b><span>A short Python script groups domains by app, flags shared SDK domains such as Firebase or AppsFlyer, and finds the domains only one app uses.</span></li>
-      <li><b>Read the result</b><span>The share of apps with at least one domain of their own is the first estimate of fingerprint coverage, measurement number 3 on the Roadmap.</span></li>
-    </ol>
-    <p class="note">Limits: one phone and a few dozen apps will overstate uniqueness, because a domain unique on this phone may be shared with apps not installed. It also does not test timing, such as telling a first open from a background refresh. The full lab in week two adds more devices, more apps and a test resolver.</p>
-  </div>
-
-  <div class="card" id="sim">
-    <div class="sec-head"><div><div class="label">Privacy simulator · version 0</div><h3>How much of the market can we report accurately?</h3></div><p>A synthetic model of the top 200 iOS apps in one market. Move the controls to see how panel size and privacy budget change what can be sold. <span class="assume">assumption</span></p></div>
-    <div class="sim">
-      <div class="sim-ctrls">
-        <div class="ctrl"><label for="simPanel">Opted-in iOS users in the market</label><output id="simPanelOut" for="simPanel"></output><input type="range" id="simPanel" min="0" max="9" step="1" value="5"></div>
-        <div class="ctrl"><label for="simEps">Privacy budget per release (ε)</label><output id="simEpsOut" for="simEps"></output><input type="range" id="simEps" min="0" max="4" step="1" value="2"></div>
-        <div class="ctrl"><span class="label">Accuracy needed, at 95%</span><div class="seg" id="simAcc" role="group" aria-label="Accuracy"><button type="button" data-v="0.1" aria-pressed="false">± 10%</button><button type="button" data-v="0.2" aria-pressed="true">± 20%</button></div></div>
-        <div class="ctrl"><span class="label">Reporting window</span><div class="seg" id="simWin" role="group" aria-label="Window"><button type="button" data-v="1" aria-pressed="true">Weekly</button><button type="button" data-v="4.3" aria-pressed="false">Monthly</button></div></div>
-      </div>
-      <div class="sim-out">
-        <div class="tiles three" id="simTiles"></div>
-        <div class="strip-wrap"><div class="strip" id="simStrip" aria-hidden="true"></div><div class="strip-ax"><span>App rank 1</span><span>200</span></div></div>
-        <div class="key"><span><i class="app"></i>Reportable</span><span><i style="background:var(--line)"></i>Below accuracy or minimum cell</span><span>Bar height is first opens per window, log scale</span></div>
-        <p class="callout" id="simNote"></p>
-      </div>
-    </div>
-    <p class="note">Assumptions: each opted-in user first-opens 0.4 apps a week, the top 200 apps take 40% of those, and shares follow a Zipf curve. Each device counts once per app per release, privacy noise is Laplace at that sensitivity, sampling error is Poisson, and the minimum cell is 50. Budget composition across many cells and releases is simplified here; the real version accounts for it. At today's third-party estimate of about 108 monthly iOS users, nothing is reportable.</p>
-  </div>
-
-  <div class="card">
-    <div class="label">Sources</div>
-    <ol class="sources">
-      <li>IETF Privacy Preserving Measurement working group, Distributed Aggregation Protocol (DAP) draft. <a href="https://datatracker.ietf.org/doc/draft-ietf-ppm-dap/">datatracker.ietf.org</a></li>
-      <li>Apple developer documentation: NEDNSSettingsManager, for encrypted DNS settings. <a href="https://developer.apple.com/documentation/networkextension/nednssettingsmanager">developer.apple.com</a></li>
-      <li>Apple developer documentation: NEDNSProxyProvider, for on-device DNS proxies. <a href="https://developer.apple.com/documentation/networkextension/nednsproxyprovider">developer.apple.com</a></li>
-      <li>Prebid.js first-party data, including audience segments in the bid request's user data. <a href="https://docs.prebid.org/features/firstPartyData.html">docs.prebid.org</a></li>
-      <li>WICG k-anonymity server explainer for on-device ad auctions. <a href="https://github.com/WICG/turtledove/blob/main/FLEDGE_k_anonymity_server.md">github.com/WICG</a></li>
-      <li>Apple: About App Privacy Report, including how to turn it on. <a href="https://support.apple.com/en-us/102188">support.apple.com</a></li>
-      <li>AppGoblin listing for Crumbs: DNS Privacy, with modelled monthly user estimates. <a href="https://appgoblin.info/apps/6771163116">appgoblin.info</a></li>
-    </ol>
-  </div>
-</section>
-
 <!-- PREBID -->
 <section class="tabpanel" id="tab-prebid" role="tabpanel" hidden>
   <div class="sec-head">
@@ -1439,6 +1440,33 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
     <p>Prebid is the open-source header-bidding library most independent publishers use. This tab follows one ad slot through a Prebid auction, so you can see where Crumbs blocks, allows and adds data in each version of the plan.</p>
   </div>
 
+
+  <div class="card" id="pb-module" style="margin-bottom:16px">
+    <div class="sec-head" style="margin-bottom:12px"><div><div class="label">Built and running · prototype</div><h3>The Crumbs Prebid module</h3></div><p>A working version of the in-page fix, injected into real sites in the demo's window B. It uses only public Prebid functions, so it works on any site that runs Prebid.</p></div>
+    <ol class="steps four" style="margin-top:0">
+      <li><b>Asks Crumbs</b><span>Looks up a signal name that only the Crumbs resolver answers. No answer means the reader isn't a Crumbs user, and the module does nothing.</span></li>
+      <li><b>Reads the group</b><span>Crumbs answers with one address per interest group. A small request to that address returns the reader's opted-in group.</span></li>
+      <li><b>Turns on Crumbs mode</b><span>No ID syncs, no Prebid storage, and no user IDs where the site's Prebid has activity controls. The auction still runs.</span></li>
+      <li><b>Adds the group</b><span>As a seller-defined audience in the bid request, a Xandr key-value and a Google Ad Manager key-value.</span></li>
+    </ol>
+    <div class="grid2" style="margin-top:16px">
+      <div class="code-card new"><span class="label">What window B's bid request carried in testing</span><pre><code>"user": {
+  "data": [{
+    "name": "crumbs.com",
+    "ext": { "segtax": 4 },
+    "segment": [{ "id": "<span class="hl-new">410</span>" }]
+  }],
+  "keywords": "<span class="hl-new">crumbs_grp=running</span>"
+}
+// user IDs: none</code></pre><p class="note">410 is "Running and Jogging" in the IAB Audience Taxonomy 1.1. Xandr received <code>crumbs_grp=running</code> as a key-value.</p></div>
+      <div class="code-card"><span class="label">Window A, the same page without Crumbs</span><pre><code>"user": {}
+// module inactive: no Crumbs answer
+// for the signal name</code></pre>
+        <p class="note">Tested with two browser windows through the demo's proxies. Real bids depend on the live network.</p>
+        <div class="gotos" style="margin-top:6px"><button type="button" class="goto" data-goto="demo" data-anchor="demo-script">See it in the live demo</button><a class="goto ghost" href="https://github.com/drpaulfarrow/crumbs/blob/ccr-dd01651e-w1d70v/crumbs_demo/static/crumbs-prebid.js" target="_blank" rel="noopener">Read the code</a></div>
+      </div>
+    </div>
+  </div>
   <div class="card" id="pb-flow">
     <div class="sec-head" style="margin-bottom:12px">
       <div><div class="label">Ad call flow</div><h3 id="pbTitle"></h3></div>
@@ -1475,7 +1503,7 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
       <li><b>Prebid needs the SSP</b><span>Prebid.js is about to send a bid request to <code>bid.ssp.example</code>, so the phone asks where that host is.</span></li>
       <li><b>Crumbs answers with the group's address</b><span>This user opted in and chose personal finance, so the answer is <code>2001:db8:ab::7</code>. Everyone else gets <code>::1</code>. To the browser it is a normal address.</span></li>
       <li><b>The request is unchanged</b><span>The browser sends Prebid's normal bid request to <code>::7</code>. The certificate is for the hostname, so it is valid on every address.</span></li>
-      <li><b>The SSP decodes the address</b><span>Its server notes it was reached on <code>::7</code>, looks up group 7, and writes <code>user.data</code> segment <code>ig-personal-finance</code> into the OpenRTB request. A curator rule can attach deal <code>crumbs-fintech-installers</code>.</span></li>
+      <li><b>The SSP decodes the address</b><span>Its server notes it was reached on <code>::7</code>, looks up group 7, and writes <code>user.data</code> segment <code>534</code> into the OpenRTB request. A curator rule can attach deal <code>crumbs-fintech-installers</code>.</span></li>
       <li><b>The deal comes back as a key-value</b><span>DSPs bid on the group or deal. If that bid wins, its deal ID returns in the bid response, and Prebid passes it to the ad server as <code>hb_deal</code>, alongside <code>hb_pb</code> and <code>hb_bidder</code>.</span></li>
     </ol>
     <div class="grid2" style="margin-top:16px">
@@ -1483,7 +1511,7 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
   "data": [{
     "name": "crumbs.com",
     "ext": { "segtax": 4 },
-    "segment": [{ "id": "<span class="hl-new">ig-personal-finance</span>" }]
+    "segment": [{ "id": "<span class="hl-new">534</span>" }]
   }]
 },
 "imp": [{ "pmp": { "deals": [
@@ -1493,7 +1521,7 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
 hb_pb     = "2.40"
 hb_deal   = "<span class="hl-new">crumbs-fintech-installers</span>"
 hb_size   = "300x250"</code></pre>
-      <p class="note">The group itself never becomes an ad server key-value. Only the deal ID of a winning bid does, which lets the publisher prioritise Crumbs deals in its ad server.</p></div>
+      <p class="note">In this server-side version, the group itself never becomes an ad server key-value. Only the deal ID of a winning bid does, which lets the publisher prioritise Crumbs deals in its ad server.</p></div>
     </div>
     <div class="callout" style="margin-top:16px"><b>Who has to know the group.</b> Step 2 only works if whatever answers the lookup knows the user's group. The best place is the phone: if the Crumbs app handles DNS on the device, it swaps in the group's address itself, and the group never reaches Crumbs' servers. If lookups go straight to Crumbs' resolver, Crumbs would have to hold each device's group, which weakens the privacy design. On a router, the group would be a household group held by the router. How the iOS app handles DNS today is a week-one question.</div>
   </div>
@@ -1527,7 +1555,7 @@ hb_size   = "300x250"</code></pre>
     "data": [{
       "name": "<span class="hl-new">crumbs.com</span>",
       "ext": { "segtax": 4 },
-      "segment": [{ "id": "<span class="hl-new">ig-personal-finance</span>" }]
+      "segment": [{ "id": "<span class="hl-new">534</span>" }]
     }]
   }
 }</code></pre>
@@ -1536,7 +1564,7 @@ hb_size   = "300x250"</code></pre>
   </div>
 
   <div class="card">
-    <div class="sec-head" style="margin-bottom:12px"><div><div class="label">Crumbs mode</div><h3>A Prebid configuration that removes identity and adds one group</h3></div><p>Illustrative. It uses Prebid's existing activity controls and real-time data module system. The Crumbs module itself does not exist yet.</p></div>
+    <div class="sec-head" style="margin-bottom:12px"><div><div class="label">Crumbs mode</div><h3>A Prebid configuration that removes identity and adds one group</h3></div><p>The production configuration. It uses Prebid's existing activity controls and real-time data module system. The prototype above shows the same idea working in the demo.</p></div>
     <div class="grid2">
       <div class="code-card"><pre><code>pbjs.setConfig({
   // Prebid activity controls: switch off identity
@@ -1564,7 +1592,7 @@ hb_size   = "300x250"</code></pre>
           <li><b>A real-time data module</b> is how data providers add first-party data to bid requests before the auction. A Crumbs module would add the interest group to <code>user.data</code>.</li>
           <li><b>Distribution</b> comes through Blockthrough, part of eyeo, which already runs in many publishers' ad code, so publishers do not need a new vendor.</li>
           <li><b>Prebid Server</b> supports the same activity controls in account settings, so server-side auctions and in-app auctions through Prebid Mobile can follow the same rules.</li>
-          <li><b>Open question:</b> how the module learns the group. The How it works tab lists the four candidate routes, including the DNS answer itself.</li>
+          <li><b>Open question:</b> which route to take to production for learning the group. The prototype uses the DNS answer. Other candidates are eyeo's browser components and an SDK in partner apps.</li>
         </ul>
       </div>
     </div>
@@ -1596,12 +1624,52 @@ hb_size   = "300x250"</code></pre>
 <!-- REVENUE MODEL -->
 <section class="tabpanel" id="tab-revenue" role="tabpanel" hidden>
   <div class="sec-head">
-    <div><div class="eyebrow">Revenue model</div><h2>In year three, Crumbs could earn about $25M and keep about $11M</h2></div>
-    <p>This follows the year-three base case from ad tech's payment to what eyeo keeps. All amounts are estimates for discussion. <span class="assume">assumption</span></p>
+    <div><div class="eyebrow">Revenue model</div><h2>Crumbs gets paid in two ways: for data, and per ad</h2></div>
+    <p>Measurement is paid for as data, with no ads involved. Targeting is paid per ad, as a small fee on media bought through Crumbs deals. Users, routers and ISPs are never charged. All amounts are estimates for discussion. <span class="assume">assumption</span></p>
+  </div>
+
+  <div class="tablewrap">
+    <table class="opts" style="min-width:760px"><thead><tr><th></th><th>Model 1 · Pay for data</th><th>Model 2 · Pay per ad</th></tr></thead><tbody>
+      <tr><td><b>What is sold</b></td><td>Outcome data and lift studies: app opens, retention, estimated installs, and whether a campaign caused them</td><td>Audience signal: opt-in interest groups and audience labels on apps and sites, used in curated deals</td></tr>
+      <tr><td><b>Who pays</b></td><td>Measurement companies such as AppsFlyer and Adjust, plus verification and incrementality vendors</td><td>The advertiser, through the curator or SSP that runs the deal. The curator passes eyeo its share. <button type="button" class="linkish" data-goto="revenue" data-anchor="ads-platform" style="color:var(--signal);padding:4px 0 0;display:block">Does eyeo need its own ads platform?</button></td></tr>
+      <tr><td><b>How it is priced</b></td><td>An annual data licence with a minimum fee, priced by apps and countries covered. Lift studies are a fixed fee per study, roughly $25,000 to $75,000.</td><td>A data fee of about 4% of the media spent on deals that use Crumbs data. The same fee can be quoted as a CPM, for example $0.20 on a $5 CPM.</td></tr>
+      <tr><td><b>Does it depend on ads running?</b></td><td>No. It is paid whether or not anyone buys media.</td><td>Yes. No ads served on Crumbs deals means no fee.</td></tr>
+      <tr><td><b>Who shares in it</b></td><td>Routers and ISPs get their share of the revenue from their households.</td><td>Publishers get a share for the inventory, and routers and ISPs get theirs.</td></tr>
+      <tr><td><b>When it pays</b></td><td>First. A pilot licence is possible in year one.</td><td>Later. It needs a larger panel and curated deals in market.</td></tr>
+      <tr class="tot"><td>Year-three base case</td><td class="rn" style="text-align:left">About $15M a year</td><td class="rn" style="text-align:left">About $10M a year</td></tr>
+    </tbody></table>
   </div>
 
   <div class="card">
-    <div class="label">Where $25M a year goes</div>
+    <div class="label">Pay per ad</div>
+    <h3>A percentage of media, or a CPM?</h3>
+    <div class="adv">
+      <div><h3 style="font-size:17px">Percentage of media</h3><ul>
+        <li>The fee grows with the value of the deal, so eyeo shares in better prices.</li>
+        <li>Curators already charge this way. The median curation fee is 14% of media <sup>[1]</sup>, so a 4% data fee fits inside it.</li>
+        <li>Easier to explain to publishers as a share of their own upside.</li></ul></div>
+      <div><h3 style="font-size:17px">Fixed CPM</h3><ul>
+        <li>Predictable for the buyer, and a familiar way to price audience data.</li>
+        <li>Protects eyeo when inventory clears cheaply.</li>
+        <li>Can look expensive on low-price inventory and push buyers back to the open auction.</li></ul></div>
+    </div>
+    <p class="callout" style="background:var(--zone)">Start with a percentage of media, with a small CPM floor so cheap inventory still pays its way. Test both with the first curator.</p>
+  </div>
+
+  <div class="card" id="ads-platform">
+    <div class="eyebrow">A question for the team</div>
+    <h2>Are we an ads platform?</h2>
+    <p class="lede" style="font-size:16px;max-width:none">Pay per ad does not require eyeo to build one. Curators and SSPs already run the deals and collect the money, so eyeo can sell its signal into them as a data provider. But there are three ways to play it, and each changes what eyeo builds and who it competes with.</p>
+    <div class="tablewrap" style="margin-top:14px"><table class="opts" style="min-width:760px"><thead><tr><th>Option</th><th>What eyeo builds</th><th>How eyeo earns</th><th>The trade-off</th></tr></thead><tbody>
+      <tr><td><b>1 · Data provider</b></td><td>The interest groups, audience labels and a list partners can use. No buying or selling of ads.</td><td>A data fee on media in partners' deals</td><td>Smallest build and stays neutral. Smaller share, and depends on partners promoting Crumbs data.</td></tr>
+      <tr><td><b>2 · Curator</b></td><td>A curation desk that packages Crumbs deals across several SSPs, using eyeo's publisher relationships through Acceptable Ads and Blockthrough.</td><td>A curation margin, typically larger than a data fee <sup>[1]</sup></td><td>More revenue and more control of quality. Competes with curators who would otherwise be partners and advocates.</td></tr>
+      <tr><td><b>3 · Ads platform</b></td><td>An exchange or ad network that runs auctions and serves ads.</td><td>A take rate on all media</td><td>Largest prize, but a large build, and eyeo would be blocking some platforms while running its own. That is the pay-to-play pattern this plan is trying to fix.</td></tr>
+    </tbody></table></div>
+    <p class="callout" style="background:var(--zone)"><b>My starting view:</b> begin as a data provider, earn the trust of publishers and curators, and only consider curating once Crumbs deals have proven results. I would not build an exchange. But this is a real choice for eyeo, and I would like the team's view.</p>
+  </div>
+
+  <div class="card">
+    <div class="label">Year three: where about $25M a year goes</div>
     <div class="rev-stack" role="img" aria-label="eyeo keeps $10.7M, routers and ISPs $3.8M, channel partners $4.0M, team $4.0M, running costs $2.7M">
       <i style="flex:10.7;background:var(--good)"></i><i style="flex:3.8;background:var(--app)"></i><i style="flex:4.0;background:var(--warn)"></i><i style="flex:4.0;background:var(--mix)"></i><i style="flex:2.7;background:var(--line)"></i>
     </div>
@@ -1612,26 +1680,11 @@ hb_size   = "300x250"</code></pre>
       <div><i class="sw" style="background:var(--mix)"></i><b>$4.0M</b> Monetization team</div>
       <div><i class="sw" style="background:var(--line)"></i><b>$2.7M</b> Resolver, privacy and audits</div>
     </div>
-    <p class="note">Year one loses about $1.5M while the panel is small. A strong year three keeps about $31M of $67M.</p>
-  </div>
-
-  <div class="cust-grid" style="margin-top:16px">
-    <div class="cust">
-      <div class="label">Case 1 · Measurement</div>
-      <h3>$15M a year</h3>
-      <p class="cust-lede">eyeo sells outcome data and lift studies to MMPs and measurement vendors.</p>
-      <p>No media changes hands, so publishers, SSPs and curators take no fees. That makes it the line that pays first and keeps the most.</p>
-    </div>
-    <div class="cust">
-      <div class="label">Case 2 · Targeting</div>
-      <h3>$10M a year</h3>
-      <p class="cust-lede">Curators pay a data fee of about 4% of media on deals that use Crumbs audience labels.</p>
-      <p>The fee is a small share of the deal, below the median curator fee of 14% <sup>[1]</sup>. Most of it comes from labelling apps and sites, which reaches every impression. Steering individual users is the proof that it works, but it brings in little money.</p>
-    </div>
+    <p class="note">Year one loses about $1.5M while the panel is small. A strong year three, including web, keeps about $31M of $67M.</p>
   </div>
 
   <div class="card" style="margin-top:16px">
-    <div class="label">Pay for data</div>
+    <div class="label">Who Crumbs pays</div>
     <h3>The people and networks the data comes from get paid</h3>
     <p>Crumbs works like a measurement panel. Others pay for the same thing: Nielsen gives panel members up to $60 a year <sup>[2]</sup>, Brave gives users 70% of its ad revenue <sup>[3]</sup>, and Google gives Apple 36% of its Safari search revenue <sup>[4]</sup>.</p>
     <p><b>Routers and ISPs are paid in cash.</b> They get 30% of the revenue from the households they bring. <b>Users are paid in kind,</b> with free protection and control. Cash doesn't work: eyeo would break even at about $7 per user a year.</p>
@@ -1655,13 +1708,21 @@ hb_size   = "300x250"</code></pre>
 <section class="tabpanel" id="tab-market" role="tabpanel" hidden>
   <div class="sec-head">
     <div><div class="eyebrow">Market sizing</div><h2>Web outcomes are a larger market, but Crumbs sees app outcomes more clearly</h2></div>
-    <p>Top-down sizing for the six focus picks, split by where the outcome happens. Sourced figures carry a reference number. Anything marked assumption is an estimate for discussion.</p>
+    <p>Top-down sizing for the five revenue picks, split by where the outcome happens. Sourced figures carry a reference number. Anything marked assumption is an estimate for discussion.</p>
+  </div>
+
+  <div class="card" id="app-install-answer" style="border-color:var(--signal);box-shadow:4px 4px 0 var(--signal)">
+    <div class="eyebrow">The app-install question</div>
+    <h2>Start with app installs, but measure results rather than sell ads</h2>
+    <p class="lede" style="font-size:17px;max-width:none">App installs are the right place to start, because that is where Crumbs can see the most and where measurement has been weakest since Apple's privacy changes. But I would start by measuring results rather than selling ads, and sell that through the companies that already measure app installs, so eyeo does not need its own advertiser sales team. Selling or targeting app-install ads comes later, once there are enough users and buyers trust the numbers.</p>
+    <p class="lede" style="font-size:17px;max-width:none;margin-top:10px">App measurement is not my deepest area. My background is the auction, publishers and privacy standards. So in the first 30 days I would test this with two of those measurement companies before committing, with someone who has app-growth experience alongside me.</p>
+    <div class="callout" style="background:var(--zone)"><b>In plain terms.</b> When someone installs an app after seeing an ad, the advertiser wants to know which ad network deserves the credit. Measurement companies such as AppsFlyer and Adjust decide that. Since Apple's tracking changes they mostly estimate on iOS. Crumbs could give them a real count of app opens to check those estimates against.</div>
   </div>
 
   <div class="tiles">
     <div class="tile"><span class="label">App outcome pool</span><span class="v app">$109B</span><p>Global app marketing spend in 2025: $78B acquisition, $31B remarketing <sup>[1]</sup></p></div>
     <div class="tile"><span class="label">Web outcome pools</span><span class="v web">$533B</span><p>Search, retail media and online display, global 2026 forecast <sup>[2]</sup></p></div>
-    <div class="tile"><span class="label">Obtainable, app, year 3</span><span class="v app">$23–73M</span><p>Sum of the six picks, app-led <span class="assume">assumption</span></p></div>
+    <div class="tile"><span class="label">Obtainable, app, year 3</span><span class="v app">$18–63M</span><p>Sum of the five picks, app-led <span class="assume">assumption</span></p></div>
     <div class="tile"><span class="label">Web adds, year 3</span><span class="v web">+$11–34M</span><p>CTV-to-site, retail media lift, web-to-app, web curation <span class="assume">assumption</span></p></div>
   </div>
 
@@ -1688,10 +1749,10 @@ hb_size   = "300x250"</code></pre>
 
   <div>
     <div class="sec-head">
-      <div><div class="label">The six focus picks</div><h2>TAM, SAM and obtainable share, nested to scale</h2></div>
+      <div><div class="label">The five revenue picks</div><h2>TAM, SAM and obtainable share, nested to scale</h2></div>
       <div class="seg" id="webSeg" role="group" aria-label="Scope"><button type="button" data-web="0" aria-pressed="true">App only<small>Day one to Target</small></button><button type="button" data-web="1" aria-pressed="false">App plus web<small>With the web extensions</small></button></div>
     </div>
-    <p class="focus-note">We focus on three markets: the iOS outcome panel as the day-one product, curation as the main prize, and ISP and router distribution as the enabler that makes both possible. Lift readouts come next because they prove the panel. The other two wait.</p>
+    <p class="focus-note">We focus on three markets: the iOS outcome panel as the day-one product, curation as the main prize, and ISP and router distribution as the enabler that makes both possible. Distribution is not a revenue line: router makers and ISPs are paid a share of the revenue from their households, never charged, so it does not appear in the sizing below. Lift readouts come next because they prove the panel. The other two wait.</p>
     <div class="key" style="margin-bottom:12px"><span><i class="app"></i>App</span><span><i class="web"></i>Web extension</span><span><i class="ena"></i>Enabler</span><span>Each square is the TAM. Inner squares are SAM and obtainable share, area to scale within the card.</span></div>
     <div class="picks" id="picks"></div>
   </div>
@@ -1724,14 +1785,14 @@ hb_size   = "300x250"</code></pre>
 <!-- COMPETITION -->
 <section class="tabpanel" id="tab-compete" role="tabpanel" hidden>
   <div class="sec-head">
-    <div><div class="eyebrow">Competition</div><h2>Crumbs competes with free DNS blockers today, and could compete on measurement later</h2></div>
-    <p>Most competitors either block tracking or sell measurement. Few do both, and none we found combine DNS-level outcome data with partner distribution and a published privacy design.</p>
+    <div><div class="eyebrow">Competition</div><h2>Crumbs competes with DNS blockers for users, and with data providers for curation and measurement budgets</h2></div>
+    <p>On the user side, the rivals are free and paid DNS blockers. On the revenue side, the rivals are the companies already selling audience data into curated deals: identity graphs, publisher data platforms, contextual vendors and telcos. None we found combine opt-in, network-level outcome data, accurate enough to calibrate against, with a published privacy design.</p>
   </div>
 
   <div class="card">
     <div class="sec-head" style="margin-bottom:12px"><div><div class="label">Positioning</div><h3>Where competitors sit</h3></div><p>The horizontal axis shows what a company sells. The vertical axis shows how it reaches users. Placements are our judgement, not measured values.</p></div>
     <div class="posmap" id="posMap" role="img" aria-label="Positioning map of Crumbs and competitors"></div>
-    <p class="note">MMPs and incrementality vendors are not on the map. They reach advertisers rather than users, and they are more likely to be Crumbs' customers than its competitors.</p>
+    <p class="note">Data providers, publisher data platforms and contextual vendors are not on the map because they do not reach users directly, but they compete for the same curation budgets. They are in the table below. MMPs and incrementality vendors are left off because they are more likely to be Crumbs' customers.</p>
   </div>
 
   <div class="tablewrap"><table class="opts comp" style="min-width:900px"><thead><tr><th>Group</th><th>Examples</th><th>What they offer</th><th>Relationship to Crumbs</th><th>How Crumbs differs</th></tr></thead><tbody id="compBody"></tbody></table></div>
@@ -1754,7 +1815,12 @@ hb_size   = "300x250"</code></pre>
       <li>Sensor Tower press release, March 2024: acquisition of data.ai; its products are powered by first-party panel data. <a href="https://sensortower.com/press/press-release-sensor-tower-acquires-market-intelligence-platform-data-ai">sensortower.com</a></li>
       <li>SimeonOnSecurity, 2026 comparison of NextDNS, AdGuard DNS, Quad9 and Cloudflare DNS. <a href="https://simeononsecurity.com/articles/dns-comparison-adguard-quad9-cloudflare-pi-hole/">simeononsecurity.com</a></li>
       <li>Infoblox: DNS-based value-added services for ISPs, including parental controls and ad blocking. <a href="https://www.infoblox.com/?p=3342">infoblox.com</a></li>
-      <li>Whalebone: DNS infrastructure behind Adblock Plus, December 2025. <a href="https://www.whalebone.io/post/whalebone-now-powers-dns-infrastructure-behind-adblock-plus">whalebone.io</a></li>
+      <li>Marketing Dive, July 2022: T-Mobile App Insights targets groups by which apps people download and how they use them; Android only, aggregated into personas. <a href="https://www.marketingdive.com/news/t-mobile-ad-business-mobile-app-insights-targeting/627667/">marketingdive.com</a></li>
+      <li>Android Central, June 2022: T-Mobile app usage data is used for advertising unless subscribers opt out. <a href="https://androidcentral.com/phones/carriers/t-mobile-sells-your-app-usage-data-to-advertisers-unless-you-opt-out-now">androidcentral.com</a></li>
+      <li>AdExchanger, September 2026: Permutive connects publishers to TransUnion's graph for sell-side curation; bid requests without an ID signal net 41% lower CPMs, per Permutive. <a href="https://www.adexchanger.com/technology/can-sell-side-curation-solve-the-cookieless-audience-problem-for-advertisers/">adexchanger.com</a></li>
+      <li>Viant press release: contextual targeting with Peer39 data. <a href="https://www.viantinc.com/press-releases/viant-enhances-contextual-targeting-capabilities-with-peer39-partnership/">viantinc.com</a></li>
+      <li>LiveRamp partner directory: Lotame as a data partner. <a href="https://partner-directory.liveramp.com/partners/lotame">liveramp.com</a></li>
+      <li>Data brokers and measurement tags Crumbs blocks today, including LiveRamp, Lotame, Eyeota, ID5 and Comscore: see the Blocking findings tab.</li>
       <li>Bitdefender white paper on prpl app deployment on ISP gateways. <a href="https://www.bitdefender.com/en-us/partners/subscriber-protection-platform/resources/files/smart-home-security-at-scale-using-prpl.pdf">bitdefender.com</a></li>
       <li>AppsFlyer revenue, market sizes and Crumbs install estimates: see the Market sizing and Crumbs today tabs.</li>
     </ol>
@@ -1780,6 +1846,74 @@ hb_size   = "300x250"</code></pre>
     <div class="eyebrow">Zero trust</div>
     <p class="quote">No one, including eyeo, should be able to see what an individual does.</p>
     <p class="quote-by">This is the design goal. Each layer below supports it, and each can be checked independently.</p>
+  </div>
+  <div class="card" id="zt-flow">
+    <div class="sec-head" style="margin-bottom:12px"><div><div class="label">How it fits together</div><h3>The DNS path, split so no single operator holds both who and what</h3></div><p>The end state, reached in phases: the attested resolver first, then the independent relay.</p></div>
+    <div class="zt-wrap">
+    <svg class="zt-svg" viewBox="0 0 1000 270" role="img" aria-label="Diagram: the phone sends an encrypted lookup through an independent relay in a TEE, which strips the IP address, to the Crumbs resolver in a TEE, which reads the query but not the IP. Both publish attestations to a public transparency log, which the phone checks before its first lookup.">
+      <defs>
+        <marker id="ztA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--ink)"/></marker>
+        <marker id="ztM" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--muted)"/></marker>
+        <marker id="ztS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--signal)"/></marker>
+      </defs>
+
+      <path d="M412 50 C 435 14, 555 14, 578 50" class="zt-at" marker-start="url(#ztS)" marker-end="url(#ztS)"/>
+      <text x="495" y="24" text-anchor="middle" class="zt-b">Mutual attestation</text>
+
+      <rect x="20" y="50" width="170" height="120" rx="12" class="zt-box"/>
+      <text x="105" y="74" text-anchor="middle" class="zt-h">Phone</text>
+      <text x="105" y="94" text-anchor="middle" class="zt-s">Crumbs app</text>
+      <text x="105" y="111" text-anchor="middle" class="zt-s">Encrypts each lookup</text>
+      <text x="105" y="127" text-anchor="middle" class="zt-s">to the resolver's key</text>
+      <text x="105" y="154" text-anchor="middle" class="zt-k">Knows who and what</text>
+
+      <rect x="260" y="50" width="200" height="120" rx="12" class="zt-tee"/>
+      <text x="360" y="70" text-anchor="middle" class="zt-b">TEE · independent operator</text>
+      <text x="360" y="92" text-anchor="middle" class="zt-h">Relay</text>
+      <text x="360" y="111" text-anchor="middle" class="zt-s">Strips the IP address</text>
+      <text x="360" y="127" text-anchor="middle" class="zt-s">Keeps no logs</text>
+      <text x="360" y="154" text-anchor="middle" class="zt-k">Sees who, not what</text>
+
+      <rect x="530" y="50" width="200" height="120" rx="12" class="zt-tee"/>
+      <text x="630" y="70" text-anchor="middle" class="zt-b">TEE · eyeo</text>
+      <text x="630" y="92" text-anchor="middle" class="zt-h">Crumbs resolver</text>
+      <text x="630" y="111" text-anchor="middle" class="zt-s">Applies the blocking policy</text>
+      <text x="630" y="127" text-anchor="middle" class="zt-s">Keeps no logs</text>
+      <text x="630" y="154" text-anchor="middle" class="zt-k">Sees what, not who</text>
+
+      <rect x="800" y="50" width="180" height="120" rx="12" class="zt-box"/>
+      <text x="890" y="74" text-anchor="middle" class="zt-h">Upstream DNS</text>
+      <text x="890" y="94" text-anchor="middle" class="zt-s">Only on a cache miss,</text>
+      <text x="890" y="111" text-anchor="middle" class="zt-s">batched and padded</text>
+      <text x="890" y="154" text-anchor="middle" class="zt-k">Sees the domain only</text>
+
+      <line x1="192" y1="92" x2="257" y2="92" class="zt-a" marker-end="url(#ztA)"/>
+      <line x1="462" y1="92" x2="527" y2="92" class="zt-a" marker-end="url(#ztA)"/>
+      <line x1="732" y1="92" x2="797" y2="92" class="zt-a" marker-end="url(#ztA)"/>
+      <line x1="257" y1="128" x2="193" y2="128" class="zt-a2" marker-end="url(#ztM)"/>
+      <line x1="527" y1="128" x2="463" y2="128" class="zt-a2" marker-end="url(#ztM)"/>
+      <line x1="797" y1="128" x2="733" y2="128" class="zt-a2" marker-end="url(#ztM)"/>
+      <g class="zt-n"><circle cx="225" cy="92" r="10"/><text x="225" y="96" text-anchor="middle">1</text></g>
+      <g class="zt-n"><circle cx="495" cy="92" r="10"/><text x="495" y="96" text-anchor="middle">2</text></g>
+      <g class="zt-n"><circle cx="765" cy="92" r="10"/><text x="765" y="96" text-anchor="middle">3</text></g>
+
+      <rect x="260" y="205" width="470" height="50" rx="10" class="zt-log"/>
+      <text x="495" y="226" text-anchor="middle" class="zt-h" style="font-size:14px">Public transparency log</text>
+      <text x="495" y="244" text-anchor="middle" class="zt-s">Published code images, attestations and every released report</text>
+      <line x1="360" y1="172" x2="360" y2="202" class="zt-at" marker-end="url(#ztS)"/>
+      <line x1="630" y1="172" x2="630" y2="202" class="zt-at" marker-end="url(#ztS)"/>
+      <path d="M105 172 V230 H257" class="zt-at" marker-end="url(#ztS)"/>
+      <text x="114" y="196" class="zt-l">4 Checks attestation</text>
+      <text x="114" y="211" class="zt-l">before the first lookup</text>
+
+    </svg>
+    </div>
+    <ol class="steps four" style="margin-top:16px">
+      <li><b>Encrypt on the phone</b><span>The lookup is encrypted so only the resolver can read it, then sent through the relay. This is Oblivious DNS over HTTPS.</span></li>
+      <li><b>Relay strips the IP</b><span>The relay forwards the sealed query without the user's IP address. It sees who is asking, but not what.</span></li>
+      <li><b>Resolver answers blind</b><span>The resolver reads the query and applies the published policy, but never sees the IP. Cache misses go upstream batched and padded, to blunt timing analysis.</span></li>
+      <li><b>Everyone checks the code</b><span>The phone checks the resolver's attestation before its first lookup. Relay and resolver attest to each other, against images in a public log.</span></li>
+    </ol>
   </div>
   <div>
     <div class="sec-head"><div><div class="label">Layered architecture</div><h2>Who has to be trusted, layer by layer</h2></div><p>Colour marks the phase each layer arrives in.</p></div>
@@ -1809,11 +1943,11 @@ hb_size   = "300x250"</code></pre>
     <p class="note">The same pattern Apple uses for Private Relay, with independent partners running the second hop.</p>
   </div>
   <div>
-    <div class="sec-head"><div><div class="label">Phasing and cost</div><h2>The first phase does not need the full infrastructure</h2></div><p>Engineering and audits dominate the cost, not hardware. Plausibly low single-digit $M a year at scale <span class="assume">assumption</span>, against year-3 obtainable revenue of $23–73M.</p></div>
+    <div class="sec-head"><div><div class="label">Phasing and cost</div><h2>The first phase does not need the full infrastructure</h2></div><p>Engineering and audits dominate the cost, not hardware. Plausibly low single-digit $M a year at scale <span class="assume">assumption</span>, against year-3 obtainable revenue of $18–63M.</p></div>
     <div class="phase-strip">
-      <div><span>Validate · days 0 to 90</span><b>Nothing built yet</b><p>Lab fingerprinting, simulations and a published design draft.</p></div>
-      <div><span>Pilot</span><b>Lowest-cost privacy layers</b><p>On-device processing, differential privacy, two-operator aggregation via a partner.</p></div>
-      <div><span>Launch</span><b>Resolver on attested hardware</b><p>Makes the protection path provable for every user, not just opted-in ones.</p></div>
+      <div><span>Validate · first 30 days</span><b>Nothing built yet</b><p>Lab fingerprinting, simulations and a published design draft.</p></div>
+      <div><span>Day one and Prove</span><b>Lowest-cost privacy layers</b><p>On-device processing, differential privacy, two-operator aggregation via a partner.</p></div>
+      <div><span>Target</span><b>Resolver on attested hardware</b><p>Makes the protection path provable for every user, not just opted-in ones.</p></div>
       <div><span>Scale</span><b>Additional layers</b><p>Independent relay, mutual attestation, TEE clean rooms. Benchmark DNS I/O overhead first.</p></div>
     </div>
   </div>
@@ -1824,7 +1958,7 @@ hb_size   = "300x250"</code></pre>
   <div class="sec-head"><div><div class="eyebrow">Roadmap</div><h2>What should be true after 30 days, one year and three years</h2></div><p>Each horizon has a mission and an outcome. Each area then shows what we do, the outcome it should produce, and how we would measure it. All targets are proposals for discussion.</p></div>
   <div class="horizons" id="horizons"></div>
 
-  <div class="sec-head" style="margin-top:8px"><div><div class="eyebrow">First 30 days</div><h2>Five measurements will decide whether the first product launches</h2></div><p>Everything in the first month is aimed at these, using lab devices and synthetic data. No real users are touched.</p></div>
+  <div class="sec-head" style="margin-top:8px"><div><div class="eyebrow">First 30 days</div><h2>Five measurements will decide our approach</h2></div><p>Everything in the first month is aimed at these, using lab devices and synthetic data. No real users are touched.</p></div>
   <div class="numbers">
     <div><span class="n">Number 1</span><b>Publisher revenue gap</b><p>Header-bidding value with Crumbs on and off, before and after the policy change.</p></div>
     <div><span class="n">Number 2</span><b>User base and router reach</b><p>Real iOS and router users, and how many households a partner could switch on. This sets how much can be sold and how much growth is needed.</p></div>
@@ -1833,10 +1967,10 @@ hb_size   = "300x250"</code></pre>
     <div><span class="n">Number 5</span><b>Buyer interest</b><p>Whether two MMPs see a calibration feed as worth paying for.</p></div>
   </div>
   <div class="weeks">
-    <div class="week"><span class="w">Week 1</span><h3>Establish the facts</h3><ul><li>Paired Crumbs-on and Crumbs-off measurement across 30 publisher sites, logging hostnames</li><li>User and opt-in counts by market, and the status of the router work</li><li>Router setup test on the main UK ISP hubs: BT, Sky, Virgin Media, TalkTalk</li><li>Visibility audit on test devices: Safari relay, Firefox, apps with their own DoH</li><li>Draft the one-page published design</li></ul></div>
-    <div class="week"><span class="w">Week 2</span><h3>Build</h3><ul><li>Draft the block-identity policy and test sending ib.adnxs.com to Xandr's cookieless endpoint</li><li>Fingerprint lab: top 200 iOS apps through install, open, background and idle</li><li>Privacy and accuracy simulator on synthetic data sized to the real base</li><li>Ask Whalebone about logging, retention and confidential computing options</li></ul></div>
+    <div class="week"><span class="w">Week 1</span><h3>Establish the facts</h3><ul><li>Repeat the paired Crumbs-on and Crumbs-off measurement across 30 publisher sites with more page views, logging hostnames</li><li>User and opt-in counts by market, and the status of the router work</li><li>Router setup test on the main UK ISP hubs: BT, Sky, Virgin Media, TalkTalk</li><li>Visibility audit on test devices: Safari relay, Firefox, apps with their own DoH</li><li>Draft the one-page published design</li></ul></div>
+    <div class="week"><span class="w">Week 2</span><h3>Build</h3><ul><li>Draft the block-identity policy and test sending ib.adnxs.com to Xandr's cookieless endpoint</li><li>Fingerprint lab: top 200 iOS apps through install, open, background and idle</li><li>Privacy and accuracy simulator on synthetic data sized to the real base</li><li>Confirm who operates the resolver, and its logging, retention and confidential computing options</li></ul></div>
     <div class="week"><span class="w">Week 3</span><h3>Test demand</h3><ul><li>Two publisher conversations, starting with UK news publishers, about advocating for Crumbs</li><li>Router conversations with one mesh maker, such as eero or TP-Link, and one UK ISP, about one-click setup</li><li>Two MMP conversations, one incrementality vendor, one SSP curator</li><li>Inventory propensity test against a contextual baseline</li><li>Red-team the design: differencing, probing, collusion</li></ul></div>
-    <div class="week"><span class="w">Week 4</span><h3>Decide</h3><ul><li>Go or no-go memo based on the five measurements</li><li>Publish the policy draft with publisher feedback</li><li>Pilot terms with one MMP</li><li>Opt-in experiment plan to test value-exchange variants</li></ul></div>
+    <div class="week"><span class="w">Week 4</span><h3>Decide</h3><ul><li>Memo on which approach to take, based on the five measurements</li><li>Publish the policy draft with publisher feedback</li><li>Pilot terms with one MMP</li><li>Opt-in experiment plan to test value-exchange variants</li></ul></div>
   </div>
   <div class="card">
     <div class="label">Kill and pivot criteria</div><h3>What would change the plan <span class="assume">proposed thresholds</span></h3>
@@ -1848,9 +1982,15 @@ hb_size   = "300x250"</code></pre>
       <div><b>Labels do not beat a contextual baseline</b><span>Curation has no advantage. Stay a measurement business and offer curators a quality signal instead.</span></div>
     </div>
   </div>
+  <div class="card" id="documents">
+    <div class="sec-head" style="margin-bottom:6px"><div><div class="label">Documents · optional</div><h3>The first documents I would write, in draft</h3></div><p>Twelve working drafts for the first month, in the order they are needed. Preview any of them here, or download them as Markdown.</p></div>
+    <div class="doc-actions" style="justify-content:flex-start;margin-bottom:6px"><button type="button" class="doc-btn dl" id="docAll" hidden>Download all as one file</button><span class="doc-msg" id="docAllMsg" role="status"></span></div>
+    <div class="doc-list" id="docList"></div>
+    <script type="application/json" id="docs-data">[{"file": "crumbs-01-fact-finding-request.md", "title": "Fact-finding request", "week": "Week 1", "desc": "What eyeo's own numbers and systems need to tell us before anything else.", "md": "# Fact-finding request\n\n*Crumbs monetization · Week 1 · Draft for discussion*\n\n**The point:** every number in the plan rests on estimates. This request swaps them for eyeo's own facts in the first week, so the 30-day work is aimed at the right questions.\n\n**In scope:** facts that change the plan. **Not in scope:** anything that needs user-level data. Aggregates are enough for every question below.\n\n## 1. Users and opt-in\n\n| Question | Why it matters | Likely owner |\n|---|---|---|\n| Installs and monthly active users, iOS and Android, by country | Sets the panel size, which caps every product | Product analytics |\n| Router users on the self-configured DNS setting, by country | The second panel, and the one that reaches TVs | Product analytics |\n| Opt-in rate for research, if an opt-in exists yet | The real panel is opted-in users, not installs | Product |\n| Retention of Crumbs users after 30 and 90 days | A panel that churns cannot be calibrated | Product analytics |\n\n## 2. How the product works today\n\n| Question | Why it matters | Likely owner |\n|---|---|---|\n| How the iOS app handles DNS: encrypted DNS settings provider, or a local proxy or tunnel | Decides whether outcome detection can run on the phone or must run in the resolver | iOS engineering |\n| Who operates the resolver, what it logs, and how long logs are kept | Every privacy claim depends on it | Infrastructure, security |\n| Where the blocklist comes from, who owns it, and how it changes | The blocking findings show independent auctions blocked while Google passes | Filter list owners |\n| Whether the Android app and router setup use the same resolver and policy | One policy should apply everywhere | Engineering |\n\n## 3. Partnerships and commercial context\n\n| Question | Why it matters | Likely owner |\n|---|---|---|\n| Status of the router work: which makers or ISPs, and how far along | Distribution is the bottleneck | Business development |\n| Existing contracts with SSPs, MMPs or curators through Acceptable Ads or Blockthrough | Fastest route to first conversations | Partnerships |\n| Any commitments made to publishers or ad tech about Crumbs blocking | Shapes how the policy change is announced | Legal, partnerships |\n| Legal view on DNS data under ePrivacy and GDPR | Sets the consent and retention rules for every product | Legal, privacy |\n\n## Format\n\nA short reply per question is enough. Where a number does not exist yet, \"unknown\" is a useful answer: it becomes a week-one measurement.\n\n## What I will do with it\n\nUpdate the sizing, the simulator inputs and the 30-day plan, and share the corrected numbers back with the team by the end of week one.\n"}, {"file": "crumbs-02-blocking-policy-proposal.md", "title": "Blocking policy proposal", "week": "Week 1", "desc": "Block identity, not auctions: the rule, edge cases, governance and how we check it.", "md": "# Blocking policy proposal: block identity, not auctions\n\n*Crumbs · Week 1 · Draft for discussion*\n\n**The point:** Crumbs should block what identifies a person across sites and apps, and allow the auctions and ad serving that pay publishers. One published rule, applied to every company the same way.\n\n## Why change\n\nPaired Crumbs-on and Crumbs-off page views showed that today's blocking:\n\n- cuts some independent auctions entirely (Xandr, Ozone, Kargo, Magnite's server-side Prebid), costing publishers 32% to 100% of header-bidding value on the sites measured;\n- lets Google's ad stack, Google Analytics and the Meta Pixel through;\n- correctly blocks most ID syncs and data brokers.\n\nThe result removes revenue from independent publishers while identity still reaches the largest platforms. Because eyeo also receives Acceptable Ads payments, the pattern can be read as pay to play.\n\n## The rule\n\n**Block** any request whose main purpose is to identify, link or profile a person across sites or apps:\n\n- ID syncs and cookie matching\n- data brokers and identity graphs\n- cross-site analytics and tracking pixels, where they can be separated from site function\n- device fingerprinting services\n\n**Allow** any request needed to run an auction, serve an ad or measure it in aggregate:\n\n- bidding and auction endpoints, client-side and server-side\n- ad serving and creative delivery\n- verification and measurement that does not build a cross-site profile\n\n**Steer instead of block** where a partner offers a cookieless or ID-free endpoint: Crumbs answers with that endpoint instead of refusing the lookup.\n\n## Edge cases and who decides\n\n| Case | Proposed handling |\n|---|---|\n| A host serves both bidding and syncing | Block if identity cannot be separated; ask the company to split hosts, and publish the request |\n| A first-party analytics domain | Allow if it stays on the site; block if it feeds a cross-site profile |\n| A company disputes a classification | A published appeal, decided by the policy group within 30 days |\n\n**Governance:** a policy group modelled on the Acceptable Ads Committee, including publisher seats. Every change is logged publicly with its reason.\n\n## How we check it\n\nPaired measurement on the same 30 sites before and after the change. Success means:\n\n- header-bidding value with Crumbs on at least 90% of Crumbs off;\n- at least 90% of ID syncs still blocked;\n- no new identifier in bid requests from Crumbs users.\n\n## Not in scope\n\nRemoving identifiers already stored by a site. DNS cannot reach inside a request; that needs the Crumbs Prebid module or eyeo's browser components.\n\n## Counterarguments\n\n- *\"Allowing auctions weakens protection.\"* Auction requests carry the same identifiers whether Crumbs allows them or not; blocking a whole auction decides who gets paid, not what the user leaks.\n- *\"Users chose Crumbs to block ads.\"* Crumbs is a privacy product. The policy blocks tracking; ad display is governed separately by Acceptable Ads.\n- *\"Google will still get more data than anyone else.\"* True today. The rule applies to Google's identity hosts in the same way, and the paired measurement will show it.\n\n## Next steps\n\n1. Classify every host in today's blocklist against the rule.\n2. Share the draft with five publishers and two SSPs for comment.\n3. Ship behind a flag, measure, then publish.\n"}, {"file": "crumbs-03-privacy-design-draft.md", "title": "Published privacy design, draft 0", "week": "Week 1", "desc": "How measurement and targeting work without anyone seeing what an individual does.", "md": "# Crumbs measurement and targeting: published privacy design\n\n*Draft 0 · Week 1 · For review before anything is built*\n\n**The point:** no one, including eyeo, should be able to see what an individual does. This document describes how Crumbs measures outcomes and supports targeting without that, so anyone can check it before launch.\n\n## 1. Principles\n\n1. **Opt-in, separate from protection.** Protection is free for everyone and works the same whether or not a user opts in. Opting in to research is a separate choice that can be switched off at any time.\n2. **Detect on the device.** Raw DNS lookups are never sent anywhere for analysis.\n3. **Aggregate only.** Advertisers and partners receive only totals with added noise, never data about a person.\n4. **Short retention.** eyeo keeps what it collects for days, not months.\n5. **Published before deployed.** This design, the reporting schema and the noise level are public before launch.\n\n## 2. What the device does\n\n- Recognises outcomes such as a first app open, using app fingerprints shipped to the device.\n- Keeps a short local memory so it can tell a first open from a repeat. This memory never leaves the device and is wiped on opt-out.\n- Sends at most one count per app per week, split into two encrypted shares.\n\n## 3. What the servers do\n\n- Two independent operators each hold one share, so neither can see any device's contribution.\n- Totals are computed for fixed cells: app, country, device type and week.\n- Each device's influence is capped, noise is added (differential privacy), and cells below a minimum size are withheld.\n- There are no ad hoc queries, which prevents differencing attacks.\n\n## 4. Targeting\n\n- Users choose interests on the device.\n- A device joins an interest group only if the group has at least 100 opted-in members.\n- The group travels in a bid request with no user identifier alongside it.\n- Sensitive categories (health, religion, sexuality, politics, financial hardship) are never used.\n\n## 5. The DNS path\n\n- Lookups are encrypted end to end.\n- Target state: an independent relay strips IP addresses (Oblivious DNS over HTTPS), and the resolver runs in attested secure hardware against a published code image, keeping no logs.\n- Every deployed image and every released report is recorded in a public transparency log.\n\n## 6. Retention\n\n| Data | Where | Kept for |\n|---|---|---|\n| Raw lookups | Device only | Not sent |\n| Seen-before memory | Device only | Up to the longest retention window reported, then deleted |\n| Encrypted shares | Aggregators | Days, deleted after each release |\n| Noised totals | eyeo and partners | As long as the report is useful |\n\n*Open question for the team:* day-30 retention reporting needs the device to remember a first open for 30 days. That memory stays on the device. Does this fit eyeo's \"days, not months\" rule as intended?\n\n## 7. What this design does not protect against\n\n- Network timing between the resolver and upstream DNS, mitigated by caching, batching and padding.\n- Weaknesses in secure hardware, mitigated by independent operators.\n- A partner linking an interest group to an IP address it already sees, mitigated by broad, rotated groups and contracts.\n\n## 8. How to check it\n\nPublished code images, attestations, the reporting schema and this document, plus an external audit and a bug bounty before launch.\n"}, {"file": "crumbs-04-dpia-outline.md", "title": "Data protection impact assessment, outline", "week": "Week 1", "desc": "The processing, risks and questions for legal, before any user data is touched.", "md": "# Data protection impact assessment: outline\n\n*Crumbs research opt-in · Week 1 · Outline for legal and privacy review*\n\n**The point:** processing DNS-derived data for research, even aggregated and opt-in, is likely to need a data protection impact assessment under GDPR Article 35, and DNS data may count as traffic data under the ePrivacy Directive. Starting this in week one keeps legal ahead of the design rather than behind it.\n\n**In scope:** the research opt-in, outcome measurement and interest groups. **Not in scope:** the free protection service, which has its own basis.\n\n## 1. Description of processing\n\n- **Purpose:** measure aggregate app outcomes and support privacy-preserving interest groups.\n- **Data:** on-device detection of app opens; encrypted, capped counts; noised aggregate totals; user-chosen interests held on the device.\n- **Data subjects:** Crumbs users who opt in, in the EU, UK and US.\n- **Recipients:** two aggregation operators; measurement companies and curators receive noised totals only.\n\n## 2. Necessity and proportionality\n\n- Lawful basis: consent, separate from the protection service, freely given and withdrawable.\n- Data minimisation: no raw lookups leave the device; only fixed, published aggregates are produced.\n- Retention: encrypted shares deleted after each release.\n\n## 3. Risks to individuals\n\n| Risk | Likelihood | Severity | Mitigation |\n|---|---|---|---|\n| Re-identification from small cells | Low | High | Minimum cell size, noise, no ad hoc queries |\n| Inferring sensitive traits from app usage | Medium | High | Sensitive app categories excluded from reports and groups |\n| Consent not freely given if tied to protection | Medium | High | Protection identical without opt-in |\n| A partner links groups to IP addresses | Medium | Medium | Broad, rotated groups; contractual bans; audits |\n| A breach of an aggregation operator | Low | Medium | Secret sharing: one operator alone holds nothing readable |\n\n## 4. Questions for legal\n\n1. Does on-device processing of DNS lookups engage ePrivacy Article 6 on traffic data, and does the opt-in meet that consent standard?\n2. Are noised aggregates personal data at all, and does that change cross-border transfer rules?\n3. What notice is required in California for any value exchange offered for opting in?\n4. Do the aggregation operators act as processors or joint controllers?\n\n## 5. Sign-off\n\nData protection officer, legal, security and the product owner, before any user data is processed.\n"}, {"file": "crumbs-05-paired-measurement-method.md", "title": "Paired measurement method", "week": "Week 2", "desc": "How to compare Crumbs on and off so publishers can trust and repeat the result.", "md": "# Paired measurement method: Crumbs on and off\n\n*Week 2 · Draft for discussion*\n\n**The point:** the blocking policy debate should start from numbers both eyeo and publishers trust. This method makes the comparison repeatable, so publishers can run it themselves and the results can be published.\n\n## 1. Question\n\nHow much header-bidding value, bidder participation and identity leakage changes when a reader uses Crumbs, before and after the policy change?\n\n## 2. Set-up\n\n- Two browser profiles on the same machine and network: **A** uses ordinary DNS, **B** uses the Crumbs resolver.\n- Each profile has its own proxy, so the browser cannot resolve names any other way.\n- Both load the same page at the same time; the run repeats with A and B swapped to remove ordering effects.\n- The open-source demo in github.com/drpaulfarrow/crumbs implements this set-up.\n\n## 3. Sites\n\n30 publisher sites, chosen to include:\n\n- UK news publishers, including at least one using Ozone;\n- sites using client-side and server-side Prebid;\n- at least five sites from publisher networks such as Mediavine or Raptive.\n\n## 4. What is recorded per page view\n\n| Measure | How |\n|---|---|\n| Hostnames requested and their outcome | Proxy log: allowed, blocked by Crumbs, failed |\n| Bidders asked and bids returned | Prebid's own events, read from the page |\n| Top bid per slot | Prebid's winning bid |\n| Identifiers in bid requests | Inspection of outgoing bid requests |\n| ID syncs fired and blocked | Proxy log, classified by host |\n\n## 5. Analysis\n\n- **Header-bidding value ratio:** B's top bids as a share of A's, per site, with a confidence interval from repeated loads.\n- **Bidder loss:** bidders asked in A but not reached in B.\n- **Identity blocked:** share of ID-sync calls blocked in B.\n- Results by site and in aggregate; no site is dropped after seeing its result.\n\n## 6. Limits\n\n- Real bids vary with time and audience; repeated loads narrow but do not remove this.\n- One network and one browser; results are directional until repeated more widely.\n- The test sees only what each page requested, not Crumbs' whole rule set.\n\n## 7. Publishing\n\nMethod and code published first; results co-published with participating publishers, each of whom sees their own numbers before release.\n"}, {"file": "crumbs-06-partner-conversation-guides.md", "title": "Partner conversation guides", "week": "Weeks 2 and 3", "desc": "One hypothesis, four questions and a kill signal for each partner type.", "md": "# Partner conversation guides\n\n*Weeks 2 and 3 · One guide per partner type*\n\n**The point:** each conversation tests one hypothesis. We listen more than we pitch, and we write down what would change our mind before the meeting, not after.\n\n---\n\n## Measurement companies (MMPs, such as AppsFlyer and Adjust)\n\n**Hypothesis:** an independent count of real iOS app opens would improve their iOS estimates enough to pay for it.\n\n**Ask:**\n1. Where are your iOS estimates weakest today: which apps, countries or categories?\n2. What would you check an independent count against, and how accurate would it need to be?\n3. How do you buy outside data today: licence, revenue share or partnership?\n4. Crumbs blocks some attribution domains today. How would you feel about buying aggregate data from us?\n\n**Would change our mind:** neither company sees value at the accuracy our panel can reach, or both insist on user-level data.\n\n*Note:* app measurement is not my deepest area. I would bring someone with app-growth experience to these meetings.\n\n---\n\n## Publishers\n\n**Hypothesis:** once auctions are restored, publishers will support Crumbs and promote the opt-in to readers.\n\n**Ask:**\n1. Here is your header-bidding value with Crumbs on and off. Does this match what you see?\n2. Would a privacy-safe audience signal on your inventory change how you value Crumbs readers?\n3. Would you promote an opt-in to your readers, and on what terms?\n4. Would you take a seat on the blocking policy group?\n\n**Would change our mind:** publishers see no revenue recovery after the policy change, or will not promote the opt-in at any revenue share.\n\n---\n\n## Curators and SSPs\n\n**Hypothesis:** curators want an audience signal with a published privacy design and will build deals on it.\n\n**Ask:**\n1. What audience data do your buyers ask for that you cannot supply today?\n2. Would opt-in interest groups of at least 100 people be useful, with no user ID?\n3. Would you test carrying a group in the DNS answer, on IPv6, with us?\n4. How would you want to pay: a percentage of media or a CPM?\n\n**Would change our mind:** groups do not beat a contextual baseline on outcomes in a first test.\n\n---\n\n## Router makers and ISPs\n\n**Hypothesis:** a one-tap Crumbs option, with a revenue share and no licence fee, is attractive enough to integrate.\n\n**Ask:**\n1. Do your customers ask for privacy or ad-tracker protection?\n2. What would integration take: your app, gateway apps through prpl, or a DNS setting?\n3. What would a revenue share need to be worth to justify the work?\n4. What would your legal team need on consent and data?\n\n**Would change our mind:** no partner will integrate within a year at any reasonable revenue share.\n\n---\n\n## After each conversation\n\nOne paragraph: what we heard, whether the hypothesis held, and the next step. Shared with the team the same day.\n"}, {"file": "crumbs-07-fingerprint-lab-and-simulator-plan.md", "title": "Fingerprint lab and simulator plan", "week": "Week 2", "desc": "The two instruments that decide whether outcome measurement is possible.", "md": "# Fingerprint lab and privacy simulator plan\n\n*Week 2 · Build plan*\n\n**The point:** two numbers decide whether outcome measurement is possible: how many apps Crumbs can recognise, and how many it can report accurately after privacy noise. These two instruments produce them.\n\n---\n\n## Part 1: Fingerprint lab\n\n**Question:** what share of the top 200 iOS apps can Crumbs recognise cleanly from their DNS lookups when they first open?\n\n### Version 0 (day one, one phone)\n1. Turn on App Privacy Report in iOS settings.\n2. Delete, reinstall and open 20 to 50 apps across categories, using each for about a minute.\n3. Export the report and group domains by app.\n4. Flag domains shared across apps (analytics and ad SDKs, content delivery networks).\n5. Count apps with at least one domain of their own.\n\n### Version 1 (week two, the real lab)\n- Three or more test devices, including an older iOS version.\n- The top 200 apps by downloads in the UK and US.\n- Each app through install, first open, background, return after a day, and idle.\n- Lookups captured at a test resolver, timestamped, so first opens can be told apart from background refreshes.\n\n### Pass mark\nAt least 50% of the top 200 apps identified cleanly. Below that, the panel cannot be sold yet, and we focus on the categories that work.\n\n### Limits\nOne lab overstates uniqueness, because a domain unique in the lab may be shared with apps not installed. Apps that use their own encrypted DNS are invisible and need counting.\n\n---\n\n## Part 2: Privacy simulator\n\n**Question:** for a given panel size and privacy budget, how many apps and countries can be reported within a useful accuracy?\n\n### Inputs\n- Opted-in users per market, from the fact-finding request.\n- First opens per user per week, and the share going to the top 200 apps.\n- Privacy budget per release, minimum cell size, and reporting window.\n\n### Method\n- Model each app's weekly first opens from a long-tail distribution.\n- Add sampling error and privacy noise at the chosen budget.\n- An app is reportable if its 95% confidence interval is within the target accuracy and above the minimum cell.\n- Account properly for the privacy budget across many cells and releases.\n\n### Outputs\n- Reportable apps by market and window.\n- Share of first-open volume covered, as a proxy for sellable spend.\n- Panel size needed for the top 50 apps.\n\n### Early finding from version 0\nAbove a privacy budget of about 1, sampling error outweighs privacy noise. Panel size is the binding constraint, which is why distribution comes first.\n"}, {"file": "crumbs-08-approach-memo-template.md", "title": "Approach memo template", "week": "Week 4", "desc": "One page that lets leadership choose the first approach in a single meeting.", "md": "# Approach memo: which way to start\n\n*Week 4 · Template, to be filled in with the five measurements*\n\n**The point:** one page that lets the leadership team choose the first approach in a single meeting.\n\n## 1. Recommendation\n\n*One sentence: the approach we recommend and why.*\n\n## 2. The five numbers\n\n| Measurement | Result | What it means |\n|---|---|---|\n| 1. Publisher revenue gap, before and after the policy change | | |\n| 2. Real user base and router reach | | |\n| 3. Fingerprint coverage, top 200 iOS apps | | |\n| 4. Reportable apps and countries at the target privacy budget | | |\n| 5. Interest from two measurement companies | | |\n\n## 3. Options considered\n\n| Approach | Chosen if | What we would do first |\n|---|---|---|\n| **A. Measurement first** | Coverage at least 50%, enough apps reportable, at least one measurement company willing to pilot | Pilot with one measurement company in the UK and US |\n| **B. Lift studies first** | Coverage good, but measurement companies hesitant | Two reference lift studies with friendly advertisers |\n| **C. Distribution first** | Too few users for any product to report accurately | Focus the next quarter on router and ISP partnerships |\n| **D. Curation quality signal** | Fingerprinting weak but publisher and curator interest strong | Offer curators inventory-level labels only |\n\nIn every option, the blocking policy change goes ahead.\n\n## 4. Risks and what would change the recommendation\n\n*The two or three risks that matter most, and the early signal for each.*\n\n## 5. What we need\n\n*People, partners and decisions needed from leadership.*\n\n## 6. Next 90 days\n\n*Three to five milestones with owners and dates.*\n"}, {"file": "crumbs-09-prd-crumbs-outcomes.md", "title": "Product requirements: Crumbs Outcomes", "week": "Week 4", "desc": "Version 1 of the measurement product, written from its launch note.", "md": "# Product requirements: Crumbs Outcomes, version 1\n\n*Week 4 · Draft, written from the launch note*\n\n**The point:** Crumbs Outcomes gives measurement companies an independent, privacy-protected count of real iOS app opens and retention, so they can check their own estimates and spot installs that never became real users.\n\n## 1. Problem\n\nSince Apple's App Tracking Transparency, measurement companies mostly estimate iOS installs and their quality. They have no independent count to check those estimates against.\n\n## 2. Customers\n\n- **First:** measurement companies such as AppsFlyer and Adjust.\n- **Second:** verification and incrementality vendors.\n- **End users of the data:** app advertisers, through those companies' dashboards.\n\n## 3. What version 1 delivers\n\n| Requirement | Detail | Priority |\n|---|---|---|\n| Daily first opens by app and country | UK and US, top apps that clear the minimum cell | Must |\n| Day 1, 7 and 30 retention | Same cells | Must |\n| Estimated installs with confidence intervals | Calibrated against a clean source, not reported installs | Must |\n| Never-opened rate | Reported installs (from the partner) compared with observed first opens | Should |\n| Secure data delivery | Daily file or data share; no user-level rows | Must |\n| Published method | Schema, noise level, minimum cell, calibration approach | Must |\n\n## 4. Not in version 1\n\nAndroid, web outcomes, targeting, per-network attribution, and any purchase or revenue data.\n\n## 5. Privacy requirements\n\nAs in the published privacy design: opt-in only, detection on the device, two-operator aggregation, noise and minimum cells, short retention, transparency log.\n\n## 6. Success measures\n\n- At least 80% of the top 500 iOS apps identified cleanly.\n- One paying pilot in year one; three licences by year three.\n- Pilot partner reports that the feed improved their iOS estimates.\n- Zero privacy incidents.\n\n## 7. Dependencies\n\nFingerprint coverage, the opt-in flow in the Crumbs app, the aggregation partner, and a panel large enough to clear the minimum cell for the pilot apps.\n\n## 8. Open questions\n\n1. Which clean source do we calibrate against: no-spend periods, or app store figures shared by the advertiser?\n2. Can day-30 retention be reported under the retention rule?\n3. How do we explain buying aggregate data from Crumbs when Crumbs blocks attribution domains?\n"}, {"file": "crumbs-10-business-case-and-pricing.md", "title": "Business case and pricing", "week": "Week 4", "desc": "Two ways Crumbs is paid, who it pays, and whether eyeo is an ads platform.", "md": "# Business case and pricing\n\n*Week 4 · Draft, all figures are assumptions for discussion*\n\n**The point:** Crumbs earns in two ways, paid for data and paid per ad, and pays the partners who bring the data. Measurement pays first; targeting is the larger prize; distribution is a cost of growth, not a revenue line.\n\n## 1. Two ways Crumbs is paid\n\n| | Pay for data | Pay per ad |\n|---|---|---|\n| What is sold | Outcome data and lift studies | Interest groups and audience labels in curated deals |\n| Who pays | Measurement, verification and incrementality companies | The advertiser, through the curator or SSP |\n| Pricing | Annual licence with a minimum fee; lift studies at roughly $25,000 to $75,000 each | About 4% of media on Crumbs deals, with a small CPM floor |\n| Depends on ads running | No | Yes |\n| Year-three base case | About $15M | About $10M |\n\n## 2. Who Crumbs pays\n\n- **Router makers and ISPs:** 30% of the revenue from the households they bring. Never charged.\n- **Publishers:** a share of curation revenue on their inventory when they promote the opt-in.\n- **Users:** paid in kind, with free protection and control. Cash payments do not work at this scale.\n\n## 3. Year-three base case\n\n| Line | $M per year |\n|---|---|\n| Revenue | about 25 |\n| Routers and ISPs | about 3.8 |\n| Partners who resell it | about 4.0 |\n| Monetization team | about 4.0 |\n| Resolver, privacy and audits | about 2.7 |\n| **eyeo keeps** | **about 10.7** |\n\nYear one loses about $1.5M while the panel is small.\n\n## 4. The decision: are we an ads platform?\n\n| Option | Builds | Earns | Trade-off |\n|---|---|---|---|\n| Data provider | Groups, labels, a list partners use | Data fee | Neutral, smallest build, smallest share |\n| Curator | A curation desk across SSPs | Curation margin | More revenue, competes with would-be advocates |\n| Ads platform | An exchange or ad network | Take rate on all media | Largest prize, but repeats the pay-to-play pattern |\n\n**Recommendation:** start as a data provider; consider curating once Crumbs deals prove results; do not build an exchange.\n\n## 5. Sensitivities\n\n- Panel size moves every line, by a factor of two or more.\n- Fingerprint coverage caps measurement revenue.\n- Curation revenue depends on Crumbs groups beating contextual targeting.\n\n## 6. Counterarguments\n\n- *\"Measurement is a small market.\"* It is the start, and it builds the trust curation needs.\n- *\"Paying partners makes margins thin.\"* Partners bring the panel; without them there is nothing to sell.\n"}, {"file": "crumbs-11-stakeholder-map-and-rhythm.md", "title": "Stakeholder map and operating rhythm", "week": "All month", "desc": "Who owns what, who decides, and when we meet.", "md": "# Stakeholder map and operating rhythm\n\n*All month · Draft, roles to be confirmed with eyeo*\n\n**The point:** most of this plan crosses teams and companies. Naming who owns what, and when we meet, stops decisions stalling between them.\n\n## 1. Who owns what\n\n| Workstream | Owner | Consulted | Informed |\n|---|---|---|---|\n| Blocking policy | Monetization lead, with filter list owners | Publishers, legal, Acceptable Ads Committee | Leadership |\n| Privacy design and DPIA | Privacy and legal | Monetization lead, engineering, security | Leadership |\n| Fact-finding and user numbers | Product analytics | iOS and infrastructure engineering | Monetization lead |\n| Fingerprint lab and simulator | Monetization lead | iOS engineering | Product |\n| Measurement company conversations | Monetization lead, with an app-growth specialist | Partnerships | Leadership |\n| Publisher and curator conversations | Monetization lead | Blockthrough, Acceptable Ads team | Leadership |\n| Router and ISP partnerships | Business development | Monetization lead, legal | Leadership |\n| Approach memo | Monetization lead | All workstream owners | Leadership |\n\n## 2. Operating rhythm\n\n| Meeting | When | Who | Output |\n|---|---|---|---|\n| Stand-up | Twice a week, 15 minutes | Workstream owners | Blockers cleared |\n| Weekly update | Friday | Written, to all stakeholders | What we learned, what changed, what is next |\n| Partner debrief | Same day as each conversation | Monetization lead | One paragraph to the team |\n| Monthly review | End of each month | Leadership | Decision on approach and resources |\n\n## 3. Decision rights\n\n- **Monetization lead decides:** experiment design, partner conversation order, the content of drafts.\n- **Leadership decides:** the blocking policy change, the first approach, any partner contract.\n- **Legal and privacy can stop:** anything involving user data, until the DPIA is signed off.\n"}, {"file": "crumbs-12-risk-register.md", "title": "Risk register", "week": "All month", "desc": "The risks that could change the plan, and the early signal for each.", "md": "# Risk register\n\n*All month · Reviewed weekly*\n\n**The point:** the risks that could change the plan, how likely they are, and the early signal we are watching for each.\n\n| # | Risk | Likelihood | Impact | Early signal | Mitigation | Owner |\n|---|---|---|---|---|---|---|\n| 1 | Apple changes DNS, Private Relay or attribution rules | Medium | High | iOS beta release notes | Avoid depending on one API; grow the router panel | Product |\n| 2 | Too few opted-in users to report anything | High | High | Fact-finding numbers; simulator output | Distribution first; router and ISP partnerships | Business development |\n| 3 | Fingerprinting covers too few apps | Medium | High | Lab coverage below 50% | Focus on categories that work; lift studies instead | Monetization lead |\n| 4 | Publishers or ad tech publicly criticise today's blocking | Medium | High | Trade press; partner complaints | Policy change first; co-published measurement | Monetization lead |\n| 5 | Regulators treat DNS research data as needing more than opt-in | Medium | High | Legal review; DPIA findings | DPIA in week one; published design; external audit | Legal and privacy |\n| 6 | Panel skews towards privacy-minded users | High | Medium | Calibration error against clean sources | Weight and calibrate; publish confidence intervals; broaden through ISPs | Data science |\n| 7 | Measurement companies will not buy from a product that blocks their domains | Medium | Medium | First two conversations | Explain aggregate-only; lead with lift studies if needed | Monetization lead |\n| 8 | Interest groups linked to IP addresses by a partner | Low | High | Audit findings | Broad, rotated groups; contracts; audits | Privacy |\n| 9 | Router and ISP deals take longer than a year | High | Medium | No signed pilot by month six | Mesh makers first; ISP gateways through prpl | Business development |\n| 10 | Crumbs data seen as competing with existing data providers | Medium | Medium | Partner pushback | One published policy for everyone; partner rather than compete | Monetization lead |\n\n## Review\n\nEach week: update likelihood and early signals, add new risks, close those that have passed.\n"}]</script>
+  </div>
   <div class="card">
     <div class="label">Hands-on, from week one</div><h3>What I would build myself</h3>
-    <p class="lede" style="font-size:16px;max-width:none">The fingerprint lab and the privacy simulator. Together they give two numbers to base the decision on: fingerprint coverage, and the share of the market that can be sold at a given privacy budget. A first version of the simulator is already on the How it works tab. I also built the blocking measurement, the signal map and this site, using AI for drafting and my own judgement for the content.</p>
+    <p class="lede" style="font-size:16px;max-width:none">The fingerprint lab and the privacy and accuracy simulator. Together they give two numbers to base the decision on: fingerprint coverage, and the share of the market that can be sold at a given privacy budget. I also built the blocking measurement, the signal map and this site, using AI for drafting and my own judgement for the content.</p>
   </div>
   <p class="foot">Figures marked assumption are estimates for discussion, not forecasts.</p>
 </section>
@@ -1859,8 +1999,11 @@ hb_size   = "300x250"</code></pre>
 <section class="tabpanel" id="tab-why" role="tabpanel" hidden>
   <div class="card">
     <div class="eyebrow">Why me</div>
-    <h1>I've spent my career on the seam this role sits on</h1>
-    <p class="lede">Crumbs sits between the auction, the privacy rules around it, and the standards that let publishers and advertisers trust both. That is where I've worked: inside the auction at AppNexus and Xandr, on privacy-preserving ad selection at Microsoft Advertising, and in the standards bodies where Prebid, IAB Europe and the NAI decide what the industry will accept.</p>
+    <h1>I already sit in the rooms this plan needs to win</h1>
+    <p class="lede">Almost every step of this plan needs another company to say yes: Prebid to accept a module, publishers to advocate, SSPs and curators to carry a signal, and the privacy community to trust the design. I sit on the boards of Prebid, IAB Europe and the NAI, co-lead Prebid's LLM and Publisher Monetization Task Force, and work in IAB Tech Lab and the W3C. I have spent my career inside the auction at AppNexus, Xandr and Microsoft Advertising, and through Prebid I work with SSPs, DSPs and publisher networks such as The Trade Desk, Magnite, Mediavine and Raptive.</p>
+    <div class="ag-badges">
+      <span>Board · Prebid</span><span>Board · IAB Europe</span><span>Board · NAI</span><span>Co-lead · Prebid LLM and Publisher Monetization Task Force</span><span>IAB Tech Lab</span><span>W3C</span><span>AppNexus · Xandr · Microsoft Advertising</span>
+    </div>
     <div class="byline">Paul Farrow · Principal Product Manager, Microsoft Advertising</div>
   </div>
 
@@ -1869,9 +2012,21 @@ hb_size   = "300x250"</code></pre>
     <div class="moves">
       <div class="move"><span class="n">A coherent plan</span><h3>Fix, measure, prove, target</h3><p>Each move pays for the next, and each has a kill criterion, so we learn cheaply if the thesis is wrong. The plan also says what we refuse to build.</p><button type="button" class="ph linkish" data-goto="thesis">See the thesis</button></div>
       <div class="move"><span class="n">Ads knowledge</span><h3>From inside the auction</h3><p>I've worked in programmatic from AppNexus, through Xandr, to Microsoft. That is why the findings separate an ID sync from a bid: they look alike in a DNS log and mean very different things to a publisher's revenue.</p><button type="button" class="ph linkish" data-goto="findings">See the blocking findings</button></div>
-      <div class="move"><span class="n">A builder</span><h3>Instruments, not slides</h3><p>I ran the 30-site measurement, the router test and the simulator myself, using AI for drafting and code and my own judgement for the method. I'd build the fingerprint lab the same way in week two.</p><button type="button" class="ph linkish" data-goto="how" data-anchor="sim">See the simulator</button></div>
-      <div class="move"><span class="n">Getting it done</span><h3>Already in the rooms</h3><p>Most of this plan needs other companies to say yes: Prebid, publishers, MMPs, ISPs. I already sit in several of those rooms, which shortens the path from idea to adoption.</p><button type="button" class="ph linkish" data-goto="plan">See the roadmap</button></div>
+      <div class="move"><span class="n">A builder</span><h3>Instruments, not slides</h3><p>I ran the 30-site measurement, the router test and the Prebid module myself, using AI for drafting and code and my own judgement for the method. I'd build the fingerprint lab the same way in week two.</p><button type="button" class="ph linkish" data-goto="demo">See the live demo</button></div>
+      <div class="move"><span class="n">Getting it done</span><h3>Already in the rooms</h3><p>Three board seats and a Prebid task force mean the conversations this plan depends on start in week one, not after months of introductions.</p><button type="button" class="ph linkish" data-goto="plan">See the first 30 days and beyond</button></div>
     </div>
+  </div>
+
+  <div class="card">
+    <div class="sec-head" style="margin-bottom:12px"><div><div class="label">Industry network</div><h3>Who I can bring into the room, for each part of the plan</h3></div><p>These are the forums where the plan's hardest yeses are decided.</p></div>
+    <div class="tablewrap"><table class="opts" style="min-width:760px"><thead><tr><th>The plan needs</th><th>The room</th><th>My role there</th><th>What it unlocks for Crumbs</th></tr></thead><tbody>
+      <tr><td><b>Crumbs mode in Prebid</b></td><td>Prebid.org</td><td>Board member, and co-lead of the LLM and Publisher Monetization Task Force</td><td>A route to propose the module and the activity-control defaults, with the people who maintain Prebid.js and Prebid Server</td></tr>
+      <tr><td><b>Publishers as advocates</b></td><td>IAB Europe, and European publisher supply work at Microsoft</td><td>Board member; supply-side publisher strategy on the Publisher Content Marketplace</td><td>Introductions to the UK and European publishers who would co-publish the measurement</td></tr>
+      <tr><td><b>A neutral, trusted policy</b></td><td>NAI</td><td>Board member</td><td>Credibility for a published blocking policy and privacy design, and early review from the self-regulatory community</td></tr>
+      <tr><td><b>A standard way to carry the group</b></td><td>IAB Tech Lab and W3C</td><td>Active in working groups, including privacy-preserving ad selection</td><td>Groups carried in standard OpenRTB fields and taxonomies, so every SSP and DSP can read them</td></tr>
+      <tr><td><b>SSPs, DSPs, curators and publisher networks</b></td><td>Prebid's member companies and the wider industry, including The Trade Desk, Magnite, Mediavine and Raptive</td><td>Years working alongside them through Prebid, and on both sides of the auction at AppNexus, Xandr and Microsoft Advertising</td><td>Direct relationships with the companies that would carry Crumbs groups, buy Crumbs deals and roll out Crumbs mode to their publishers</td></tr>
+    </tbody></table></div>
+    <p class="note">The roles are mine. Any introduction made for eyeo would be agreed with each organisation first.</p>
   </div>
 
   <div class="card">
@@ -1883,8 +2038,8 @@ hb_size   = "300x250"</code></pre>
       <tr><td><b>The privacy design</b></td><td>Work on the Ad Selection API and Privacy Sandbox, and in W3C and IAB Tech Lab. Secure hardware, k-anonymity and attestation are the same building blocks this plan uses.</td><td class="c"><span class="pip p2" role="img" aria-label="Strong"></span></td></tr>
       <tr><td><b>The outcome panel and lift readouts</b></td><td>A PhD in Neuroscience from Bristol. Experimental design, noisy measurement and fixing the analysis before seeing the data are the core of a credible lift test.</td><td class="c"><span class="pip p2" role="img" aria-label="Strong"></span></td></tr>
       <tr><td><b>Selling data to MMPs</b></td><td>I know where MMPs sit in the stack, but I haven't sold a data product to them. I'd pair early with eyeo's partnerships team.</td><td class="c"><span class="pip p1" role="img" aria-label="Partial"></span></td></tr>
-      <tr><td><b>ISP and router partnerships</b></td><td>New ground beyond the router test on this site. Whalebone's ISP relationships and eyeo's business development team would lead, with me owning the product case.</td><td class="c"><span class="pip" role="img" aria-label="Gap"></span></td></tr>
-      <tr><td><b>DNS resolver operations</b></td><td>Whalebone runs the resolver. Anything touching logging or attested hardware needs their engineers in the room from the start.</td><td class="c"><span class="pip" role="img" aria-label="Gap"></span></td></tr>
+      <tr><td><b>ISP and router partnerships</b></td><td>New ground beyond the router test on this site. eyeo's business development team would lead, with me owning the product case.</td><td class="c"><span class="pip" role="img" aria-label="Gap"></span></td></tr>
+      <tr><td><b>DNS resolver operations</b></td><td>I haven't run DNS infrastructure. Anything touching logging or attested hardware needs the resolver's engineers in the room from the start.</td><td class="c"><span class="pip" role="img" aria-label="Gap"></span></td></tr>
     </tbody></table></div>
     <div class="key" style="margin-top:12px"><span><i class="pip p2"></i>Strong</span><span><i class="pip p1"></i>Partial</span><span><i class="pip"></i>Gap, with a partner to lead</span></div>
   </div>
@@ -1893,7 +2048,7 @@ hb_size   = "300x250"</code></pre>
     <div class="sec-head"><div><div class="eyebrow">How I work</div><h2>Three habits that run through this site</h2></div></div>
     <div class="tests">
       <div><b>Measure before arguing</b><p>The blocking debate starts from paired Crumbs-on and Crumbs-off data, so we argue about what to do rather than what is happening.</p></div>
-      <div><b>Build the instrument</b><p>If a decision depends on a number, I build the thing that produces it: the fingerprint lab, the simulator, the paired measurement.</p></div>
+      <div><b>Build the instrument</b><p>If a decision depends on a number, I build the thing that produces it: the paired measurement already, and the fingerprint lab and the privacy and accuracy simulator in the first month.</p></div>
       <div><b>Publish the method</b><p>eyeo already publishes its design before deploying. I'd extend that to pre-registered lift tests and a public log of every report released.</p></div>
     </div>
   </div>
@@ -1907,8 +2062,8 @@ hb_size   = "300x250"</code></pre>
   <div class="card alert" style="border-color:var(--signal)">
     <div>
       <div class="eyebrow">From here</div>
-      <h2>The first 30 days decide whether this launches</h2>
-      <p>Five measurements, four weeks, and a go or no-go memo at the end. I'd start with the two I can build myself.</p>
+      <h2>The first 30 days decide our approach</h2>
+      <p>Five measurements, four weeks, and a memo on which approach to take. I'd start with the two I can build myself.</p>
     </div>
     <div class="gotos"><button type="button" class="goto" data-goto="plan">See the first 30 days</button></div>
   </div>
@@ -2009,7 +2164,7 @@ function sceneSvg(i){
 })();
 
 /* ===== Tabs ===== */
-const TABS=["thesis","demo","revenue","customers","launch","today","findings","chain","how","prebid","market","compete","options","trust","plan","why"];
+const TABS=["agenda","thesis","demo","revenue","customers","launch","today","findings","chain","prebid","market","compete","options","trust","plan","why"];
 document.addEventListener("click",e=>{const g=e.target.closest("[data-goto]"); if(!g) return; showTab(g.dataset.goto,true); const an=g.dataset.anchor && document.getElementById(g.dataset.anchor); if(an) requestAnimationFrame(()=>an.scrollIntoView({block:"start"}));});
 let activeTab="thesis";
 function showTab(t,push){
@@ -2027,10 +2182,10 @@ window.addEventListener("hashchange",()=>{ const h=location.hash.slice(1); if(TA
 
 /* ===== Signal chain map ===== */
 const PHASES = [
-  {name:"Day one", tag:"Fix and measure", note:"A published policy that blocks identity but allows auctions, and router and ISP partnerships for one-click setup. Then the iOS outcome panel and fraud flags, sold through MMPs, with on-device detection and differential privacy."},
+  {name:"Day one", tag:"Fix and measure", note:"A published policy that blocks identity but allows auctions, and router and ISP partnerships for one-click setup. Then the iOS outcome panel and fraud flags, sold through MMPs, with on-device detection and differential privacy. Router and ISP partners grow the opted-in base from day one; household audiences and CTV come in the Scale phase."},
   {name:"Prove", tag:"Lift and proof", note:"Independent lift readouts and on-device deal matching. A Prebid Crumbs mode with publishers. Two-operator aggregation and an Acceptable Ads test bed."},
   {name:"Target", tag:"Curation", note:"Audience-composition curation through SSPs and curators, measured by the same panel. The resolver moves into an attested TEE."},
-  {name:"Scale", tag:"Household and web", note:"Router households, CTV and web outcomes. Independent relay, attested aggregators and TEE clean rooms."}
+  {name:"Scale", tag:"Household and web", note:"Audiences everywhere: router households, CTV and web. Independent relay, attested aggregators and TEE clean rooms."}
 ];
 const FLOWS = {
   signal:{name:"Signal", color:"var(--signal)", desc:"Signal moves right, from consent to verified outcomes."},
@@ -2046,10 +2201,10 @@ const NODES = [
   {name:"Phone and router", sub:"Detects outcomes locally", from:0, kicker:"Events are detected on the device, and raw data stays there.",
    who:[{i:"phone",c:"var(--signal)",label:"iOS app, live since August 2026",sub:"Registers as the system DNS provider",from:0},{i:"router",c:"var(--signal)",label:"Home router",sub:"Self-configured today; one-click setup through partners is a priority",from:0},{i:"tv",c:"var(--muted)",label:"Smart TVs and consoles",sub:"Visible behind the router",from:3}],
    now:["The Crumbs app registers as the phone's DNS provider. App detection runs locally: a first open, an active day, a retention milestone. The seen-before memory never leaves the phone. iOS first.","The phone also matches deals locally. It knows it used inventory in a campaign and later opened the advertiser's app, and contributes one encrypted count.","The same on-device matching, now across curated deals at volume.","Routers bring TVs, consoles and smart devices into view, at the scale partnerships have reached by then. Household state lives in an attested TEE with automatic expiry."],
-   gives:"Encrypted, capped event contributions", gets:"Fingerprint updates and privacy-budget rules", guarantee:"Raw lookups never leave the device.",
+   gives:"Encrypted, capped event contributions", gets:"Fingerprint updates and privacy-budget rules", guarantee:"Raw lookup logs never leave the device; lookups leave only encrypted.",
    comps:[["One-click router setup through partners",0],["On-device app detection",0],["Local seen-before memory",0],["On-device deal matching",1],["Router household view",3]]},
   {name:"Relay and resolver", sub:"Blocks identity, allows auctions", from:0, kicker:"The resolver blocks tracking domains and, in later phases, proves it keeps no logs.",
-   who:[{i:"server",c:"var(--ink)",label:"Crumbs resolver",sub:"Built on Whalebone; eyeo sets the policy",from:0},{i:"relay",c:"var(--muted)",label:"Independent relay operator",sub:"A CDN or non-profit strips IP addresses",from:3},{i:"shield",c:"var(--signal)",label:"Independent auditors",sub:"Check attestations and the transparency log",from:2}],
+   who:[{i:"server",c:"var(--ink)",label:"Crumbs resolver",sub:"eyeo sets the policy",from:0},{i:"relay",c:"var(--muted)",label:"Independent relay operator",sub:"A CDN or non-profit strips IP addresses",from:3},{i:"shield",c:"var(--signal)",label:"Independent auditors",sub:"Check attestations and the transparency log",from:2}],
    now:["Today the blocklist cuts some independent auctions entirely, while Google, the Meta Pixel and several ID providers pass through. Day one replaces it with a published policy: ID syncs, data brokers and cross-site analytics are blocked, and auctions and ad serving are allowed. Where a partner offers a cookieless endpoint, Crumbs sends traffic there instead of blocking it. This protection is free for every user, whether or not they opt in.","Encrypted DNS endpoints keep modern browsers on Crumbs, and the Firefox canary domain stops automatic DoH from routing around it.","The resolver moves into an attested TEE. Clients check the attestation against a published image before sending a single query.","An independent operator runs an Oblivious DoH relay that strips IP addresses. Relay and resolver attest to each other, so nobody holds both who and what."],
    gives:"Answers, or a refusal for bad domains", gets:"Lookups", guarantee:"From Target, no-logging is attested in hardware rather than promised in a policy.",
    comps:[["Published block-identity policy",0],["Steering to cookieless endpoints",0],["Encrypted DNS (DoH) for routers, live today",0],["Encrypted DNS for apps and browsers",1],["Attested TEE resolver",2],["Independent ODoH relay",3]]},
@@ -2121,7 +2276,7 @@ const TOUR = [
   {node:5,phase:2,flows:["signal","ads"],title:"Curation within the privacy rules",text:"Inventory receives an audience-composition label and must meet the Acceptable Ads Standard. An opt-in interest-group ID for groups of at least 100 people enters bid requests. No buyer receives a user-level segment."},
   {node:0,phase:2,flows:["ads"],title:"Ads that reach users meet a quality standard",text:"Ads arrive through curated deals that meet the Acceptable Ads Standard. The same panel then measures whether those ads worked."},
   {node:2,phase:3,flows:["signal","money","ads"],title:"Each step can be verified",text:"An independent relay removes IP addresses, the resolver and aggregators run in attested secure hardware, and every release is logged publicly. As a result, eyeo itself cannot see what any individual does."},
-  {node:null,phase:3,flows:["signal","money","ads"],title:"Next steps",text:"In the first 30 days we would measure the publisher revenue gap, open router and ISP conversations, build the fingerprint lab, run the privacy simulator, size the opt-in base and speak to two MMPs. The results will show whether the first product should launch."}
+  {node:null,phase:3,flows:["signal","money","ads"],title:"Next steps",text:"In the first 30 days we would measure the publisher revenue gap, open router and ISP conversations, build the fingerprint lab, run the privacy and accuracy simulator, size the opt-in base and speak to two MMPs. The results will decide which approach to take first."}
 ];
 const state = {phase:0, flows:{signal:true,money:true,ads:true}, sel:null, tour:-1};
 const $ = id => document.getElementById(id);
@@ -2362,8 +2517,7 @@ const PICKS=[
   {n:"Independent lift readouts",focus:"next",flabel:"Next · proves the panel",tag:"App + web",tam:[1800,1800],sa:[250,350],sw:[100,200],oa:[2,8],ow:[2,6],conf:"Medium-low",why:"Incrementality services, app-advertiser share. Fast per-study revenue.",web:"Web extension: off-site retail media lift."},
   {n:"Audience-composition curation",focus:"focus",flabel:"Focus · main prize",tag:"App + web",tam:[10000,15000],sa:[300,600],sw:[200,400],oa:[6,25],ow:[5,15],conf:"Low",why:"Curation and data fees on curated spend. Curation is the fastest-growing way programmatic is bought, so it has the largest potential, but it needs evidence first.",web:"Web extension: web inventory labels, Safari skew noted."},
   {n:"Install suppression",focus:"later",flabel:"Debate",tag:"App only",tam:[2000,8000],sa:[50,150],sw:[0,0],oa:[2,5],ow:[0,0],conf:"Low",why:"Sized as waste removed. The compliant aggregate version captures a slice.",web:"No web extension."},
-  {n:"CTV household attribution",focus:"later",flabel:"Later",tag:"App + web",tam:[400,1100],sa:[50,200],sw:[100,300],oa:[3,10],ow:[3,10],conf:"Low",why:"US CTV measurement at 1 to 3% of media. Gated by router households.",web:"Web extension: CTV-to-site visits roughly doubles the addressable pool."},
-  {n:"ISP and router white-label",focus:"focus",flabel:"Focus · enabler",tag:"Enabler, day one",tam:[1400,1400],sa:[200,400],sw:[0,0],oa:[5,10],ow:[0,0],conf:"Medium-low",why:"Network-level DNS protection services. Its main value is a larger panel, and self-setup is too hard for most users, so it starts on day one.",web:"A larger panel increases every other line.",enabler:true}
+  {n:"CTV household attribution",focus:"later",flabel:"Later",tag:"App + web",tam:[400,1100],sa:[50,200],sw:[100,300],oa:[3,10],ow:[3,10],conf:"Low",why:"US CTV measurement at 1 to 3% of media. Gated by router households.",web:"Web extension: CTV-to-site visits roughly doubles the addressable pool."}
 ];
 const mid=r=>(r[0]+r[1])/2;
 const fm=v=> v>=1000 ? "$"+(v/1000).toFixed(v%1000?1:0).replace(/\.0$/,"")+"B" : "$"+(Math.round(v*10)/10)+"M";
@@ -2389,7 +2543,7 @@ function drawPicks(){
   const rows=PICKS.map(p=>{ const a=mid(p.oa), w=showWeb?mid(p.ow):0; ta+=a; tw+=w;
     return `<div class="bar-row"><span class="nm">${p.n}</span><div class="bar"><i class="${p.enabler?"ena":"app"}" style="width:${a/max*100}%"></i>${w?`<i class="web" style="width:${w/max*100}%"></i>`:""}</div><span class="val">${fm(a+w)}</span></div>`; }).join("");
   const tot=ta+tw;
-  document.getElementById("somBars").innerHTML=rows+`<div class="bar-row total"><span class="nm">Total, midpoints</span><div class="bar"><i class="app" style="width:${ta/tot*100}%"></i>${tw?`<i class="web" style="width:${tw/tot*100}%"></i>`:""}</div><span class="val">${fm(tot)}</span></div><p class="note">The total bar is drawn to its own scale. Ranges: app-led $23M to $73M; web adds $11M to $34M when switched on. All obtainable figures are assumptions.</p>`;
+  document.getElementById("somBars").innerHTML=rows+`<div class="bar-row total"><span class="nm">Total, midpoints</span><div class="bar"><i class="app" style="width:${ta/tot*100}%"></i>${tw?`<i class="web" style="width:${tw/tot*100}%"></i>`:""}</div><span class="val">${fm(tot)}</span></div><p class="note">The total bar is drawn to its own scale. Ranges: app-led $18M to $63M; web adds $11M to $34M when switched on. All obtainable figures are assumptions.</p>`;
 }
 document.getElementById("webSeg").addEventListener("click",e=>{const b=e.target.closest("button"); if(!b) return; showWeb=b.dataset.web==="1"; document.querySelectorAll("#webSeg button").forEach(x=>x.setAttribute("aria-pressed",x===b)); drawPicks();});
 drawPicks();
@@ -2403,15 +2557,15 @@ const OPTS=[
   ["iOS outcome panel","Measurement","MMPs, measurement vendors",2,2,2,"focus","Focus"],
   ["Independent lift readouts","Measurement","Incrementality vendors, advertisers",2,2,2,"focus","Focus"],
   ["On-device exposure-to-outcome matching","Measurement","MMPs, networks",2,2,1,"fold","Folds into lift"],
-  ["CTV-to-app household attribution","Measurement","CTV platforms, cross-screen vendors",2,1,2,"focus","Focus"],
+  ["CTV-to-app household attribution","Measurement","CTV platforms, cross-screen vendors",2,1,2,"focus","Focus, later (needs router households)"],
   ["Web visit lift","Measurement","Brands, retail media",1,2,2,"fold","Folds into CTV"],
   ["MMM validation inputs","Measurement","MMM vendors",1,2,1,"cut","Cut"],
   ["Brand lift surveys in the app","Measurement","Brands, agencies",1,2,1,"cut","Cut"],
   ["Audience-composition curation","Targeting","SSPs, curators, DSPs",2,2,2,"focus","Focus"],
   ["On-device targeting on eyeo inventory","Targeting","eyeo, as owned media",2,2,1,"fold","Test bed for curation"],
-  ["Install suppression and bid modifiers","Targeting","App advertisers, DSPs",2,1,2,"focus","Focus, the debate"],
+  ["Install suppression and bid modifiers","Targeting","App advertisers, DSPs",2,1,2,"focus","Focus, under debate"],
   ["On-device interest cohorts","Targeting","DSPs, networks",0,1,1,"cut","Cut"],
-  ["Household or CTV segments","Targeting","CTV platforms",2,0,2,"cut","Cut"],
+  ["Household or CTV segments","Targeting","CTV platforms",2,0,2,"fold","Later, after phone measurement"],
   ["Competitive conquesting cohorts","Targeting","App advertisers",2,0,2,"cut","Cut"],
   ["Install fraud detection","Ad quality","MMPs, verification vendors",2,2,2,"fold","Folds into the panel"],
   ["Malvertising intelligence","Ad quality","SSPs, verification vendors",1,2,1,"cut","Adjacent"],
@@ -2421,10 +2575,10 @@ const OPTS=[
   ["Alternative data for funds","Market intelligence","Hedge funds",1,0,2,"cut","Cut"],
   ["Sponsored placements in the app","Ad delivery","Privacy and security brands",1,2,0,"cut","Cut"],
   ["DNS-level ad replacement","Ad delivery","Networks",1,0,1,"cut","Cut"],
-  ["ISP and router white-label","Non-ad","ISPs, router makers",2,2,2,"focus","Focus, the enabler"],
+  ["ISP and router distribution","Non-ad","ISPs, router makers",2,2,2,"focus","Focus, the enabler"],
   ["Threat intelligence feeds","Non-ad","Security vendors",1,2,2,"cut","Not the brief"],
   ["Premium consumer tier","Non-ad","Users",0,2,1,"cut","Cut"],
-  ["Data dividend for opt-in","Non-ad","Funded by the above",1,2,0,"fold","Opt-in lever"]
+  ["Data dividend for opt-in","Non-ad","Funded by the above",1,2,0,"cut","Cut: users are paid in kind"]
 ];
 const OCATS=["All","Focus","Policy","Measurement","Targeting","Ad quality","Market intelligence","Ad delivery","Non-ad"];
 let optFilter="All";
@@ -2469,11 +2623,12 @@ document.getElementById("advPeople").innerHTML=[
     {n:"NextDNS, AdGuard DNS, Control D",s:"Paid or free DNS blockers",x:.12,y:.22,c:"var(--muted)",dy:-12},
     {n:"Cloudflare 1.1.1.1, Quad9",s:"Free public DNS",x:.06,y:.38,c:"var(--muted)",dy:-12},
     {n:"eero Plus and router suites",s:"Subscription on the router",x:.16,y:.7,c:"var(--muted)",dy:-12},
-    {n:"ISP DNS security vendors",s:"Whalebone, Infoblox, Allot",x:.24,y:.9,c:"var(--muted)",dy:22,anchor:"start"},
+    {n:"ISP DNS security vendors",s:"Infoblox, Allot, SafeDNS",x:.24,y:.9,c:"var(--muted)",dy:22,anchor:"start"},
     {n:"Brave",s:"Browser with its own ads",x:.7,y:.32,c:"var(--ads)",dy:-12},
     {n:"Sensor Tower",s:"App data from its own panel",x:.9,y:.14,c:"var(--web)",dy:-12,anchor:"end"},
     {n:"Crumbs today",s:"Self-installed DNS blocker",x:.22,y:.08,c:"var(--bad)",dy:-12},
-    {n:"Crumbs with the plan",s:"Partner distribution plus ad products",x:.76,y:.8,c:"var(--signal)",dy:-14}
+    {n:"Crumbs with the plan",s:"Partner distribution plus ad products",x:.76,y:.8,c:"var(--signal)",dy:-14},
+    {n:"T-Mobile Advertising Solutions",s:"App-usage audiences from the network",x:.93,y:.64,c:"var(--warn)",dy:22,anchor:"end"}
   ];
   let s=`<svg viewBox="0 0 ${W} ${H}"><defs><marker id="pmArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" style="fill:var(--signal)"/></marker></defs>`;
   s+=`<rect class="pm-q" x="${L}" y="${T}" width="${iw/2}" height="${ih/2}"/><rect class="pm-q tr" x="${L+iw/2}" y="${T}" width="${iw/2}" height="${ih/2}"/><rect class="pm-q" x="${L}" y="${T+ih/2}" width="${iw/2}" height="${ih/2}"/><rect class="pm-q" x="${L+iw/2}" y="${T+ih/2}" width="${iw/2}" height="${ih/2}"/>`;
@@ -2493,7 +2648,12 @@ document.getElementById("advPeople").innerHTML=[
   const COMP=[
     ["Consumer DNS blockers","NextDNS, AdGuard DNS, Control D, Cloudflare 1.1.1.1 for Families, Quad9","Tracker, ad and malware blocking through a DNS setting, often free","comp","Competitor","Today, little. With the plan, a privacy-safe ad and measurement business funds the free product, and partners make setup one click."],
     ["Router security suites","eero Plus, other router makers' subscriptions","DNS ad blocking, threat protection and filters sold with the router","both","Competitor and possible partner","Router makers could add Crumbs as an option instead of building their own, and earn a share of ad revenue rather than only subscription fees."],
-    ["ISP DNS security vendors","Whalebone, Infoblox, Allot, SafeDNS","DNS security and parental controls that ISPs sell to subscribers","both","Competitor and possible partner","Crumbs is built on Whalebone. Crumbs brings a consumer brand and ad products that could give ISPs revenue, not only cost."],
+    ["ISP DNS security vendors","Infoblox, Allot, SafeDNS","DNS security and parental controls that ISPs sell to subscribers","both","Competitor and possible partner","Crumbs brings a consumer brand and ad products that could give ISPs revenue, not only cost."],
+    ["Audience data providers","LiveRamp, TransUnion, Lotame, Eyeota","Identity graphs and third-party segments sold into curated deals and DSPs","comp","Direct competitor in curation","They sell segments about individuals, matched through IDs. Crumbs sells opt-in groups of at least 100 people with no ID. Crumbs also blocks several of them today, so the published policy must apply the same rule to them as to everyone, or it looks like clearing the field for eyeo."],
+    ["Publisher data platforms","Permutive, Optable","Publishers' first-party audiences packaged for sell-side curation, increasingly matched to graphs such as TransUnion's","both","Competitor and possible partner","They see what happens on one publisher's site. Crumbs sees outcomes across apps, so it could feed these platforms as a signal rather than replace them."],
+    ["Contextual data","Peer39, and contextual segments from IAS and DoubleVerify","Signals about the page rather than the person, needing no ID or consent","comp","Competitor and baseline","Contextual is the default no-ID signal. Crumbs groups have to beat it on outcomes, which is already a kill criterion on the First 30 days and beyond tab."],
+    ["Telco data","T-Mobile Advertising Solutions","Audiences built from which apps subscribers install and how they use them, Android only, opt-out","comp","Closest like-for-like competitor","The same kind of signal, taken from the network. T-Mobile's is opt-out; Crumbs is opt-in, published and covers iOS. It proves the data has value, and shows the backlash risk when consent is weak."],
+    ["Audience measurement panels","Nielsen, Comscore","Paid opt-in panels that measure who saw media","comp","Competitor in measurement","They measure audiences for media. Crumbs measures app outcomes. Crumbs also blocks Comscore's tag today."],
     ["Privacy-first ad platforms","Brave","Blocks third-party ads and sells its own privacy-preserving ads","comp","Competitor for the idea","Brave works inside its own browser. Crumbs works across apps and devices at the network level, and supports existing publishers and ad tech rather than replacing them."],
     ["App intelligence panels","Sensor Tower, including data.ai","App downloads, usage and ad intelligence from first-party panels","comp","Competitor in measurement","Crumbs would sell outcome data with a published privacy design and confidence intervals, to MMPs rather than directly to app publishers."],
     ["MMPs and incrementality vendors","AppsFlyer, Adjust, Singular, Haus, Measured","Attribution, fraud protection and lift testing for app advertisers","both","Possible customers","Crumbs could supply independent outcome data. But crumbs.com lists AppsFlyer, Branch, Kochava and Tenjin as blocked because they trace app installs, so this relationship needs care."],
@@ -2502,7 +2662,7 @@ document.getElementById("advPeople").innerHTML=[
   document.getElementById("compBody").innerHTML=COMP.map(c=>`<tr><td><b>${c[0]}</b></td><td>${c[1]}</td><td>${c[2]}</td><td><span class="rel ${c[3]}">${c[4]}</span></td><td>${c[5]}</td></tr>`).join("");
 
   const DIFFS=[
-    ["Outcome data at the DNS layer","With consent, Crumbs can see real app opens and retention on iOS, across all apps on a device.","DNS blockers see the same lookups but do not use them. MMPs and panels have to model or rely on their own apps.","Needs fingerprinting and a larger user base"],
+    ["Accurate outcome data at the DNS layer","With consent, Crumbs can see real app opens and retention on iOS, across all apps on a device: real events rather than modelled estimates, published with confidence intervals.","DNS blockers see the same lookups but do not use them. MMPs and panels have to model or rely on their own apps.","Needs fingerprinting and a larger user base"],
     ["A published, neutral blocking policy","eyeo has run the Acceptable Ads standard and committee for years, and can publish one policy that treats every company the same.","Other DNS blockers use filter lists without a public policy on auctions versus identity.","Needs the day-one policy change"],
     ["Relationships with publishers and ad tech","Acceptable Ads partners and Blockthrough, which already runs in publishers' ad code.","Consumer DNS companies have no route into the auction.","Needs the publisher coalition"],
     ["Privacy that can be checked","On-device processing, split aggregation and, later, attested hardware, with a published design.","Panels and DNS services generally ask users to trust their privacy policy.","Built in phases"],
@@ -2511,10 +2671,10 @@ document.getElementById("advPeople").innerHTML=[
   document.getElementById("diffs").innerHTML=DIFFS.map(d=>`<div class="diff"><h3>${d[0]}</h3><p>${d[1]}</p><span class="dep">${d[3]}</span><p class="vs">${d[2]}</p></div>`).join("");
 
   const SW=[
-    ["s","S","Strengths","Internal",["eyeo's brand and reach: Adblock Plus serves hundreds of millions of users, according to Whalebone","The Acceptable Ads standard, committee and advertiser and publisher relationships","Blockthrough, which already runs in publishers' ad code","A DNS position that can observe app outcomes on iOS with consent","Encrypted DNS (DoH) already supported for modern routers"]],
+    ["s","S","Strengths","Internal",["eyeo's brand and reach: hundreds of millions of AdBlock and Adblock Plus users","The Acceptable Ads standard, committee and advertiser and publisher relationships","Blockthrough, which already runs in publishers' ad code","A DNS position that can observe app outcomes on iOS with consent","Encrypted DNS (DoH) already supported for modern routers"]],
     ["w","W","Weaknesses","Internal",["A very small user base today: a third-party estimate is about 350 iOS installs","Router setup is manual, and many ISP routers do not allow it","The current blocklist cuts some independent auctions while Google and the Meta Pixel pass","No privacy-safe signal reaches the auction yet","DNS cannot see inside requests, or Safari traffic with Private Relay on","Crumbs blocks MMP attribution domains, which complicates selling data to MMPs"]],
     ["o","O","Opportunities","External",["The post-ATT measurement gap on iOS, where app acquisition spend grew 35% in 2025","Rapid growth in curated deals, which need trusted audience data","Publishers who want audience value without tracking","ISP gateways that can now install third-party apps through prpl, such as AT&T's 12 million","Router makers looking for subscription and revenue features","CTV advertisers who need proof of outcomes"]],
-    ["t","T","Threats","External",["Apple changing DNS, Private Relay or attribution rules","Free DNS blockers that users already trust","Router makers and ISPs bundling their own blocking, such as eero Plus","Sensor Tower and MMPs improving their own panels and models","Brave's model, with 109 million monthly users, as an established privacy-ads alternative","Criticism from publishers and ad tech, or pay-to-play claims, if blocking stays as it is","Regulators questioning any use of DNS data, even aggregated"]]
+    ["t","T","Threats","External",["Apple changing DNS, Private Relay or attribution rules","Free DNS blockers that users already trust","Router makers and ISPs bundling their own blocking, such as eero Plus","Sensor Tower and MMPs improving their own panels and models","Data providers and publisher platforms, such as LiveRamp, TransUnion and Permutive, already selling into curated deals","Telco app-usage data, such as T-Mobile's, offering a similar signal at scale","Brave's model, with 109 million monthly users, as an established privacy-ads alternative","Criticism from publishers and ad tech, or pay-to-play claims, if blocking stays as it is","Regulators questioning any use of DNS data, even aggregated"]]
   ];
   document.getElementById("swot").innerHTML=SW.map(q=>`<div class="sq ${q[0]}"><div class="sh"><span class="sl">${q[1]}</span><div><h3>${q[2]}</h3><span class="kind">${q[3]}</span></div></div><ul>${q[4].map(i=>`<li>${i}</li>`).join("")}</ul></div>`).join("");
 })();
@@ -2524,11 +2684,11 @@ document.getElementById("advPeople").innerHTML=[
 (function roadmap(){
   const A='<span class="assume">assumption</span>';
   const H=[
-    {cls:"h1",when:"Next 30 days",by:"By mid-November 2026",mission:"Learn and decide",outcome:"A go or no-go decision on the first product, based on five measurements.",rows:[
+    {cls:"h1",when:"Next 30 days",by:"By mid-November 2026",mission:"Learn and decide",outcome:"A decision on which approach to take first, based on five measurements.",rows:[
       ["Policy","Measure the publisher revenue gap with Crumbs on and off, and draft a block-identity policy.","eyeo knows how large the revenue problem is and has a policy to discuss.","Revenue gap measured on 30 sites"],
       ["Distribution","Test router setup on the main UK ISP hubs, and open conversations with one ISP and one mesh maker.","We know which hubs allow setup and whether partners are interested.","4 hubs tested: BT, Sky, Virgin Media, TalkTalk. 1 ISP and 1 mesh maker spoken to"],
-      ["Product","Build the fingerprint lab and the privacy simulator, and speak to two MMPs.","We know whether the panel can be built and whether buyers want it.","At least 50% of the top 200 iOS apps identified cleanly. Reportable app and country combinations counted. 2 MMPs spoken to"],
-      ["Privacy","Draft the one-page published design and agree logging terms with Whalebone.","The privacy design can be reviewed before anything is built.","Design drafted. Logging terms agreed"],
+      ["Product","Build the fingerprint lab and the privacy and accuracy simulator, and speak to two MMPs.","We know whether the panel can be built and whether buyers want it.","At least 50% of the top 200 iOS apps identified cleanly. Reportable app and country combinations counted. 2 MMPs spoken to"],
+      ["Privacy","Draft the one-page published design and confirm how the resolver logs and retains data.","The privacy design can be reviewed before anything is built.","Design drafted. Logging and retention confirmed"],
       ["Users","Confirm real user and opt-in numbers for iOS, Android and routers.","The plan is based on eyeo's own numbers rather than estimates.","Counts confirmed with eyeo data"]]},
     {cls:"h2",when:"After 1 year",by:"By October 2027",mission:"Fix, distribute and pilot",outcome:"Publishers trust Crumbs, some households can switch it on in one click, and Crumbs has a paying customer.",rows:[
       ["Policy","The published policy is live, and a Prebid Crumbs mode runs with the first publishers through Blockthrough.","Publishers and ad tech partners see Crumbs as neutral.","Header-bidding value at least 90% of Crumbs off. No identifiers in bid requests. At least 90% of ID syncs blocked. 5 publishers in Crumbs mode"],
@@ -2543,7 +2703,7 @@ document.getElementById("advPeople").innerHTML=[
       ["Product","The outcome panel is licensed to major MMPs, an opt-in interest-group signal is used in curated deals, and CTV attribution is in pilot.","Advertisers use Crumbs to reach and understand audiences where data is limited.","At least 3 MMPs licensing. $200M to $500M a year of media on Crumbs-labelled deals"],
       ["Privacy","The resolver and aggregators run on attested hardware, behind an independent relay, with a public transparency log.","Anyone can check Crumbs' privacy claims.","Resolver and aggregators attested. Zero privacy incidents"],
       ["Users","Users see ads that match interests they chose, and can see and control what is shared.","Users trust Crumbs and choose to stay opted in.","App store rating 4.5 or higher. Opt-in rate maintained"],
-      ["Revenue","Fund Crumbs from measurement, curation and web products.","Crumbs pays for itself.","$23M to $73M, plus up to $34M from web "+A]]}
+      ["Revenue","Fund Crumbs from measurement, curation and web products.","Crumbs pays for itself.","$18M to $63M, plus up to $34M from web "+A]]}
   ];
   document.getElementById("horizons").innerHTML=H.map(h=>`<article class="hz ${h.cls}">
     <div class="hz-head">
@@ -2643,7 +2803,7 @@ document.getElementById("advPeople").innerHTML=[
     faq:[["Is this Crumbs selling my data?","No. Crumbs sends only counts combined across at least 100 people, and no one, including eyeo, can see what an individual does. The design is published so this can be checked."],["What if I say no?","Nothing changes. Protection is identical whether or not you opt in."]]}},
    {id:"publishers",who:"Publishers",ico:"news",tier:"Secondary · advocate",name:"Crumbs for Publishers",date:"Target: March 2027",
     head:"Crumbs now restores publishers' auctions and adds a privacy-safe audience signal to Prebid",
-    sum:"Crumbs has changed what it blocks. It now blocks identity, such as ID syncs and data brokers, and lets every auction run. Publishers using Prebid can also turn on Crumbs mode, which removes identifiers from bid requests and adds an opt-in interest group that curated deals can target.",
+    sum:"Crumbs has changed what it blocks. It now blocks identity, such as ID syncs and data brokers, and lets every auction run. Publishers using Prebid can also turn on Crumbs mode, which removes identifiers from bid requests. An opt-in interest group that curated deals can target follows once measurement is trusted.",
     news:["Auctions that Crumbs blocked before, including server-side Prebid, now run as normal.","Crumbs mode for Prebid, delivered through Blockthrough, switches off user syncs and IDs and adds the Crumbs interest group.","A free paired report shows each publisher its header-bidding value with Crumbs on and off.","Publishers get a seat on the group that governs Crumbs' blocking policy."],
     get:"Ask your Blockthrough contact to enable Crumbs mode, or add the Crumbs module to your Prebid build.",
     quote:["We were losing bids from Crumbs users. Now those readers are worth more to us, not less, and we did not have to track anyone.","Example head of programmatic at a UK news publisher, written for planning"],
@@ -2655,7 +2815,7 @@ document.getElementById("advPeople").innerHTML=[
     news:["A one-tap Crumbs option inside partner router and mesh apps.","A Crumbs app for ISP gateways that support third-party apps through the prpl standard.","A partner dashboard showing protected households, blocked threats and revenue share.","Encrypted DNS on supported routers by default."],
     get:"Partners integrate Crumbs through the partner programme. Households turn it on in their router app or receive it from their ISP.",
     quote:["Our customers wanted privacy protection, and this one pays us instead of costing us.","Example product lead at a mesh router maker, written for planning"],
-    gtm:{seg:"Mesh makers first, such as eero and TP-Link Deco, then UK ISPs and Whalebone's existing ISP customers.",why:"A security feature their customers want, a trusted privacy brand, and a revenue share instead of a licence cost.",price:"Free to integrate. Partners receive a share of measurement and curation revenue from their households.",reach:"Direct partnerships led by eyeo business development, and Whalebone's ISP relationships.",plan:["Router setup tested on the main UK ISP hubs","Integration pilot with one mesh maker","First ISP gateway pilot through prpl"],kpi:["1 router maker live, 1 ISP pilot","Households protected in the hundreds of thousands","Opt-in rate in partner households at least 30%"],
+    gtm:{seg:"Mesh makers first, such as eero and TP-Link Deco, then UK ISPs.",why:"A security feature their customers want, a trusted privacy brand, and a revenue share instead of a licence cost.",price:"Free to integrate. Partners receive a share of measurement and curation revenue from their households.",reach:"Direct partnerships led by eyeo business development.",plan:["Router setup tested on the main UK ISP hubs","Integration pilot with one mesh maker","First ISP gateway pilot through prpl"],kpi:["1 router maker live, 1 ISP pilot","Households protected in the hundreds of thousands","Opt-in rate in partner households at least 30%"],
     faq:[["Why would an ISP share its DNS?","It does not have to give up its resolver. Crumbs can run as an app on the gateway, and the ISP earns revenue from a feature its customers value."],["What about households where the ISP router is locked?","A partner mesh system in router mode can run Crumbs for the whole home."]]}},
    {id:"tech",who:"Tech providers",ico:"chart",tier:"Primary · first paying",name:"Crumbs Outcomes",date:"Target: September 2027",
     head:"Crumbs Outcomes gives MMPs independent iOS install and retention data",
@@ -2680,7 +2840,7 @@ document.getElementById("advPeople").innerHTML=[
     get:"Through an incrementality vendor or MMP partner, or directly for a small number of reference advertisers.",
     quote:["We stopped arguing with our networks about whose numbers to believe.","Example UA lead at a subscription app, written for planning"],
     gtm:{seg:"App advertisers with large iOS budgets: subscription, gaming, fintech and commerce. Performance agencies that run their campaigns.",why:"An independent answer to whether their spend caused installs, from a source that does not sell the media.",price:"Per study, roughly $25,000 to $75,000, sold through partners. Reference studies are discounted.",reach:"Incrementality vendors and MMPs as channels, plus a few direct reference advertisers for case studies.",plan:["Two reference studies with friendly advertisers","Studies offered through one incrementality vendor","Case studies published"],kpi:["5 studies in year 1","At least half of studies detect lift at the registered threshold","Repeat purchase by reference advertisers"],
-    faq:[["Why trust eyeo to grade media it might sell?","Tests are pre-registered, the method is published, and Lift works on media eyeo did not curate."],["How big must a test be?","It depends on the app's install volume and the panel in that country. The simulator on the How it works tab estimates it."]]}}
+    faq:[["Why trust eyeo to grade media it might sell?","Tests are pre-registered, the method is published, and Lift works on media eyeo did not curate."],["How big must a test be?","It depends on the app's install volume and the panel in that country. A privacy simulator built in the first 30 days would estimate it."]]}}
   ];
   let cur="publishers";
   const picker=document.getElementById("lnPicker"), body=document.getElementById("lnBody");
@@ -2735,23 +2895,36 @@ function demoInit(){
 }
 
 
-/* ===== Presentation path: next buttons ===== */
+document.addEventListener("click",e=>{
+  const c=e.target.closest("#demo-close"), h=e.target.closest("#demo-hide");
+  const msg=document.getElementById("demo-msg");
+  if(c){
+    c.disabled=true; msg.textContent="Closing the windows…";
+    fetch("/api/close-ab",{method:"POST"}).then(r=>r.json()).then(j=>{
+      msg.textContent=j.closed&&j.closed.length?"A/B windows closed.":"No A/B windows were open.";
+    }).catch(()=>{ msg.textContent="Could not reach the demo."; }).finally(()=>{ c.disabled=false; });
+  }
+  if(h){
+    const f=document.getElementById("demo-frame"), show=f.hidden;
+    f.hidden=!show; h.textContent=show?"Hide panel":"Show panel"; h.setAttribute("aria-expanded",String(show));
+  }
+});
+
+/* ===== Presentation path: follow the agenda run ===== */
 (function nextLinks(){
-  const PATH=[["thesis","Thesis"],["today","Crumbs today"],["findings","Blocking findings"],["demo","Live demo"],["customers","Customers"],["market","Where to start"],["revenue","Revenue model"],["prebid","How it works in Prebid"],["how","What has to be true"],["plan","First 30 days and beyond"]];
-  PATH.forEach(([k],i)=>{
-    const panel=document.getElementById("tab-"+k); if(!panel) return;
-    const nxt=PATH[i+1];
-    const w=document.createElement("div"); w.className="next-wrap";
-    w.innerHTML = nxt ? `<button type="button" class="next-btn" data-goto="${nxt[0]}">Next: ${i+2}. ${nxt[1]} →</button>` : `<button type="button" class="next-btn" data-goto="thesis" data-anchor="questions-card">Back to the questions for the team</button>`;
-    panel.appendChild(w);
-  });
+  const RUN=[["today","Crumbs today"],["demo","Live demo"],["findings","Blocking findings"],["market","Where to start"],["plan","First 30 days and beyond"]];
+  const add=(k,html)=>{ const p=document.getElementById("tab-"+k); if(!p) return; const w=document.createElement("div"); w.className="next-wrap"; w.innerHTML=html; p.appendChild(w); };
+  add("agenda",`<button type="button" class="next-btn" data-goto="today">Start: 1. Crumbs today →</button>`);
+  RUN.forEach(([k],i)=>{ const n=RUN[i+1];
+    add(k, n ? `<button type="button" class="next-btn" data-goto="${n[0]}">Next on the agenda: ${n[1]} →</button>` : `<button type="button" class="next-btn" data-goto="agenda">Back to the agenda</button>`); });
+  TABS.filter(k=>k!=="agenda" && !RUN.some(r=>r[0]===k)).forEach(k=>add(k,`<button type="button" class="next-btn" data-goto="agenda" style="background:var(--surface);color:var(--ink)">Back to the agenda</button>`));
 })();
 
 /* ===== Zero trust layers ===== */
 const LAYERS=[
   ["Blocking policy","A published policy blocks syncs, data brokers and cross-site analytics, and allows auctions and ad serving.","Anyone can read the policy and check it with paired measurement",0],
   ["Bid requests","Identifiers already stored by sites are removed in the page or browser, through a Prebid Crumbs mode or eyeo's browser SDK. DNS cannot do this.","Publisher's Prebid setup and published code",1],
-  ["Phone","Raw lookups never leave. App detection, seen-before memory and deal matching all run locally.","Nobody: the data never leaves the device",0],
+  ["Phone","Lookups leave only encrypted, for the resolver. Raw lookup logs never leave the phone. App detection, seen-before memory and deal matching all run locally.","Nobody: the data never leaves the device",0],
   ["Network path","An Oblivious DoH relay strips IP addresses; queries are encrypted end to end.","Relay and resolver must not collude",3],
   ["Resolver","Runs in an attested TEE against a published image and keeps no logs.","Hardware vendor and public code",2],
   ["Household state","Router state sealed in a TEE with automatic expiry.","Hardware vendor and public code",3],
@@ -2761,47 +2934,68 @@ const LAYERS=[
 ];
 document.getElementById("layers").innerHTML=LAYERS.map(l=>`<div class="layer d${l[3]+1}"><b>${l[0]}</b><span class="m">${l[1]}</span><span class="t">${l[2]}</span><span class="ph">${PHASES[l[3]].name}</span></div>`).join("");
 
-/* ===== Privacy simulator ===== */
-(function sim(){
-  const N=200, H=Array.from({length:N},(_,i)=>1/(i+1)).reduce((a,b)=>a+b,0);
-  const FO=0.4, TOP=0.4, Z=1.96, KMIN=50;
-  const PANELS=[1000,2000,5000,10000,20000,50000,100000,200000,500000,1000000];
-  const EPS=[0.25,0.5,1,2,4];
-  const st={acc:0.2,win:1};
-  const g=id=>document.getElementById(id);
-  const fmtN=n=>n>=1e6?(Math.round(n/1e5)/10)+"M":n>=1e3?Math.round(n/1e3).toLocaleString("en-GB")+"k":String(Math.round(n));
-  function half(c,eps){ return Z*Math.sqrt(c+2/(eps*eps))/c; }
-  function run(){
-    const panel=PANELS[+g("simPanel").value], eps=EPS[+g("simEps").value], acc=st.acc, w=st.win;
-    g("simPanelOut").textContent=fmtN(panel);
-    g("simEpsOut").textContent=String(eps);
-    const base=panel*FO*TOP*w/H;
-    let ok=0,vol=0,tot=0,bars="";
-    for(let r=1;r<=N;r++){ const c=base/r, good=c>=KMIN && half(c,eps)<=acc; if(good){ok++;vol+=c;} tot+=c;
-      const h=Math.max(1,Math.min(100,Math.log10(c+1)/Math.log10(1e5)*100));
-      bars+=`<i class="${good?"ok":""}" style="height:${h}%"></i>`; }
-    g("simStrip").innerHTML=bars;
-    const A=acc*acc, cNeed=Math.max(KMIN,(Z*Z+Math.sqrt(Z**4+8*A*Z*Z/(eps*eps)))/(2*A));
-    const need50=cNeed*50*H/(FO*TOP*w);
-    const dpShare=(2/(eps*eps))/(cNeed+2/(eps*eps));
-    const wl=w===1?"week":"month";
-    g("simTiles").innerHTML=
-      `<div class="tile"><span class="label">Apps reportable</span><span class="v app">${ok} of 200</span><p>Per ${wl}, at ± ${Math.round(acc*100)}%</p></div>`+
-      `<div class="tile"><span class="label">First opens covered</span><span class="v app">${Math.round(vol/tot*100)}%</span><p>Share of top-200 volume, a proxy for sellable spend</p></div>`+
-      `<div class="tile"><span class="label">Panel for the top 50</span><span class="v ink">${fmtN(need50)}</span><p>Opted-in users needed in this market</p></div>`;
-    g("simNote").textContent = dpShare<0.25
-      ? `Sampling error, not privacy noise, sets the limit here: noise is ${Math.round(dpShare*100)}% of the error at the smallest reportable app. Growing the panel helps far more than loosening the privacy budget, which is why distribution comes first.`
-      : `Privacy noise is ${Math.round(dpShare*100)}% of the error at the smallest reportable app. A monthly window or a larger budget would help, but each comes at a cost: slower data or weaker privacy.`;
+/* ===== Documents: preview and optional download ===== */
+(function docs(){
+  const el=document.getElementById("docs-data"); if(!el) return;
+  const DOCS=JSON.parse(el.textContent);
+  const esc=t=>t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  const inl=t=>esc(t).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/\*(.+?)\*/g,"<i>$1</i>").replace(/`(.+?)`/g,"<code>$1</code>");
+  function md(src){
+    const L=src.split("\n"); let out="", i=0;
+    while(i<L.length){
+      const l=L[i];
+      if(/^\s*$/.test(l)){ i++; continue; }
+      if(/^---\s*$/.test(l)){ out+="<hr>"; i++; continue; }
+      const h=l.match(/^(#{1,3})\s+(.*)$/); if(h){ const n=h[1].length; out+=`<h${n}>${inl(h[2])}</h${n}>`; i++; continue; }
+      if(/^\|/.test(l)){
+        const rows=[]; while(i<L.length && /^\|/.test(L[i])){ rows.push(L[i]); i++; }
+        const cells=r=>r.replace(/^\||\|$/g,"").split("|").map(c=>c.trim());
+        let t="<div class='tw'><table><thead><tr>"+cells(rows[0]).map(c=>`<th>${inl(c)}</th>`).join("")+"</tr></thead><tbody>";
+        rows.slice(2).forEach(r=>{ t+="<tr>"+cells(r).map(c=>`<td>${inl(c)}</td>`).join("")+"</tr>"; });
+        out+=t+"</tbody></table></div>"; continue;
+      }
+      if(/^\s*-\s+/.test(l)){ out+="<ul>"; while(i<L.length && /^\s*-\s+/.test(L[i])){ out+=`<li>${inl(L[i].replace(/^\s*-\s+/,""))}</li>`; i++; } out+="</ul>"; continue; }
+      if(/^\s*\d+\.\s+/.test(l)){ out+="<ol>"; while(i<L.length && /^\s*\d+\.\s+/.test(L[i])){ out+=`<li>${inl(L[i].replace(/^\s*\d+\.\s+/,""))}</li>`; i++; } out+="</ol>"; continue; }
+      let p=[]; while(i<L.length && !/^\s*$/.test(L[i]) && !/^(#|\||---|\s*-\s|\s*\d+\.\s)/.test(L[i])){ p.push(L[i]); i++; }
+      out+=`<p>${inl(p.join(" "))}</p>`;
+    }
+    return out;
   }
-  g("simPanel").addEventListener("input",run);
-  g("simEps").addEventListener("input",run);
-  [["simAcc","acc"],["simWin","win"]].forEach(([id,k])=>g(id).addEventListener("click",e=>{const b=e.target.closest("button"); if(!b) return; st[k]=+b.dataset.v; g(id).querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b)); run();}));
-  run();
+  const list=document.getElementById("docList");
+  list.innerHTML=DOCS.map((d,i)=>`<div class="doc-row">
+    <div class="doc-head"><span class="doc-n">${String(i+1).padStart(2,"0")}</span>
+      <div><b>${d.title}</b><span class="doc-wk">${d.week}</span><p>${d.desc}</p></div>
+      <div><div class="doc-actions"><button type="button" class="doc-btn" data-prev="${i}" aria-expanded="false">Preview</button><button type="button" class="doc-btn dl" data-dl="${i}" hidden>Download</button></div><div class="doc-msg" id="docMsg${i}" role="status"></div></div>
+    </div>
+    <div class="doc-prev" id="docPrev${i}" hidden></div>
+  </div>`).join("");
+  let dl=null;
+  list.addEventListener("click",e=>{
+    const p=e.target.closest("[data-prev]");
+    if(p){ const i=+p.dataset.prev, box=document.getElementById("docPrev"+i), open=box.hidden;
+      if(open && !box.innerHTML) box.innerHTML=md(DOCS[i].md);
+      box.hidden=!open; p.textContent=open?"Hide preview":"Preview"; p.setAttribute("aria-expanded",String(open)); return; }
+    const b=e.target.closest("[data-dl]");
+    if(b && dl){ const i=+b.dataset.dl; save(DOCS[i].file, DOCS[i].md, document.getElementById("docMsg"+i), b); }
+  });
+  function save(filename,data,msg,btn){
+    btn.disabled=true; msg.textContent="";
+    dl.save({filename,data}).then(()=>{ msg.textContent="Saved."; })
+      .catch(err=>{ const c=err&&err.code; msg.textContent = c==="declined" ? "" : c==="rate_limited" ? "Another download is waiting. Try again in a moment." : "This download isn't available here."; })
+      .finally(()=>{ btn.disabled=false; });
+  }
+  document.getElementById("docAll").addEventListener("click",e=>{
+    if(!dl) return;
+    const all=DOCS.map(d=>d.md).join("\n\n---\n\n");
+    save("crumbs-first-30-days-documents.md", all, document.getElementById("docAllMsg"), e.currentTarget);
+  });
+  (async()=>{ try{ dl = window.claude && window.claude.use ? await window.claude.use("downloads") : null; }catch(e){ dl=null; }
+    if(dl){ document.querySelectorAll("[data-dl]").forEach(b=>b.hidden=false); document.getElementById("docAll").hidden=false; } })();
 })();
 
 /* ===== Boot ===== */
 const initial=location.hash.slice(1);
-showTab(TABS.includes(initial)?initial:"thesis",false);
+showTab(TABS.includes(initial)?initial:"agenda",false);
 if(document.fonts && document.fonts.ready) document.fonts.ready.then(()=>{ if(activeTab==="chain") layout(); if(activeTab==="market") drawTreemaps(); });
 </script>
 

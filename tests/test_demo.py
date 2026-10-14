@@ -534,6 +534,8 @@ def test_control_api_switches_policy_module_and_group():
         assert state["signal"]["group"] == "finance"
         status, _, _ = await ctl.route("POST", "/api/signal", b'{"group": "nope"}', {}, None)
         assert status.startswith("400")
+        closed = json.loads((await ctl.route("POST", "/api/close-ab", b"", {}, None))[2])
+        assert closed == {"ok": True, "closed": []}  # no windows open
         status, _, js = await ctl.route("GET", "/static/crumbs-prebid.js", b"", {}, None)
         assert status.startswith("200") and b"requestBids.before" in js
     asyncio.run(run())

@@ -188,6 +188,13 @@ class LaneMonitor:
         finally:
             self._calls.pop(msg_id, None)
 
+    async def close_browser(self) -> bool:
+        """Close this lane's browser window. True if one was open."""
+        if not self.connected or not self._ws:
+            return False
+        await self._call("Browser.close", timeout=3)
+        return True
+
     def reset(self) -> None:
         self.tally.clear()
         self.sync_tally.clear()
