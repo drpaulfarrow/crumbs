@@ -7,6 +7,7 @@ import asyncio
 import json
 import logging
 import sys
+from pathlib import Path
 import webbrowser
 from functools import partial
 
@@ -18,9 +19,17 @@ from .browser_monitor import LaneMonitor
 from .launcher import launch_ab, launch_warmup, warm_profile_state, window_bounds
 from .system_dns import system_dns_state
 from .proxy import LaneProxy
+from .signal import Signal
 from .upstream import Upstream
 
 log = logging.getLogger("crumbs")
+
+# Auction endpoints the proposed policy lets through (from the blocking findings).
+# ID-sync and tracker hosts at the same companies stay blocked.
+DEFAULT_AUCTION_HOSTS = [
+    "ib.adnxs.com", "prebid-server.rubiconproject.com", "fastlane.rubiconproject.com",
+    "elb.the-ozone-project.com", "krk2.kargo.com",
+]
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -155,7 +164,13 @@ async def serve(args) -> None:
     upstream = Upstream(args.upstream)
     spec = crumbs_spec(args.crumbs_resolver)
     crumbs = Upstream(spec, os_fallback=False) if spec else None
-    engine = Engine(lists, upstream=upstream, crumbs=crumbs, block_ads=args.block_ads)
+    demo_cfg = load_demo_config()
+    signal = Signal(demo_cfg.get("crumbs_signal"))
+    policy = demo_cfg.get("proposed_policy", {})
+    engine = Engine(lists, upstream=upstream, crumbs=crumbs, block_ads=args.block_ads, signal=signal,
+                    auction_hosts=policy.get("allow_auction_hosts", DEFAULT_AUCTION_HOSTS))
+    engine.policy_fix = bool(policy.get("on_at_start", False))
+    engine.inject_module = bool(demo_cfg.get("crumbs_module", {}).get("inject", True))
     if crumbs:
         engine.crumbs_warning = await health_check(crumbs, upstream)
 
@@ -171,9 +186,15 @@ async def serve(args) -> None:
         system = engine.add_lane(Lane("system", "Whole PC (system DNS)", "dns", args.dns_port, enabled=True))
         closers += await start_dns(engine, system, ["127.0.0.1", "::1"])
 
+    closers += await signal.start()
+    module_js = (Path(__file__).parent / "static" / "crumbs-prebid.js").read_text(encoding="utf-8")
+    module_source = f"window.__crumbsCfg = {json.dumps({'signalUrl': signal.url})};\n{module_js}"
+
     monitors = {}
     for lane, cdp_port in ((lane_a, args.cdp_a_port), (lane_b, args.cdp_b_port)):
         lane.monitor = monitors[lane.name] = LaneMonitor(lane, cdp_port)
+        # Injected into every page in both windows. It only acts where Crumbs answers.
+        lane.monitor.inject_source = lambda: module_source if engine.inject_module else None
         lane.monitor.start()
     browser = args.browser or load_demo_config().get("browser", "edge")
 
@@ -202,6 +223,8 @@ async def serve(args) -> None:
     print(f"\n  Crumbs demo running. Control panel: {panel}")
     print(f"  Case study with live panel: {site}")
     print(f"  Prebid test page:          http://127.0.0.1:{args.panel_port}/test")
+    print(f"  Crumbs signal: {signal.host} -> group '{signal.group}' at {signal.address()}"
+          + (f"  (WARNING: could not listen on {', '.join(signal.errors)})" if signal.errors else ""))
     print(f"  From the Android emulator: http://10.0.2.2:{args.panel_port}/test?lane=emulator")
     print(f"  Lists: {len(lists.trackers)} tracker / {len(lists.ads)} ad domains ({lists.sources['trackers']})")
     print(f"  Normal DNS upstream: {upstream.describe()}")

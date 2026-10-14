@@ -70,6 +70,14 @@ h3 { margin: 4px 0 0; font-size: 12px; color: var(--muted); text-transform: uppe
 .logo.lg { width: 30px; height: 30px; border-radius: 8px; vertical-align: middle; margin-right: 0; }
 .logo.md { width: 20px; height: 20px; border-radius: 5px; vertical-align: -5px; }
 .brand { display: flex; align-items: center; gap: 10px; }
+.fix { margin: 6px 24px 0; padding: 12px 14px; border-radius: 12px; background: var(--card); border: 1px solid var(--line);
+  display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center; }
+.fix .t { font-weight: 600; }
+.fix label { display: flex; align-items: center; gap: 7px; font-size: 13px; cursor: pointer; }
+.fix select { font: inherit; padding: 5px 8px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
+.fix .hint { color: var(--muted); font-size: 12px; flex-basis: 100%; margin: 0; }
+.chip { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 999px; background: var(--on-soft); color: var(--on); font-weight: 600; margin: 1px 4px 1px 0; }
+.chip.off { background: var(--bg); color: var(--muted); }
 .bar .name { display: flex; align-items: center; }
 .pill { display: inline-block; min-width: 54px; font-size: 10px; font-weight: 700; text-align: center;
   border-radius: 4px; padding: 0 4px; margin-right: 6px; }
@@ -120,6 +128,15 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
   <button id="reset">Reset stats</button>
 </header>
 <div class="warn" id="warn"></div>
+<div class="fix" id="fix">
+  <span class="t">The fix, for window B</span>
+  <label title="Block identity, not auctions: a Crumbs-on lane lets auction hosts through and keeps blocking ID syncs and trackers">
+    <input type="checkbox" id="policy-fix"> Proposed policy: allow auctions</label>
+  <label title="Inject the Crumbs Prebid module into every page in both windows. It only acts where Crumbs answers.">
+    <input type="checkbox" id="inject-module"> Crumbs Prebid module</label>
+  <label>Opted-in group <select id="signal-group"></select></label>
+  <p class="hint">Turn these on, then reload the pages. The module only acts where the Crumbs resolver answers its signal name, so window A is untouched. New tabs pick up the module; reload existing ones.</p>
+</div>
 <main id="lanes"></main>
 <main>
   <section class="card wide">
@@ -313,11 +330,33 @@ function prebidSite(host, pair) {
     if (S.bidders_requested.includes(name)) return '<td class="num">no bid</td>';
     return '<td class="num">not asked</td>';
   };
+  const crumbsCell = S => {
+    if (!S) return '<td class="num">not open</td>';
+    const c = S.crumbs;
+    if (!c) return '<td class="num">not loaded</td>';
+    if (c.status !== "on") return `<td class="num">inactive (${esc(c.status)})</td>`;
+    return `<td class="num"><span class="chip">on</span>${c.group ? esc(c.group.label) : "no group"}</td>`;
+  };
+  const dataCell = S => {
+    const u = S && S.user;
+    if (!u) return '<td class="num">–</td>';
+    const segs = (u.data || []).filter(d => d.ids && d.ids.length)
+      .map(d => `${esc(d.name || "?")}${d.segtax ? " · segtax " + esc(d.segtax) : ""} · ${d.ids.map(esc).join(", ")}`);
+    return `<td class="num">${segs.length ? segs.map(x => `<span class="chip">${x}</span>`).join("") : '<span class="chip off">none</span>'}</td>`;
+  };
+  const idCell = S => {
+    const u = S && S.user;
+    if (!u) return '<td class="num">–</td>';
+    return `<td class="num">${u.eids.length ? `<span class="down">${u.eids.length}: ${u.eids.slice(0, 4).map(esc).join(", ")}${u.eids.length > 4 ? "…" : ""}</span>` : '<span class="up">none</span>'}</td>`;
+  };
+  const extra = `<tr><td>Crumbs module</td>${crumbsCell(A)}${crumbsCell(B)}<td></td></tr>
+    <tr><td>Audience data in the bid request</td>${dataCell(A)}${dataCell(B)}<td></td></tr>
+    <tr><td>User IDs in the bid request</td>${idCell(A)}${idCell(B)}<td></td></tr>`;
   const brows = bidders.map(n => `<tr><td>${bidderLogo(n)}${esc(n)}</td>${bcell(A, n)}${bcell(B, n)}</tr>`).join("");
   const version = [A, B].find(S => S && S.found);
   return `<div class="pb-site"><h4>${host.startsWith("127.0.0.1") ? "" : domainLogo(host, "md")}${esc(host)}${version ? ` <span class="cat">Prebid ${esc(version.versions.join(", "))}</span>` : ""}</h4>
     <div class="pb-grid">
-      <table><thead><tr><th></th><th class="num">A · off</th><th class="num">B · on</th><th class="num">B vs A</th></tr></thead><tbody>${body}</tbody></table>
+      <table><thead><tr><th></th><th class="num">A · off</th><th class="num">B · on</th><th class="num">B vs A</th></tr></thead><tbody>${body}${extra}</tbody></table>
       <table><thead><tr><th>Bidder</th><th class="num">A · off</th><th class="num">B · on</th></tr></thead>
         <tbody>${brows || '<tr><td colspan="3" class="empty">No bidders yet.</td></tr>'}</tbody></table>
     </div></div>`;
@@ -325,6 +364,23 @@ function prebidSite(host, pair) {
 
 let busy = false;
 let mode = "local";
+function syncFix(st) {
+  if (document.activeElement && document.activeElement.closest && document.activeElement.closest("#fix")) return;
+  $("#policy-fix").checked = !!st.policy_fix;
+  $("#inject-module").checked = !!st.inject_module;
+  const sel = $("#signal-group"), sig = st.signal;
+  if (!sig) { $("#fix").style.display = "none"; return; }
+  const opts = [{ key: "", label: "None (opted out)" }].concat(sig.groups);
+  if (sel.options.length !== opts.length) {
+    sel.innerHTML = opts.map(g => `<option value="${esc(g.key)}">${esc(g.label)}${g.id ? " · IAB " + g.id : ""}</option>`).join("");
+  }
+  sel.value = sig.group;
+  if (sig.errors && sig.errors.length) $("#fix .hint").textContent = "Signal server could not start: " + sig.errors.join(", ");
+}
+$("#policy-fix").onchange = e => fetch("/api/policy", { method: "POST", body: JSON.stringify({ enabled: e.target.checked }) }).then(refresh);
+$("#inject-module").onchange = e => fetch("/api/module", { method: "POST", body: JSON.stringify({ enabled: e.target.checked }) }).then(refresh);
+$("#signal-group").onchange = e => fetch("/api/signal", { method: "POST", body: JSON.stringify({ group: e.target.value }) }).then(refresh);
+
 async function refresh() {
   if (busy) return;
   busy = true;
@@ -336,6 +392,7 @@ async function refresh() {
       ? `Crumbs ON = real Crumbs resolver (${st.crumbs_resolver})`
       : "Crumbs ON = local EasyPrivacy list";
     $("#lists").textContent = `${st.lists.trackers.toLocaleString()} tracker domains · ${st.lists.sources.trackers}`;
+    syncFix(st);
     const w = $("#warn");
     w.style.display = st.crumbs_warning ? "block" : "none";
     w.textContent = st.crumbs_warning || "";

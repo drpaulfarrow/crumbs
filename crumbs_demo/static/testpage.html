@@ -65,6 +65,10 @@ code { font-size: 12px; }
       <div id="auction-units" style="margin-top:8px"></div>
     </div>
     <div class="panel">
+      <h2>What the bid request told bidders about this reader</h2>
+      <div id="bidreq">Waiting for the auction…</div>
+    </div>
+    <div class="panel">
       <h2>What this device can reach</h2>
       <div id="probes">Checking…</div>
     </div>
@@ -185,6 +189,30 @@ function runAuction(cfg) {
   });
 }
 
+function showBidRequest() {
+  const el = document.getElementById("bidreq");
+  const c = window.__crumbs;
+  let u = null;
+  try {
+    const reqs = pbjs.getEvents().filter(e => e.eventType === "bidRequested");
+    const last = reqs[reqs.length - 1];
+    if (last) u = (last.args.ortb2 && last.args.ortb2.user) || {};
+  } catch (e) {}
+  const row = (k, v) => `<div class="probe"><span>${k}</span><b>${v}</b></div>`;
+  const module = !c ? "not loaded" : c.status === "on"
+    ? `on${c.group ? ": " + esc(c.group.label) : ", no group"}` : `inactive (${esc(c.status)})`;
+  let html = row("Crumbs module", module);
+  if (c && c.status === "on") html += row("Crumbs mode", esc(c.crumbsMode.join(", ")));
+  if (!u) { el.innerHTML = html + row("Bid request", "none sent"); return; }
+  const segs = (u.data || []).filter(d => (d.segment || []).length)
+    .map(d => `${esc(d.name)} · segtax ${esc(d.ext && d.ext.segtax)} · id ${d.segment.map(x => esc(x.id)).join(", ")}`);
+  const eids = (u.ext && u.ext.eids) || [];
+  html += row("Seller-defined audience (user.data)", segs.length ? `<span style="color:var(--ok)">${segs.join("; ")}</span>` : "none");
+  html += row("Keywords (Xandr key-values)", esc(u.keywords || "none"));
+  html += row("User IDs", eids.length ? esc(eids.map(e => e.source).join(", ")) : "none");
+  el.innerHTML = html;
+}
+
 async function main() {
   const cfg = await (await fetch(`${API}/api/demo-config`)).json();
   document.getElementById("headline").textContent = cfg.page.title;
@@ -239,6 +267,8 @@ async function main() {
       auction.detail = "Xandr answered with no bid";
     }
   }
+
+  showBidRequest();
 
   const r = document.getElementById("auction-result");
   r.textContent = auction.status === "won"

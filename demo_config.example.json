@@ -138,5 +138,27 @@
     "publisher_id": 1557389
   },
   "browser": "edge",
-  "_browser_note": "edge or chrome. Windows A and B always use fresh profiles."
+  "_browser_note": "edge or chrome. Windows A and B always use fresh profiles.",
+  "crumbs_signal": {
+    "_note": "DNS steering demo. A Crumbs-on lane answers this hostname with one local address per interest group. IDs are IAB Audience Taxonomy 1.1 nodes.",
+    "host": "signal.crumbs.test",
+    "port": 5390,
+    "provider": "crumbs.com",
+    "group": "running"
+  },
+  "proposed_policy": {
+    "_note": "Block identity, not auctions. When switched on in the panel, Crumbs-on lanes still let these auction hosts through.",
+    "on_at_start": false,
+    "allow_auction_hosts": [
+      "ib.adnxs.com",
+      "prebid-server.rubiconproject.com",
+      "fastlane.rubiconproject.com",
+      "elb.the-ozone-project.com",
+      "krk2.kargo.com"
+    ]
+  },
+  "crumbs_module": {
+    "_note": "Inject the Crumbs Prebid module into every page in the A/B windows. It only acts where Crumbs answers the signal hostname.",
+    "inject": true
+  }
 }

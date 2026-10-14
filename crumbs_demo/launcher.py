@@ -87,6 +87,9 @@ def browser_args(profile: Path, proxy_port: int, cdp_port: int, x: int, width: i
         "--no-default-browser-check",
         "--disable-sync",
         "--disable-features=PrivacySandboxSettings4,OptimizationHints,MediaRouter",
+        # Demo only: lets the injected Crumbs module on https sites call the local
+        # http signal server. A production signal endpoint would use https.
+        "--allow-running-insecure-content",
         f"--window-position={x},0",
         f"--window-size={width},{height}",
         "--new-window",

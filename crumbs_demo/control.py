@@ -132,6 +132,24 @@ class ControlServer:
                 return self._json({"error": "unknown lane"}, "404 Not Found")
             enabled = bool(json.loads(body or b"{}").get("enabled"))
             return self._json(self.engine.set_enabled(name, enabled).to_dict())
+        if method == "POST" and path in ("/api/policy", "/api/module"):
+            enabled = bool(json.loads(body or b"{}").get("enabled"))
+            if path == "/api/policy":
+                self.engine.policy_fix = enabled
+                for lane in self.engine.lanes.values():  # reconnect so open tunnels follow the new policy
+                    for callback in lane.on_toggle:
+                        callback(lane)
+            else:
+                self.engine.inject_module = enabled
+            return self._json({"ok": True, "enabled": enabled})
+        if method == "POST" and path == "/api/signal":
+            if not self.engine.signal:
+                return self._json({"error": "signal unavailable"}, "500 Internal Server Error")
+            try:
+                self.engine.signal.set_group(json.loads(body or b"{}").get("group", ""))
+            except ValueError as e:
+                return self._json({"error": str(e)}, "400 Bad Request")
+            return self._json(self.engine.signal.to_dict())
         if method == "POST" and path == "/api/reset":
             self.engine.reset_stats()
             return self._json({"ok": True})

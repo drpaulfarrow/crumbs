@@ -454,3 +454,86 @@ def test_report_pairs_visits_and_builds_html(tmp_path):
     html_path = build_report(tmp_path)
     assert "Crumbs monetization impact" in html_path.read_text(encoding="utf-8")
     assert (tmp_path / "sites.csv").exists() and (tmp_path / "bidders.csv").exists()
+
+
+# --- Crumbs signal, proposed policy and Prebid module ---------------------------
+
+def test_signal_answer_carries_a_seller_defined_audience():
+    from crumbs_demo.signal import Signal
+    sig = Signal({"group": "travel"})
+    g = sig.by_key("travel")
+    assert sig.address() == g["addr"]
+    body = sig.answer_for(g["addr"])
+    assert body["crumbs"] == "on" and body["group"] == "travel"
+    assert body["sda"] == {"segtax": 4, "id": "719"}  # IAB Audience Taxonomy 1.1: Interest | Travel
+    assert sig.answer_for("127.0.0.19")["group"] is None  # opted out: Crumbs user, no group
+    sig.set_group("")
+    assert sig.address() == "127.0.0.19"
+
+
+def test_policy_fix_and_signal_through_the_proxy():
+    from crumbs_demo.signal import Signal
+
+    async def run():
+        normal_t, _, normal_addr = await start_fake_dns()
+        crumbs_t, _, crumbs_addr = await start_fake_dns(sinkhole={"ib.adnxs.com", "acdn.adnxs.com"})
+        site, site_port = await start_website()
+        sig = Signal({"port": free_port(), "group": "running"})
+        sig_servers = await sig.start()
+        engine = Engine(lists(), upstream=Upstream([normal_addr], os_fallback=False),
+                        crumbs=Upstream([crumbs_addr], os_fallback=False),
+                        signal=sig, auction_hosts=["ib.adnxs.com"])
+        lane_on = engine.add_lane(Lane("b", "B", "proxy", free_port(), enabled=True))
+        lane_off = engine.add_lane(Lane("a", "A", "proxy", free_port(), enabled=False))
+        proxies = [LaneProxy(engine, lane_on), LaneProxy(engine, lane_off)]
+        for p in proxies:
+            await p.start()
+
+        async def get_via(proxy_port, url):
+            reader, writer = await asyncio.open_connection("127.0.0.1", proxy_port)
+            writer.write(f"GET {url} HTTP/1.1\r\nHost: x\r\n\r\n".encode())
+            data = await asyncio.wait_for(reader.read(), 5)
+            writer.close()
+            return data
+
+        try:
+            # Today: Crumbs blocks the auction host.
+            assert b"403" in await connect_via(lane_on.port, "ib.adnxs.com", site_port)
+            # Proposed policy: the auction goes through, the sync host stays blocked.
+            engine.policy_fix = True
+            assert (await connect_via(lane_on.port, "ib.adnxs.com", site_port)).endswith(b"hello")
+            assert b"403" in await connect_via(lane_on.port, "acdn.adnxs.com", site_port)
+            # The signal name: Crumbs answers with the group's address, which returns the group.
+            reply = await get_via(lane_on.port, sig.url)
+            body = json.loads(reply.split(b"\r\n\r\n", 1)[1])
+            assert body["group"] == "running" and body["sda"]["id"] == "410"
+            # Crumbs off: nobody answers the signal name, so the module stays inactive.
+            assert b"502" in (await get_via(lane_off.port, sig.url)).split(b"\r\n")[0]
+        finally:
+            for p in proxies:
+                p.server.close()
+            for s in sig_servers:
+                s.close()
+            site.close()
+            normal_t.close()
+            crumbs_t.close()
+    asyncio.run(run())
+
+
+def test_control_api_switches_policy_module_and_group():
+    from crumbs_demo.signal import Signal
+
+    async def run():
+        engine = Engine(lists(), signal=Signal())
+        ctl = ControlServer(engine, 0)
+        await ctl.route("POST", "/api/policy", b'{"enabled": true}', {}, None)
+        await ctl.route("POST", "/api/module", b'{"enabled": false}', {}, None)
+        await ctl.route("POST", "/api/signal", b'{"group": "finance"}', {}, None)
+        state = json.loads((await ctl.route("GET", "/api/state", b"", {}, None))[2])
+        assert state["policy_fix"] is True and state["inject_module"] is False
+        assert state["signal"]["group"] == "finance"
+        status, _, _ = await ctl.route("POST", "/api/signal", b'{"group": "nope"}', {}, None)
+        assert status.startswith("400")
+        status, _, js = await ctl.route("GET", "/static/crumbs-prebid.js", b"", {}, None)
+        assert status.startswith("200") and b"requestBids.before" in js
+    asyncio.run(run())

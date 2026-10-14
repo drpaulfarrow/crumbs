@@ -106,8 +106,15 @@ class Engine:
     """
 
     def __init__(self, lists: Blocklists, upstream: Upstream | None = None,
-                 crumbs: Upstream | None = None, block_ads: bool = False):
+                 crumbs: Upstream | None = None, block_ads: bool = False,
+                 signal=None, auction_hosts: list[str] | None = None):
         self.lists = lists
+        self.signal = signal  # crumbs_demo.signal.Signal, for the DNS-steered interest group
+        # The proposed policy: block identity, not auctions. When on, a Crumbs-on lane
+        # still lets these auction hosts through; ID syncs and trackers stay blocked.
+        self.auction_hosts = [h.lower().lstrip(".") for h in (auction_hosts or [])]
+        self.policy_fix = False
+        self.inject_module = True
         self.upstream = upstream
         self.crumbs = crumbs
         self.block_ads = block_ads
@@ -146,6 +153,10 @@ class Engine:
         company = company_for(c.rule or host) if (c.rule or blocked) else None
         return Decision(host, blocked, c.category, c.rule, company, source)
 
+    def is_auction_host(self, host: str) -> bool:
+        h = host.lower()
+        return any(h == a or h.endswith("." + a) for a in self.auction_hosts)
+
     def uses_crumbs(self, lane: Lane) -> bool:
         return lane.enabled and self.crumbs is not None
 
@@ -153,6 +164,25 @@ class Engine:
         """Decide and resolve a hostname for a proxy lane. Lookup is None when blocked."""
         if is_ip(host):
             return Decision(host, False, "other", None, None), Lookup([host.strip("[]")], [], False)
+        if self.signal and host.lower() == self.signal.host:
+            # Only the Crumbs resolver knows this name. Its answer is the group's address.
+            if not lane.enabled:
+                decision = Decision(host, False, "signal", None, None, "normal DNS")
+                self.record(lane, decision, note="no answer: only Crumbs knows this name")
+                return decision, Lookup([], [], False)
+            g = self.signal.by_key(self.signal.group)
+            decision = Decision(host, False, "signal", None, "Crumbs", "Crumbs resolver")
+            self.record(lane, decision, note=f"Crumbs signal: {g['label'] if g else 'no group (opted out)'}"
+                                             f" -> {self.signal.address()}")
+            return decision, Lookup([self.signal.address()], [], False)
+        if lane.enabled and self.policy_fix and self.is_auction_host(host):
+            decision = self.labelled(host, False, "proposed policy")
+            started = time.perf_counter()
+            result = await self.upstream.lookup(host)
+            if not result.cached:
+                lane.stats.lookup_ms.append((time.perf_counter() - started) * 1000)
+            self.record(lane, decision, note="auction allowed by the proposed policy")
+            return decision, result
         if self.uses_crumbs(lane):
             started = time.perf_counter()
             result = await self.crumbs.lookup(host)
@@ -222,5 +252,9 @@ class Engine:
             "crumbs_resolver": self.crumbs.describe() if self.crumbs else None,
             "crumbs_warning": self.crumbs_warning,
             "upstream": self.upstream.describe() if self.upstream else None,
+            "policy_fix": self.policy_fix,
+            "auction_hosts": self.auction_hosts,
+            "inject_module": self.inject_module,
+            "signal": self.signal.to_dict() if self.signal else None,
             "page_events": list(self.page_events)[::-1],
         }
