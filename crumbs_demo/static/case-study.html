@@ -683,6 +683,8 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
 .rev-row .rv{text-align:right;font-variant-numeric:tabular-nums}
 .rev-stack{display:flex;height:34px;border:1.5px solid var(--ink);border-radius:8px;overflow:hidden;margin-bottom:12px}
 .rev-stack i{display:block;min-width:2px}
+.rev-legend{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:14.5px}
+.rev-legend b{font-variant-numeric:tabular-nums;margin-right:4px}
 .sw{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:8px;vertical-align:-1px}
 .opts tr.sub td:first-child{padding-left:30px;color:var(--muted)}
 .opts td.rn{font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
@@ -1548,97 +1550,57 @@ hb_size   = "300x250"</code></pre>
 <!-- REVENUE MODEL -->
 <section class="tabpanel" id="tab-revenue" role="tabpanel" hidden>
   <div class="sec-head">
-    <div><div class="eyebrow">Revenue model</div><h2>In the year-three base case, eyeo keeps about 40% of what ad tech pays</h2></div>
-    <p>The Market sizing tab gives gross revenue. This tab follows that money through the partners who sell it, the routers and ISPs who bring households, and the cost of running the system privately. Figures marked assumption are estimates for discussion, and every input can be changed below.</p>
+    <div><div class="eyebrow">Revenue model</div><h2>In year three, Crumbs could earn about $25M and keep about $11M</h2></div>
+    <p>This follows the year-three base case from ad tech's payment to what eyeo keeps. All amounts are estimates for discussion. <span class="assume">assumption</span></p>
   </div>
 
-  <div class="tiles" id="revTiles"></div>
-
-  <div class="card" style="margin-top:16px">
-    <div class="sec-head" style="margin-bottom:12px"><div><div class="label">The model in one sentence</div><h3>It is a pay-for-data model, and the data comes from households, not from publishers</h3></div><p>In most ad tech, the money moves from the advertiser to the publisher, and data providers take a fee along the way. Here, part of the money moves back to the people and networks the data comes from. That makes Crumbs closer to a measurement panel than to an ad network.</p></div>
-    <div class="tablewrap"><table class="opts" style="min-width:760px"><thead><tr><th>Business</th><th>Who supplies the data or the reach</th><th>What they get</th></tr></thead><tbody>
-      <tr><td><b>Nielsen's computer and mobile panel</b></td><td>People who install a metering app</td><td>Rewards of up to $60 a year <sup>[9]</sup></td></tr>
-      <tr><td><b>Brave Ads</b></td><td>Users who opt in to private ads</td><td>70% of the ad revenue from the ads they see <sup>[10]</sup></td></tr>
-      <tr><td><b>Google search on Safari</b></td><td>Apple, which controls the default</td><td>36% of the search revenue from Safari <sup>[11]</sup></td></tr>
-      <tr><td><b>Crumbs, proposed</b></td><td>Routers and ISPs that switch households on, and users who opt in</td><td>Routers and ISPs get a share of revenue from their households. Users get free protection and control, not cash.</td></tr>
-    </tbody></table></div>
-    <p class="note">The router share is set below at 30% of revenue from the households a partner brings. That sits between the app-store convention and Apple's search share. It is an assumption to test with the first partner.</p>
-  </div>
-
-  <div class="card" id="rev-model" style="margin-top:16px">
-    <div class="sec-head"><div><div class="label">Interactive model</div><h3>From gross revenue to what eyeo keeps</h3></div><p>Choose a scenario, then change who gets paid how much. The bars are to scale within each scenario. <span class="assume">assumption</span></p></div>
-    <div class="sim">
-      <div class="sim-ctrls">
-        <div class="ctrl"><span class="label">Scenario</span><div class="seg" id="revScen" role="group" aria-label="Scenario"><button type="button" data-v="y1" aria-pressed="false">Year 1</button><button type="button" data-v="y3" aria-pressed="true">Year 3 base</button><button type="button" data-v="y3hi" aria-pressed="false">Year 3 high</button></div></div>
-        <div class="ctrl"><label for="revShare">Router and ISP revenue share</label><output id="revShareOut" for="revShare"></output><input type="range" id="revShare" min="0" max="60" step="5" value="30"></div>
-        <div class="ctrl"><label for="revRouted">Share of the panel that came through routers and ISPs</label><output id="revRoutedOut" for="revRouted"></output><input type="range" id="revRouted" min="0" max="100" step="5" value="60"></div>
-        <div class="ctrl"><label for="revFee">Crumbs data fee, share of curated media</label><output id="revFeeOut" for="revFee"></output><input type="range" id="revFee" min="1" max="10" step="0.5" value="4"></div>
-        <div class="ctrl"><label for="revCash">Cash paid to each opted-in user per year</label><output id="revCashOut" for="revCash"></output><input type="range" id="revCash" min="0" max="60" step="1" value="0"></div>
-      </div>
-      <div class="sim-out">
-        <div id="revBars"></div>
-        <p class="callout" id="revNote"></p>
-      </div>
+  <div class="card">
+    <div class="label">Where $25M a year goes</div>
+    <div class="rev-stack" role="img" aria-label="eyeo keeps $10.7M, routers and ISPs $3.8M, channel partners $4.0M, team $4.0M, running costs $2.7M">
+      <i style="flex:10.7;background:var(--good)"></i><i style="flex:3.8;background:var(--app)"></i><i style="flex:4.0;background:var(--warn)"></i><i style="flex:4.0;background:var(--mix)"></i><i style="flex:2.7;background:var(--line)"></i>
     </div>
-    <p class="note">Changing the scenario resets the share of the panel from routers to that scenario's default: 10% in year 1, 60% in the year-three base and 75% in the year-three high case.</p>
+    <div class="rev-legend">
+      <div><i class="sw" style="background:var(--good)"></i><b>$10.7M</b> eyeo keeps</div>
+      <div><i class="sw" style="background:var(--app)"></i><b>$3.8M</b> Routers and ISPs</div>
+      <div><i class="sw" style="background:var(--warn)"></i><b>$4.0M</b> Partners who resell it</div>
+      <div><i class="sw" style="background:var(--mix)"></i><b>$4.0M</b> Monetization team</div>
+      <div><i class="sw" style="background:var(--line)"></i><b>$2.7M</b> Resolver, privacy and audits</div>
+    </div>
+    <p class="note">Year one loses about $1.5M while the panel is small. A strong year three keeps about $31M of $67M.</p>
   </div>
 
-  <div class="card" style="margin-top:16px">
-    <div class="sec-head" style="margin-bottom:12px"><div><div class="label">Case 1 · Measurement</div><h3>Measurement pays first and keeps the most, because there is no media to share</h3></div><p>eyeo sells aggregate outcome data to companies that already sell measurement to advertisers. The price is a licence or a study fee, not a cut of media, so nothing has to be paid to publishers, SSPs or curators.</p></div>
-    <div class="tablewrap"><table class="opts" style="min-width:820px"><thead><tr><th>Line</th><th>Year 1</th><th>Year 3 base</th><th>Year 3 high</th><th>Basis</th></tr></thead><tbody id="revMeasRows"></tbody></table></div>
-    <p class="note">A $2M licence would be about 0.4% of AppsFlyer's 2024 revenue of about $508M <sup>[15]</sup>. MMPs don't publish unit prices, and their contracts are based on active users or tracked events <sup>[16]</sup>, so licence prices have to be found in the first pilot conversations.</p>
-  </div>
-
-  <div class="card" style="margin-top:16px">
-    <div class="sec-head" style="margin-bottom:12px"><div><div class="label">Case 2 · Targeting</div><h3>Targeting money comes from labelling inventory, not from steering individual users</h3></div><p>There are two ways Crumbs data can reach a curated deal. Inventory labels describe the audience of an app or site, measured by the panel, and apply to every impression on it. DNS steering marks only the impressions of opted-in users. The first scales with curated media. The second scales with the panel, and the panel is small next to the open web.</p></div>
-    <div class="tablewrap"><table class="opts" style="min-width:820px"><thead><tr><th>Line</th><th>Year 1</th><th>Year 3 base</th><th>Year 3 high</th><th>Basis</th></tr></thead><tbody id="revTargRows"></tbody></table></div>
-    <p class="note">DNS steering still matters. It is the clearest proof that targeting can work without identifiers, and it is what publishers and curators can test first. It just isn't where most of the revenue comes from.</p>
-  </div>
-
-  <div class="card" style="margin-top:16px">
-    <div class="sec-head" style="margin-bottom:12px"><div><div class="label">Worked example · one curated buy</div><h3>Where $100 of advertiser spend goes when a deal uses Crumbs labels</h3></div><p>An illustration using the median fees reported for curated deals. Fees are shown as a share of the $85 that reaches the media after the DSP's fee. Real deals vary widely, and about half of curated deals carry no curator fee <sup>[2]</sup>.</p></div>
-    <div id="revFlow"></div>
-  </div>
-
-  <div class="card" style="margin-top:16px">
-    <div class="sec-head" style="margin-bottom:12px"><div><div class="label">What this means</div><h3>Four things the model says about the product</h3></div></div>
-    <div class="numbers">
-      <div><span class="n">Point 1</span><b>Measurement funds the start</b><p>It is the larger line until curation proves itself, and it keeps more per dollar because no media changes hands.</p></div>
-      <div><span class="n">Point 2</span><b>Labels are the targeting business</b><p>Inventory labels earn about 25 times as much as DNS steering in the base case. Steering is the demonstration, and labels are the revenue.</p></div>
-      <div><span class="n">Point 3</span><b>Users can't be paid in cash</b><p>In the base case, eyeo breaks even at about $7 per user per year. Nielsen-level rewards of up to $60 a year would make every scenario lose money. The value exchange has to be protection, control and better ads.</p></div>
-      <div><span class="n">Point 4</span><b>Routers are paid for reach</b><p>A router partner earns a few dollars a year per opted-in user. That is small next to a paid security add-on, so the pitch to ISPs is a free security feature plus a revenue share, not the revenue share alone.</p></div>
+  <div class="cust-grid" style="margin-top:16px">
+    <div class="cust">
+      <div class="label">Case 1 · Measurement</div>
+      <h3>$15M a year</h3>
+      <p class="cust-lede">eyeo sells outcome data and lift studies to MMPs and measurement vendors.</p>
+      <p>No media changes hands, so publishers, SSPs and curators take no fees. That makes it the line that pays first and keeps the most.</p>
+    </div>
+    <div class="cust">
+      <div class="label">Case 2 · Targeting</div>
+      <h3>$10M a year</h3>
+      <p class="cust-lede">Curators pay a data fee of about 4% of media on deals that use Crumbs audience labels.</p>
+      <p>The fee is a small share of the deal, below the median curator fee of 14% <sup>[1]</sup>. Most of it comes from labelling apps and sites, which reaches every impression. Steering individual users is the proof that it works, but it brings in little money.</p>
     </div>
   </div>
 
   <div class="card" style="margin-top:16px">
-    <div class="sec-head" style="margin-bottom:12px"><div><div class="label">Paying for data · the rules</div><h3>Paying for data brings obligations that a free product doesn't have</h3></div></div>
-    <div class="tablewrap"><table class="opts" style="min-width:760px"><thead><tr><th>Rule</th><th>What it requires</th><th>What it means for Crumbs</th></tr></thead><tbody>
-      <tr><td><b>EU ePrivacy Directive, Article 6(3)</b></td><td>A telecoms provider can use traffic data for value-added services only with the user's prior consent, only as far as the service needs, and the user can withdraw at any time <sup>[13]</sup>.</td><td>An ISP that switches Crumbs on needs its own consent from the subscriber, separate from the protection itself.</td></tr>
-      <tr><td><b>California, CCPA regulations §7016</b></td><td>A business offering a financial incentive for data must publish a good-faith estimate of the value of that data and explain how it was calculated <sup>[14]</sup>.</td><td>Any cash or credit to users needs a published value estimate. This model is the starting point for it.</td></tr>
-      <tr><td><b>Freely given consent</b></td><td>Protection should not depend on sharing data.</td><td>Protection stays free and works the same whether or not a user opts in. The opt-in is separate, as on the Customers tab.</td></tr>
-    </tbody></table></div>
-    <p class="note">ISPs already sell security as an add-on. Whalebone says operators set consumer prices at 5 to 10% of ARPU, and it offers telcos a revenue-share pricing option <sup>[12]</sup>.</p>
+    <div class="label">Pay for data</div>
+    <h3>The people and networks the data comes from get paid</h3>
+    <p>Crumbs works like a measurement panel. Others pay for the same thing: Nielsen gives panel members up to $60 a year <sup>[2]</sup>, Brave gives users 70% of its ad revenue <sup>[3]</sup>, and Google gives Apple 36% of its Safari search revenue <sup>[4]</sup>.</p>
+    <p><b>Routers and ISPs are paid in cash.</b> They get 30% of the revenue from the households they bring. <b>Users are paid in kind,</b> with free protection and control. Cash doesn't work: eyeo would break even at about $7 per user a year.</p>
+    <p class="note">Paying for data has rules. In the EU, an ISP needs its own consent from each subscriber <sup>[5]</sup>. In California, any cash for data needs a published estimate of what the data is worth <sup>[6]</sup>.</p>
   </div>
 
   <div class="card" style="margin-top:16px">
     <div class="label">Sources</div>
     <ol class="sources">
-      <li>Journal du Net, 24 March 2026: Equativ's SSP commission never exceeds 15%. The average curator commission on Equativ's Maestro platform is about 35%. <a href="https://www.journaldunet.com/adtech/1549003-la-commission-d-equativ-est-de-15-maximum-celle-des-curators-de-35-en-moyenne/">journaldunet.com</a></li>
-      <li>AdExchanger, May 2025, citing Jounce Media: the median margin-based curation fee is 14%, and about half of curated deal IDs carry no fee. Uses a 15% DSP fee as an example. <a href="https://www.adexchanger.com/programmatic/publishers-dont-fear-curation-fees-theyre-just-the-same-old-ad-tech-tax/">adexchanger.com</a></li>
-      <li>PPC Land on audience marketplaces: The Trade Desk's example rate card is 50% of media capped at a $5 CPM. Audience Unlimited is 3.3% or 4.4% of media. LiveRamp's Data Marketplace earned $35M in the quarter to June 2025. <a href="https://ppc.land/audience-marketplace/">ppc.land</a></li>
-      <li>AdExchanger, 2018: percent-of-media data pricing is typically capped at 10 to 20% of media. <a href="https://www.adexchanger.com/online-advertising/data-companies-selling-data-percent-media">adexchanger.com</a></li>
-      <li>AdRoll help centre: an example third-party segment priced at a $1.00 CPM. <a href="https://help.adroll.com/hc/en-us/articles/46776957722253">help.adroll.com</a></li>
-      <li>eMarketer: US open-web programmatic spend could pass $50B in 2025. <a href="https://www.emarketer.com/content/programmatic-ad-spending-set-reach-nearly-180-billion-by-2025">emarketer.com</a></li>
-      <li>DataReportal, Digital 2026 USA: 324 million internet users at the end of 2025. <a href="https://datareportal.com/reports/digital-2026-united-states-of-america">datareportal.com</a></li>
-      <li>PubMatic, March 2025: curated deals on Connect drove eCPMs more than 25% higher. Company claim. <a href="https://www.globenewswire.com/news-release/2025/03/20/3046179/0/en/PubMatic-s-Connect-Platform-for-Curation-Delivers-for-Publishers-Drives-25-Higher-eCPMs-Incremental-Revenue-and-Diverse-Demand.html">globenewswire.com</a></li>
+      <li>AdExchanger, May 2025, citing Jounce Media: the median margin-based curation fee is 14%. <a href="https://www.adexchanger.com/programmatic/publishers-dont-fear-curation-fees-theyre-just-the-same-old-ad-tech-tax/">adexchanger.com</a></li>
       <li>Nielsen Computer and Mobile Panel FAQ: rewards of up to $60 a year. <a href="https://computermobilepanel.nielsen.com/cmp/faqeng.html">nielsen.com</a></li>
       <li>Brave: Brave Ads shares 70% of ad revenue with users. <a href="https://brave.com/brave-ads-launch/">brave.com</a></li>
       <li>NBC News, November 2023: Alphabet pays Apple 36% of Safari search revenue. <a href="https://www.nbcnews.com/tech/tech-news/alphabet-pays-apple-36-safari-search-revenue-sundar-pichai-confirms-rcna125191">nbcnews.com</a></li>
-      <li>Whalebone Aura pricing: volume, bulk and revenue-share options for telcos, with consumer prices set at 5 to 10% of ARPU. <a href="https://whalebone.io/aura-pricing">whalebone.io</a></li>
-      <li>EU ePrivacy Directive 2002/58/EC, Article 6. <a href="https://www.legislation.gov.uk/eudr/2002/58/article/6/data.html">legislation.gov.uk</a></li>
+      <li>EU ePrivacy Directive 2002/58/EC, Article 6(3). <a href="https://www.legislation.gov.uk/eudr/2002/58/article/6/data.html">legislation.gov.uk</a></li>
       <li>California Code of Regulations, title 11, §7016, Notice of Financial Incentive. <a href="https://law.cornell.edu/regulations/california/11-CCR-7016">law.cornell.edu</a></li>
-      <li>YesPress company profile: AppsFlyer revenue about $508M in 2024. <a href="https://yespress.io/appsflyer.md">yespress.io</a></li>
-      <li>Linkrunner, 2026: AppsFlyer does not publish pricing, and contracts are based on monthly active users or tracked events. <a href="https://linkrunner.io/blog/how-much-does-an-mmp-actually-cost-complete-pricing-breakdown-for-indian-apps-in-2026">linkrunner.io</a></li>
     </ol>
   </div>
 </section>
@@ -2726,104 +2688,6 @@ function demoInit(){
   }).catch(()=>{});
 }
 
-
-/* ===== Revenue model ===== */
-(function revenueModel(){
-  const SC={
-    y1:  {name:"Year 1",users:0.15,routed:0.10,licN:1,licP:0.3,fraud:0,studies:5,studyP:0.06,labelled:5,steer:0.01,fixed:0.5,tee:0,team:1.5},
-    y3:  {name:"Year 3 base",users:1.5,routed:0.60,licN:4,licP:2.0,fraud:2.0,studies:60,studyP:0.08,labelled:250,steer:0.10,fixed:1.5,tee:0.3,team:4.0},
-    y3hi:{name:"Year 3 high",users:5.0,routed:0.75,licN:6,licP:3.0,fraud:4.0,studies:120,studyP:0.10,labelled:750,steer:0.20,fixed:2.0,tee:0.3,team:6.0}
-  };
-  const K={studyPartner:0.40,platformCut:0.20,openWebPerUser:50000/324,prebidShare:0.5,geo:0.7,uplift:1.25,infraPerUser:0.60};
-  const el=id=>document.getElementById(id); if(!el("revTiles")) return;
-  const st={scen:"y3",share:0.30,routed:0.60,fee:0.04,cash:0};
-
-  function run(s,share,routed,fee,cash){
-    const U=s.users, r={};
-    r.licences=s.licN*s.licP+s.fraud; r.studies=s.studies*s.studyP;
-    r.mGross=r.licences+r.studies; r.mPartner=r.studies*K.studyPartner;
-    r.mRouter=(r.mGross-r.mPartner)*share*routed;
-    r.labelledMedia=s.labelled; r.tLabels=s.labelled*fee;
-    r.steerMedia=U*1e6*K.openWebPerUser*K.prebidShare*K.geo*s.steer*K.uplift/1e6; r.tSteer=r.steerMedia*fee;
-    r.tGross=r.tLabels+r.tSteer; r.tPartner=r.tGross*K.platformCut;
-    r.tRouter=(r.tGross-r.tPartner)*share*routed;
-    r.gross=r.mGross+r.tGross; r.partners=r.mPartner+r.tPartner; r.routers=r.mRouter+r.tRouter;
-    r.infra=U*K.infraPerUser*(1+s.tee); r.fixed=s.fixed; r.team=s.team; r.cash=U*cash;
-    r.net=r.gross-r.partners-r.routers-r.infra-r.fixed-r.team-r.cash;
-    r.breakeven=(r.net+r.cash)/U; r.perUser=r.gross/U; r.routerPerUser=routed?r.routers/(U*routed):0;
-    return r;
-  }
-  const m=v=>{const a=Math.abs(v); const t=a>=10?a.toFixed(0):a>=1?a.toFixed(1):a>=0.1?a.toFixed(2):a.toFixed(2); return (v<0?"−":"")+"$"+t+"M";};
-  const d=v=>"$"+(Math.abs(v)<10?v.toFixed(2):v.toFixed(0));
-  const pct=v=>Math.round(v*100)+"%";
-
-  function bars(r){
-    const rows=[
-      ["Measurement revenue",r.mGross,"in"],["Targeting revenue",r.tGross,"in"],
-      ["Channel partners",-r.partners,"out"],["Routers and ISPs",-r.routers,"out"],
-      ["Resolver and aggregation",-r.infra,"out"],["Privacy operations and audits",-r.fixed,"out"],
-      ["Monetization team",-r.team,"out"],["Cash to users",-r.cash,"out"],
-      ["eyeo keeps",r.net,"net"]];
-    const max=Math.max(r.gross,1e-9);
-    return `<div class="rev-bars">${rows.map(([l,v,k])=>`<div class="rev-row ${k}${k==="net"&&v<0?" neg":""}"><span class="rl">${l}</span><span class="rb"><i style="width:${Math.min(100,Math.abs(v)/max*100).toFixed(1)}%"></i></span><span class="rv">${m(v)}</span></div>`).join("")}</div>`;
-  }
-  function render(){
-    const s=SC[st.scen], r=run(s,st.share,st.routed,st.fee,st.cash);
-    el("revShareOut").textContent=pct(st.share); el("revRoutedOut").textContent=pct(st.routed);
-    el("revFeeOut").textContent=(st.fee*100).toFixed(1).replace(/\.0$/,"")+"%"; el("revCashOut").textContent="$"+st.cash;
-    el("revTiles").innerHTML=[
-      ["Gross revenue",m(r.gross),"ink",`${s.name}, measurement and targeting`],
-      ["Paid to channel partners",m(r.partners),"warn","Incrementality vendors and curation platforms"],
-      ["Paid to routers and ISPs",m(r.routers),"warn",`${pct(st.share)} of revenue from the ${pct(st.routed)} of the panel they bring`],
-      ["eyeo keeps",m(r.net),r.net>=0?"good":"bad",r.gross?`${Math.round(r.net/r.gross*100)}% of gross, after team and running costs`:""]
-    ].map(t=>`<div class="tile"><span class="label">${t[0]}</span><span class="v ${t[2]}">${t[1]}</span><p>${t[3]}</p></div>`).join("");
-    el("revBars").innerHTML=bars(r);
-    el("revNote").textContent = `Each opted-in user brings ${d(r.perUser)} a year in gross revenue. A router or ISP partner earns ${d(r.routerPerUser)} a year for each opted-in user it brings. ` +
-      (r.breakeven>0 ? `eyeo breaks even if it pays each user up to ${d(r.breakeven)} a year in cash.` : `In this scenario eyeo loses money before paying users anything.`);
-    tables();
-  }
-  function tables(){
-    const R=Object.fromEntries(Object.entries(SC).map(([k,s])=>[k,run(s,st.share,s.routed,st.fee,0)]));
-    const row=(l,f,b,cls)=>`<tr${cls?` class="${cls}"`:""}><td><b>${l}</b></td>${["y1","y3","y3hi"].map(k=>`<td class="rn">${f(R[k],SC[k])}</td>`).join("")}<td>${b}</td></tr>`;
-    el("revMeasRows").innerHTML=[
-      row("Outcome data licences",(r,s)=>m(s.licN*s.licP),"MMPs and verification vendors: 1, 4 and 6 licences at $0.3M, $2M and $3M a year. <span class='assume'>assumption</span>"),
-      row("Fraud flags",(r,s)=>m(s.fraud),"Sold to fraud and verification vendors. <span class='assume'>assumption</span>"),
-      row("Lift studies",r=>m(r.studies),"5, 60 and 120 studies at $60k to $100k each. <span class='assume'>assumption</span>"),
-      row("Incrementality vendor margin",r=>m(-r.mPartner),"40% of the studies they sell for us. Licences are sold direct. <span class='assume'>assumption</span>"),
-      row("Router and ISP share",r=>m(-r.mRouter),`${pct(st.share)} of the rest, on the share of the panel partners brought: 10%, 60% and 75%.`),
-      row("Measurement after partners",r=>m(r.mGross-r.mPartner-r.mRouter),"Before running costs and team.","tot")
-    ].join("");
-    el("revTargRows").innerHTML=[
-      row("Curated media using Crumbs labels",r=>m(r.labelledMedia),"US open-web programmatic is over $50B a year <sup>[6]</sup>. The base case is 0.5% of it. <span class='assume'>assumption</span>"),
-      row("Label data fee",r=>m(r.tLabels),`${(st.fee*100).toFixed(1).replace(/\.0$/,"")}% of media. Comparable fees run from 3.3% to a 10 to 20% cap <sup>[3]</sup> <sup>[4]</sup>, against a median 14% curator fee <sup>[2]</sup>.`),
-      row("Media steered to opted-in users",r=>m(r.steerMedia),"$154 of open-web spend per US internet user a year <sup>[6]</sup> <sup>[7]</sup>, half through Prebid, 70% for the country mix, 1 to 20% in Crumbs deals, 25% higher prices <sup>[8]</sup>. <span class='assume'>assumption</span>"),
-      row("Steering data fee",r=>m(r.tSteer),"Same fee rate as labels."),
-      row("Curation platform's cut",r=>m(-r.tPartner),"20% of data fees to the SSP or curation platform that carries them. <span class='assume'>assumption</span>"),
-      row("Router and ISP share",r=>m(-r.tRouter),`${pct(st.share)} of the rest, on the share of the panel partners brought.`),
-      row("Targeting after partners",r=>m(r.tGross-r.tPartner-r.tRouter),"Before running costs and team.","tot")
-    ].join("");
-  }
-  function flow(){
-    const media=85, items=[
-      ["DSP fee",15,"ads"],["SSP fee, up to 15%",0.15*media,"mix"],["Curator fee, median 14%",0.14*media,"mix"],
-      ["Crumbs data fee, 4%",0.04*media,"app"],["Publisher",media-0.29*media-0.04*media,"good"]];
-    const fee=0.04*media, plat=fee*0.2, rtr=(fee-plat)*0.3*0.6, eyeo=fee-plat-rtr;
-    el("revFlow").innerHTML=`<div class="rev-stack" role="img" aria-label="Split of $100 of advertiser spend">${items.map(([l,v,c])=>`<i style="flex:${v};background:var(--${c})" title="${l}: $${v.toFixed(2)}"></i>`).join("")}</div>
-    <div class="tablewrap"><table class="opts" style="min-width:620px"><tbody>${items.map(([l,v,c])=>`<tr><td><i class="sw" style="background:var(--${c})"></i>${l}</td><td class="rn">$${v.toFixed(2)}</td></tr>`).join("")}
-    <tr class="sub"><td>Of the Crumbs fee: curation platform's cut, 20%</td><td class="rn">$${plat.toFixed(2)}</td></tr>
-    <tr class="sub"><td>Of the Crumbs fee: routers and ISPs, 30% on the 60% of the panel they bring</td><td class="rn">$${rtr.toFixed(2)}</td></tr>
-    <tr class="sub tot"><td>Of the Crumbs fee: eyeo, before running costs</td><td class="rn">$${eyeo.toFixed(2)}</td></tr></tbody></table></div>
-    <p class="note">The publisher keeps about $57 of the $100 in this example. The Crumbs fee is about 3% of what the advertiser spends.</p>`;
-  }
-  el("revScen").addEventListener("click",e=>{const b=e.target.closest("button"); if(!b) return; st.scen=b.dataset.v; st.routed=SC[st.scen].routed; el("revRouted").value=Math.round(st.routed*100);
-    el("revScen").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b)); render();});
-  el("revShare").addEventListener("input",e=>{st.share=+e.target.value/100; render();});
-  el("revRouted").addEventListener("input",e=>{st.routed=+e.target.value/100; render();});
-  el("revFee").addEventListener("input",e=>{st.fee=+e.target.value/100; render();});
-  el("revCash").addEventListener("input",e=>{st.cash=+e.target.value; render();});
-  window.__revRun=(k,share,routed,fee,cash)=>run(SC[k],share,routed,fee,cash);
-  flow(); render();
-})();
 
 /* ===== Presentation path: next buttons ===== */
 (function nextLinks(){
