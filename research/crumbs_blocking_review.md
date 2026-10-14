@@ -123,8 +123,63 @@ These are cheap in revenue and meaningful for privacy.
 
    The target result: ID syncs blocked, identifiers absent from bid requests, and header-bidding value close to the Crumbs-off level.
 
+## Publishers as Crumbs' biggest advocates
+
+### The argument
+- **For publishers, a user with no signals is a user they can't sell well.**
+  - More and more of their traffic arrives with no usable identity: Safari and Firefox block third-party cookies; people refuse consent; ad blocking is growing (about 1.1B users); privacy laws keep tightening.
+  - That traffic sells at a steep discount, or not at all.
+- **Crumbs can turn some of that traffic back into an audience buyers will pay for:** opt-in interest groups of 100+ people, privacy-protected measurement, and curated deals, all attached to the publisher's own inventory.
+- **So publishers gain twice:**
+  - their audiences are worth more where signals have gone;
+  - the alternative, more and more traffic with no signal, keeps losing value.
+- **Publishers also have what Crumbs lacks.** Eyeo's own design doc for Crumbs named install base as its biggest risk:
+  - direct relationships with hundreds of millions of readers;
+  - consent and messaging screens they control;
+  - a voice with buyers and regulators.
+- **That makes them the natural people to recommend Crumbs.** The message is "Browse privately with Crumbs and keep supporting the journalism you read". That's a better offer to readers than "pay or accept tracking".
+
+### The precondition: today's Crumbs would make publishers opponents, not advocates
+- In our runs, Crumbs **cut** header-bidding value on every measured publisher (32% to 100%).
+- It blocked Ozone, the UK publishers' own ad platform.
+- Publishers will only advocate once Crumbs:
+  1. stops blocking auctions and steers to cookieless endpoints instead;
+  2. puts its interest-group signal and measurement into the auction;
+  3. can show the uplift with numbers.
+
+  These are the steps in "What a tailored version would look like" above.
+- Eyeo also carries baggage with publishers: Acceptable Ads was called "extortion", and Trestle "holding our sites to ransom". So the terms have to be visibly fair: a revenue share and no pay-to-play.
+
+### Use the right baseline when pitching publishers
+- Our A/B compares a Crumbs user against a **fully tracked** user, which overstates what publishers lose.
+- A Crumbs user's realistic alternative is usually:
+  - an ad-blocker user, worth roughly nothing;
+  - someone who refused consent, worth very little;
+  - a Safari or Firefox user with no identity, discounted.
+- **The pitch to publishers is "Crumbs traffic vs your other traffic with no signal", not "vs tracked traffic".** The measurement tool should add that comparison: a third window with no consent, or with an ordinary ad blocker, alongside Crumbs with its signal.
+
+### How to enlist them
+1. **Make launch partners of the publishers Crumbs currently hurts.**
+   - Ozone and its UK publisher members (the Guardian, Reach and others) are the obvious first cohort-deal partners.
+   - Today they are the most visible casualties, so they would make the most credible advocates.
+2. **Use Blockthrough as the delivery route.** Blockthrough already runs inside publishers' ad code and already shows messages to ad-blocking readers. It can:
+   - read the Crumbs signal and pass it into Prebid;
+   - report the uplift on Crumbs traffic in the publisher's own dashboard;
+   - show readers a "Browse with Crumbs" invitation. That grows Crumbs' user base through publishers rather than eyeo's own marketing.
+3. **Share the value.** Give publishers a share of the extra revenue that Crumbs signals bring (eyeo's own Crumbs design doc envisaged rewarding the sites visited), and show it transparently.
+4. **Give them proof to repeat.** Run per-publisher paired measurements showing value recovered on traffic with no signal, which publishers can take to buyers and trade bodies.
+5. **Form a coalition.** Publishers, plus the independent ad-tech companies that follow the "block identity, not commerce" standard. Together they can argue for privacy-safe audiences with buyers, the IAB and regulators. That positions eyeo as the open web's privacy partner rather than its tollkeeper.
+
+### What to measure to show publishers it works
+- Prebid and ad-server value per page view: Crumbs-with-signal traffic vs the publisher's other traffic with no signal.
+- Share of traffic buyers can target, before and after.
+- Fill rate and bid density on Crumbs traffic.
+- Reader take-up of the "Browse with Crumbs" invitation (the growth channel).
+- Publisher revenue share paid out.
+
 ## Questions to put to eyeo
 - Is the current blocklist a deliberate policy (for example, "anything EasyPrivacy lists"), or inherited from filter lists? Who decides which auction endpoints are blocked?
 - How does Crumbs think about competitive neutrality between Google and independent ad-tech companies, given Acceptable Ads relationships?
 - What's the plan for getting the interest-group signal into Prebid and Ad Manager? Is Blockthrough the delivery route?
 - Is DNS meant to be the long-term enforcement layer, or the distribution layer (routers, phones), with request-level privacy handled by eyeo's browser SDK?
+- Are publishers part of Crumbs' go-to-market today? Would Blockthrough be the route for getting the Crumbs signal into publishers' ad code, and for publishers recommending Crumbs to their readers?
