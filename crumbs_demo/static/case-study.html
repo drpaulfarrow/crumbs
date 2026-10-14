@@ -332,6 +332,10 @@ table.opts{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
 .alert p{margin:6px 0 0;font-size:16px;max-width:80ch}
 .gotos{display:flex;flex-direction:column;gap:8px}
 .goto.ghost{background:transparent;color:var(--signal)}
+.demo-bar{padding:14px 16px;margin-bottom:14px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.demo-bar p{margin:0;flex:1 1 320px}
+.demo-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.demo-msg{font-size:13.5px;color:var(--muted)}
 a.goto{text-decoration:none;text-align:center;display:inline-block}
 #router-setup{scroll-margin-top:80px}
 .goto{border:1px solid var(--signal);background:var(--signal);color:#fff;border-radius:999px;padding:10px 16px;font-weight:600;cursor:pointer;font-size:14px;white-space:nowrap}
@@ -864,8 +868,13 @@ a.goto{text-decoration:none;text-align:center;display:inline-block}
   </div>
 
   <div id="demo-live" hidden>
-    <div class="card" style="padding:14px 16px;margin-bottom:14px">
-      <p style="margin:0">The control panel below is running on this laptop. Its "Open A/B" buttons open the two windows on the right of the screen, so this page can stay on the left.</p>
+    <div class="card demo-bar">
+      <p>The control panel below is running on this laptop. Its "Open A/B" buttons open the two windows on the right of the screen, so this page can stay on the left.</p>
+      <div class="demo-actions">
+        <button type="button" class="goto" id="demo-close">Close A/B windows</button>
+        <button type="button" class="goto ghost" id="demo-hide" aria-expanded="true" aria-controls="demo-frame">Hide panel</button>
+        <span class="demo-msg" id="demo-msg" role="status"></span>
+      </div>
     </div>
     <iframe id="demo-frame" title="Crumbs demo control panel" style="width:100%;height:calc(100vh - 230px);min-height:640px;border:1.5px solid var(--ink);border-radius:16px;box-shadow:3px 3px 0 var(--ink);background:#fff"></iframe>
   </div>
@@ -882,26 +891,6 @@ a.goto{text-decoration:none;text-align:center;display:inline-block}
       <div><span class="n">Step 3</span><b>Prebid compared</b><p>Every two seconds the panel reads each window's Prebid results: bidders asked, bids received and the top bid per slot.</p></div>
       <div><span class="n">Step 4</span><b>Test page</b><p>A test publisher page runs a real Prebid auction and also works from the Android emulator running the Crumbs app.</p></div>
     </div>
-    <div class="card" id="run-it" style="margin-top:14px">
-      <div class="sec-head" style="margin-bottom:10px"><div><div class="label">Run it yourself</div><h3>Clone the repo and reproduce the findings on your own machine</h3></div><p>Everything on the Blocking findings tab came from this code. Running it is the quickest way to check the numbers.</p></div>
-      <p style="margin:0 0 12px"><a href="https://github.com/drpaulfarrow/crumbs" target="_blank" rel="noopener"><b>github.com/drpaulfarrow/crumbs</b></a></p>
-      <div class="grid2">
-        <div class="code-card"><span class="label">Windows: set up once, then start</span><pre><code>git clone https://github.com/drpaulfarrow/crumbs
-cd crumbs
-powershell -ExecutionPolicy Bypass -File scripts\windows\setup.ps1
-
-scripts\windows\start-demo.ps1              # real sites
-scripts\windows\start-demo.ps1 -Page test   # Prebid test page
-scripts\windows\start-demo.ps1 -Local       # local EasyPrivacy list</code></pre></div>
-        <div class="code-card"><span class="label">macOS or Linux: development mode</span><pre><code>git clone https://github.com/drpaulfarrow/crumbs
-cd crumbs
-pip install -r requirements-dev.txt
-python -m pytest -q tests
-python -m crumbs_demo run --no-dns --crumbs-resolver local</code></pre>
-        <p class="note">Development mode skips the DNS port that needs admin rights and uses a local blocklist rather than eyeo's resolver.</p></div>
-      </div>
-      <p class="note">Needs Python 3.10 or later and Chrome or Edge. The control panel opens at <code>http://127.0.0.1:5380/</code>, and this site is served from it at <code>/case-study</code>. Admin rights are only needed for the optional whole-PC test, and Android Studio only for the emulator test.</p>
-    </div>
   </div>
   <div class="card" id="demo-script" style="margin-top:16px">
     <div class="label">Demo script</div>
@@ -912,6 +901,26 @@ python -m crumbs_demo run --no-dns --crumbs-resolver local</code></pre>
       <li><b>Crumbs module</b><span>Tick "Crumbs Prebid module", pick a group and reload. Window B's bid requests now carry the group and no user IDs. Window A is unchanged.</span></li>
     </ol>
     <p class="note">The switches are in the strip under the control panel's header. The Prebid section of the panel shows what each window's bid request told bidders.</p>
+  </div>
+  <div class="card" id="run-it" style="margin-top:16px">
+    <div class="sec-head" style="margin-bottom:10px"><div><div class="label">Run it yourself</div><h3>Clone the repo and reproduce the findings on your own machine</h3></div><p>Everything on the Blocking findings tab came from this code. Running it is the quickest way to check the numbers.</p></div>
+    <p style="margin:0 0 12px"><a href="https://github.com/drpaulfarrow/crumbs" target="_blank" rel="noopener"><b>github.com/drpaulfarrow/crumbs</b></a></p>
+    <div class="grid2">
+      <div class="code-card"><span class="label">Windows: set up once, then start</span><pre><code>git clone https://github.com/drpaulfarrow/crumbs
+cd crumbs
+powershell -ExecutionPolicy Bypass -File scripts\windows\setup.ps1
+
+scripts\windows\start-demo.ps1              # real sites
+scripts\windows\start-demo.ps1 -Page test   # Prebid test page
+scripts\windows\start-demo.ps1 -Local       # local EasyPrivacy list</code></pre></div>
+      <div class="code-card"><span class="label">macOS or Linux: development mode</span><pre><code>git clone https://github.com/drpaulfarrow/crumbs
+cd crumbs
+pip install -r requirements-dev.txt
+python -m pytest -q tests
+python -m crumbs_demo run --no-dns --crumbs-resolver local</code></pre>
+      <p class="note">Development mode skips the DNS port that needs admin rights and uses a local blocklist rather than eyeo's resolver.</p></div>
+    </div>
+    <p class="note">Needs Python 3.10 or later and Chrome or Edge. The control panel opens at <code>http://127.0.0.1:5380/</code>, and this site is served from it at <code>/case-study</code>. Admin rights are only needed for the optional whole-PC test, and Android Studio only for the emulator test.</p>
   </div>
 </section>
 
@@ -2793,6 +2802,20 @@ function demoInit(){
   }).catch(()=>{});
 }
 
+document.addEventListener("click",e=>{
+  const c=e.target.closest("#demo-close"), h=e.target.closest("#demo-hide");
+  const msg=document.getElementById("demo-msg");
+  if(c){
+    c.disabled=true; msg.textContent="Closing the windows…";
+    fetch("/api/close-ab",{method:"POST"}).then(r=>r.json()).then(j=>{
+      msg.textContent=j.closed&&j.closed.length?"A/B windows closed.":"No A/B windows were open.";
+    }).catch(()=>{ msg.textContent="Could not reach the demo."; }).finally(()=>{ c.disabled=false; });
+  }
+  if(h){
+    const f=document.getElementById("demo-frame"), show=f.hidden;
+    f.hidden=!show; h.textContent=show?"Hide panel":"Show panel"; h.setAttribute("aria-expanded",String(show));
+  }
+});
 
 /* ===== Presentation path: next buttons ===== */
 (function nextLinks(){

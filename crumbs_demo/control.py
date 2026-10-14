@@ -150,6 +150,10 @@ class ControlServer:
             except ValueError as e:
                 return self._json({"error": str(e)}, "400 Bad Request")
             return self._json(self.engine.signal.to_dict())
+        if method == "POST" and path == "/api/close-ab":
+            closed = [lane.name for lane in self.engine.lanes.values()
+                      if lane.monitor and await lane.monitor.close_browser()]
+            return self._json({"ok": True, "closed": closed})
         if method == "POST" and path == "/api/reset":
             self.engine.reset_stats()
             return self._json({"ok": True})
