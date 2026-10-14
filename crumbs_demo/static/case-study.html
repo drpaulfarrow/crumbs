@@ -701,6 +701,29 @@ a.goto{text-decoration:none;text-align:center;display:inline-block}
 .opts td.rn{font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
 .opts tr.tot td{font-weight:700;border-top:1.5px solid var(--ink)}
 @media (max-width:560px){ .rev-row{grid-template-columns:minmax(0,1fr) 64px} .rev-row .rb{grid-column:1/-1;grid-row:2} }
+/* Why me badges */
+.ag-badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.ag-badges span{font-family:var(--f-mono);font-size:12px;font-weight:700;background:var(--mint);color:var(--mint-ink);border:1.5px solid var(--ink);border-radius:999px;padding:3px 10px;box-shadow:2px 2px 0 var(--ink)}
+/* Agenda */
+.ag-hero h1{max-width:28ch}
+.ag-three{margin:6px 0 0;padding:0;list-style:none;counter-reset:a;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.ag-three li{counter-increment:a;background:var(--node);border:1.5px solid var(--ink);border-radius:12px;box-shadow:2px 2px 0 var(--ink);padding:14px 16px;font-size:15px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.ag-three li::before{content:counter(a);display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--mint);color:var(--mint-ink);border:1.5px solid var(--ink);font-family:var(--f-mono);font-weight:700;font-size:13px}
+.ag-run{margin:0;padding:0;list-style:none;display:flex;flex-direction:column}
+.ag-run li{display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:16px;align-items:center;padding:14px 0;border-top:1px solid var(--line)}
+.ag-run li:first-child{border-top:0}
+.ag-t{font-family:var(--f-mono);font-weight:700;font-size:13px;font-variant-numeric:tabular-nums}
+.ag-run b{font-family:var(--f-display);font-size:18px}
+.ag-run p{margin:2px 0 0;font-size:14.5px}
+.ag-run p.ag-q{color:var(--signal);font-size:14px}
+.ag-router{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.ag-card{background:var(--surface);border:1.5px solid var(--ink);border-radius:12px;box-shadow:2px 2px 0 var(--ink);padding:12px 14px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.ag-card p{margin:0;font-size:14px;flex:1}
+.ag-card .linkish{color:var(--signal);font-size:13.5px;padding-top:6px}
+.tab .tn.minor{background:transparent;color:var(--muted);border-color:var(--line)}
+.tab.tab-agenda{color:var(--ink);font-weight:700}
+@media (max-width:1080px){ .ag-router{grid-template-columns:repeat(2,minmax(0,1fr))} .ag-three{grid-template-columns:minmax(0,1fr)} }
+@media (max-width:560px){ .ag-router{grid-template-columns:minmax(0,1fr)} .ag-run li{grid-template-columns:minmax(0,1fr)} }
 </style>
 
 <header class="site-head">
@@ -709,27 +732,75 @@ a.goto{text-decoration:none;text-align:center;display:inline-block}
       <div><b>Crumbs Outcomes</b></div>
     </div>
     <nav class="tabs" role="tablist" aria-label="Sections">
-      <button class="tab" role="tab" data-tab="today" aria-selected="true"><span class="tn">1</span>Crumbs today</button>
-      <button class="tab" role="tab" data-tab="thesis" aria-selected="false"><span class="tn">2</span>Thesis</button>
+      <button class="tab tab-agenda" role="tab" data-tab="agenda" aria-selected="true">Agenda</button>
+      <button class="tab" role="tab" data-tab="today" aria-selected="false"><span class="tn">1</span>Crumbs today</button>
+      <button class="tab" role="tab" data-tab="thesis" aria-selected="false"><span class="tn minor">2</span>Thesis</button>
       <button class="tab" role="tab" data-tab="demo" aria-selected="false"><span class="tn">3</span>Live demo</button>
       <button class="tab" role="tab" data-tab="findings" aria-selected="false"><span class="tn">4</span>Blocking findings</button>
-      <button class="tab" role="tab" data-tab="options" aria-selected="false"><span class="tn">5</span>Options</button>
+      <button class="tab" role="tab" data-tab="options" aria-selected="false"><span class="tn minor">5</span>Options</button>
       <button class="tab" role="tab" data-tab="market" aria-selected="false"><span class="tn">6</span>Where to start</button>
-      <button class="tab" role="tab" data-tab="customers" aria-selected="false"><span class="tn">7</span>Customers</button>
-      <button class="tab" role="tab" data-tab="compete" aria-selected="false"><span class="tn">8</span>Competition</button>
-      <button class="tab" role="tab" data-tab="chain" aria-selected="false"><span class="tn">9</span>Signal chain</button>
-      <button class="tab" role="tab" data-tab="prebid" aria-selected="false"><span class="tn">10</span>How it works in Prebid</button>
+      <button class="tab" role="tab" data-tab="customers" aria-selected="false"><span class="tn minor">7</span>Customers</button>
+      <button class="tab" role="tab" data-tab="compete" aria-selected="false"><span class="tn minor">8</span>Competition</button>
+      <button class="tab" role="tab" data-tab="chain" aria-selected="false"><span class="tn minor">9</span>Signal chain</button>
+      <button class="tab" role="tab" data-tab="prebid" aria-selected="false"><span class="tn minor">10</span>How it works in Prebid</button>
       <button class="tab" role="tab" data-tab="how" aria-selected="false"><span class="tn">11</span>What has to be true</button>
-      <button class="tab" role="tab" data-tab="trust" aria-selected="false"><span class="tn">12</span>Zero trust</button>
-      <button class="tab" role="tab" data-tab="revenue" aria-selected="false"><span class="tn">13</span>Revenue model</button>
-      <button class="tab" role="tab" data-tab="launch" aria-selected="false"><span class="tn">14</span>Launch notes</button>
+      <button class="tab" role="tab" data-tab="trust" aria-selected="false"><span class="tn minor">12</span>Zero trust</button>
+      <button class="tab" role="tab" data-tab="revenue" aria-selected="false"><span class="tn minor">13</span>Revenue model</button>
+      <button class="tab" role="tab" data-tab="launch" aria-selected="false"><span class="tn minor">14</span>Launch notes</button>
       <button class="tab" role="tab" data-tab="plan" aria-selected="false"><span class="tn">15</span>First 30 days and beyond</button>
-      <button class="tab" role="tab" data-tab="why" aria-selected="false"><span class="tn">16</span>Why me</button>
+      <button class="tab" role="tab" data-tab="why" aria-selected="false"><span class="tn minor">16</span>Why me</button>
     </nav>
   </div>
 </header>
 
 <main class="wrap">
+
+<!-- AGENDA -->
+<section class="tabpanel" id="tab-agenda" role="tabpanel" hidden>
+  <div class="card ag-hero">
+    <div class="eyebrow">Agenda · about 60 minutes</div>
+    <h1>Where I'd start, what has to be true, and what I'd do in the first 30 days</h1>
+    <ol class="ag-three">
+      <li><b>Fix Crumbs before selling anything.</b> Block identity, not auctions, so publishers stop losing revenue. Grow through routers and ISPs, because the panel is too small to measure today.</li>
+      <li><b>Sell measurement first, through companies advertisers already pay.</b> An iOS outcome panel and fraud flags licensed to MMPs, then curation as the main prize. Publishers and curators are the advocates.</li>
+      <li><b>Five numbers in 30 days decide whether it launches.</b> Publisher revenue gap, real user base, fingerprint coverage, reportable apps, and whether two MMPs would pay.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <div class="sec-head" style="margin-bottom:12px"><div><div class="label">The run</div><h3>Six tabs, in order, with a question for the room at each stop</h3></div><p>Times are a guide. Questions from the team take priority, and the router below jumps straight to the tab that answers them.</p></div>
+    <ol class="ag-run">
+      <li><span class="ag-t">5 min</span><div><b>Crumbs today</b><p>What exists, who uses it, and why router setup is the bottleneck.</p><p class="ag-q">Ask: how many opted-in users do we have by market, and where is the router work?</p></div><button type="button" class="goto" data-goto="today">Open</button></li>
+      <li><span class="ag-t">8 min</span><div><b>Live demo</b><p>Three steps from the demo script: today, the proposed policy, then the working Crumbs Prebid module.</p><p class="ag-q">Ask: is this what you expected the blocklist to do?</p></div><button type="button" class="goto" data-goto="demo" data-anchor="demo-script">Open</button></li>
+      <li><span class="ag-t">7 min</span><div><b>Blocking findings</b><p>Identity mostly reaches Google while independent auctions are cut. Block identity, not auctions.</p><p class="ag-q">Ask: is the blocklist a deliberate policy, or inherited from filter lists?</p></div><button type="button" class="goto" data-goto="findings">Open</button></li>
+      <li><span class="ag-t">12 min</span><div><b>Where to start</b><p>Your app-install guess is right on market but wrong on channel: sell through MMPs, then curation.</p><p class="ag-q">Ask: does selling through MMPs rather than to advertisers fit how you have been thinking about it?</p></div><button type="button" class="goto" data-goto="market">Open</button></li>
+      <li><span class="ag-t">13 min</span><div><b>What has to be true</b><p>Fingerprinting works, enough apps clear accuracy after privacy noise, and buyers trust the method.</p><p class="ag-q">Ask: how does the iOS app handle DNS today, as a settings provider or a local proxy?</p></div><button type="button" class="goto" data-goto="how">Open</button></li>
+      <li><span class="ag-t">10 min</span><div><b>First 30 days and beyond</b><p>Five measurements, four weeks, a go or no-go memo. Where we go from here.</p><p class="ag-q">Ask: what would you change, and who should I talk to first?</p></div><button type="button" class="goto" data-goto="plan">Open</button></li>
+    </ol>
+  </div>
+
+  <div>
+    <div class="sec-head"><div><div class="eyebrow">If they ask</div><h2>Question router</h2></div><p>The first six match how the team said it will assess the session. Each has a one-line answer and the tab that backs it up.</p></div>
+    <div class="ag-router">
+      <div class="ag-card"><span class="label">Product</span><p>iOS outcome panel and fraud flags first. Curation on opt-in interest groups is the main prize.</p><button type="button" class="linkish" data-goto="market">Where to start</button></div>
+      <div class="ag-card"><span class="label">Testing</span><p>Paired Crumbs-on and off measurement, a fingerprint lab, a privacy simulator and pre-registered lift tests.</p><button type="button" class="linkish" data-goto="how" data-anchor="sim">What has to be true</button></div>
+      <div class="ag-card"><span class="label">Metrics</span><p>To us: the five numbers. To others: published method, confidence intervals and pre-registered lift.</p><button type="button" class="linkish" data-goto="plan">First 30 days</button></div>
+      <div class="ag-card"><span class="label">Scale</span><p>Panel size caps everything, so routers and ISPs come first. Privacy hardware is phased in as volume grows.</p><button type="button" class="linkish" data-goto="trust">Zero trust</button></div>
+      <div class="ag-card"><span class="label">Distribution</span><p>Users through routers and ISPs. Buyers through MMPs, SSPs and curators. Publishers as advocates.</p><button type="button" class="linkish" data-goto="customers">Customers</button></div>
+      <div class="ag-card"><span class="label">Business model</span><p>Data licences and lift fees, a data fee of about 4% on curated media, and a revenue share to routers and ISPs.</p><button type="button" class="linkish" data-goto="revenue">Revenue model</button></div>
+      <div class="ag-card"><span class="label">Won't publishers hate this?</span><p>They lose most today. Fixing the policy turns them into the strongest advocates.</p><button type="button" class="linkish" data-goto="customers" data-anchor="advocates">Our advocates</button></div>
+      <div class="ag-card"><span class="label">How does it work in an auction?</span><p>A working Crumbs Prebid module removes user IDs and adds the group. A server-side option carries the group in the DNS answer.</p><button type="button" class="linkish" data-goto="prebid" data-anchor="pb-module">The Prebid module</button></div>
+      <div class="ag-card"><span class="label">Who else does this?</span><p>DNS blockers compete for users. Data providers, publisher platforms and telcos compete for curation budgets.</p><button type="button" class="linkish" data-goto="compete">Competition</button></div>
+      <div class="ag-card"><span class="label">What did you rule out?</span><p>29 options scored on three tests. Data for funds, conquesting and DNS ad replacement are out.</p><button type="button" class="linkish" data-goto="options">Options</button></div>
+      <div class="ag-card"><span class="label">How do fraud flags work?</span><p>Reported installs compared with real first opens. They catch fake installs, not stolen credit for real ones.</p><button type="button" class="linkish" data-goto="how">What has to be true</button></div>
+      <div class="ag-card"><span class="label">How does the signal flow end to end?</span><p>From an opted-in phone through the privacy engine to MMPs, curators and advertisers.</p><button type="button" class="linkish" data-goto="chain">Signal chain</button></div>
+      <div class="ag-card"><span class="label">What does launch look like?</span><p>A release note and go-to-market plan for each customer, written before we build.</p><button type="button" class="linkish" data-goto="launch">Launch notes</button></div>
+      <div class="ag-card"><span class="label">What's the strategy in one line?</span><p>Block tracking but not auctions, grow through routers, sell through measurement companies and curators.</p><button type="button" class="linkish" data-goto="thesis" data-anchor="strategy">Thesis</button></div>
+      <div class="ag-card"><span class="label">Where are you stuck?</span><p>The iOS DNS route, how a group reaches the page, and the real opt-in numbers.</p><button type="button" class="linkish" data-goto="thesis" data-anchor="questions-card">Questions for the team</button></div>
+      <div class="ag-card"><span class="label">Why you?</span><p>Board seats at Prebid, IAB Europe and the NAI, a career inside the auction, and a working builder's toolkit.</p><button type="button" class="linkish" data-goto="why">Why me</button></div>
+    </div>
+  </div>
+</section>
 
 <!-- THESIS -->
 <section class="tabpanel" id="tab-thesis" role="tabpanel">
@@ -1921,8 +1992,11 @@ hb_size   = "300x250"</code></pre>
 <section class="tabpanel" id="tab-why" role="tabpanel" hidden>
   <div class="card">
     <div class="eyebrow">Why me</div>
-    <h1>I've spent my career on the seam this role sits on</h1>
-    <p class="lede">Crumbs sits between the auction, the privacy rules around it, and the standards that let publishers and advertisers trust both. That is where I've worked: inside the auction at AppNexus and Xandr, on privacy-preserving ad selection at Microsoft Advertising, and in the standards bodies where Prebid, IAB Europe and the NAI decide what the industry will accept.</p>
+    <h1>I already sit in the rooms this plan needs to win</h1>
+    <p class="lede">Almost every step of this plan needs another company to say yes: Prebid to accept a module, publishers to advocate, SSPs and curators to carry a signal, and the privacy community to trust the design. I sit on the boards of Prebid, IAB Europe and the NAI, co-lead Prebid's LLM and Publisher Monetization Task Force, and work in IAB Tech Lab and the W3C. I have spent my career inside the auction at AppNexus, Xandr and Microsoft Advertising, so the SSPs, DSPs and publishers on these pages are people I already work with.</p>
+    <div class="ag-badges">
+      <span>Board · Prebid</span><span>Board · IAB Europe</span><span>Board · NAI</span><span>Co-lead · Prebid LLM and Publisher Monetization Task Force</span><span>IAB Tech Lab</span><span>W3C</span><span>AppNexus · Xandr · Microsoft Advertising</span>
+    </div>
     <div class="byline">Paul Farrow · Principal Product Manager, Microsoft Advertising</div>
   </div>
 
@@ -1932,8 +2006,20 @@ hb_size   = "300x250"</code></pre>
       <div class="move"><span class="n">A coherent plan</span><h3>Fix, measure, prove, target</h3><p>Each move pays for the next, and each has a kill criterion, so we learn cheaply if the thesis is wrong. The plan also says what we refuse to build.</p><button type="button" class="ph linkish" data-goto="thesis">See the thesis</button></div>
       <div class="move"><span class="n">Ads knowledge</span><h3>From inside the auction</h3><p>I've worked in programmatic from AppNexus, through Xandr, to Microsoft. That is why the findings separate an ID sync from a bid: they look alike in a DNS log and mean very different things to a publisher's revenue.</p><button type="button" class="ph linkish" data-goto="findings">See the blocking findings</button></div>
       <div class="move"><span class="n">A builder</span><h3>Instruments, not slides</h3><p>I ran the 30-site measurement, the router test and the simulator myself, using AI for drafting and code and my own judgement for the method. I'd build the fingerprint lab the same way in week two.</p><button type="button" class="ph linkish" data-goto="how" data-anchor="sim">See the simulator</button></div>
-      <div class="move"><span class="n">Getting it done</span><h3>Already in the rooms</h3><p>Most of this plan needs other companies to say yes: Prebid, publishers, MMPs, ISPs. I already sit in several of those rooms, which shortens the path from idea to adoption.</p><button type="button" class="ph linkish" data-goto="plan">See the roadmap</button></div>
+      <div class="move"><span class="n">Getting it done</span><h3>Already in the rooms</h3><p>Three board seats and a Prebid task force mean the conversations this plan depends on start in week one, not after months of introductions.</p><button type="button" class="ph linkish" data-goto="plan">See the roadmap</button></div>
     </div>
+  </div>
+
+  <div class="card">
+    <div class="sec-head" style="margin-bottom:12px"><div><div class="label">Industry network</div><h3>Who I can bring into the room, for each part of the plan</h3></div><p>These are the forums where the plan's hardest yeses are decided.</p></div>
+    <div class="tablewrap"><table class="opts" style="min-width:760px"><thead><tr><th>The plan needs</th><th>The room</th><th>My role there</th><th>What it unlocks for Crumbs</th></tr></thead><tbody>
+      <tr><td><b>Crumbs mode in Prebid</b></td><td>Prebid.org</td><td>Board member, and co-lead of the LLM and Publisher Monetization Task Force</td><td>A route to propose the module and the activity-control defaults, with the people who maintain Prebid.js and Prebid Server</td></tr>
+      <tr><td><b>Publishers as advocates</b></td><td>IAB Europe, and European publisher supply work at Microsoft</td><td>Board member; supply-side publisher strategy on the Publisher Content Marketplace</td><td>Introductions to the UK and European publishers who would co-publish the measurement</td></tr>
+      <tr><td><b>A neutral, trusted policy</b></td><td>NAI</td><td>Board member</td><td>Credibility for a published blocking policy and privacy design, and early review from the self-regulatory community</td></tr>
+      <tr><td><b>A standard way to carry the group</b></td><td>IAB Tech Lab and W3C</td><td>Active in working groups, including privacy-preserving ad selection</td><td>Groups carried in standard OpenRTB fields and taxonomies, so every SSP and DSP can read them</td></tr>
+      <tr><td><b>SSPs, curators and DSPs</b></td><td>AppNexus, Xandr and Microsoft Advertising</td><td>Years building on both sides of the auction</td><td>Direct relationships with the companies that would carry Crumbs groups and buy Crumbs deals</td></tr>
+    </tbody></table></div>
+    <p class="note">The roles are mine. Any introduction made for eyeo would be agreed with each organisation first.</p>
   </div>
 
   <div class="card">
@@ -2071,7 +2157,7 @@ function sceneSvg(i){
 })();
 
 /* ===== Tabs ===== */
-const TABS=["thesis","demo","revenue","customers","launch","today","findings","chain","how","prebid","market","compete","options","trust","plan","why"];
+const TABS=["agenda","thesis","demo","revenue","customers","launch","today","findings","chain","how","prebid","market","compete","options","trust","plan","why"];
 document.addEventListener("click",e=>{const g=e.target.closest("[data-goto]"); if(!g) return; showTab(g.dataset.goto,true); const an=g.dataset.anchor && document.getElementById(g.dataset.anchor); if(an) requestAnimationFrame(()=>an.scrollIntoView({block:"start"}));});
 let activeTab="thesis";
 function showTab(t,push){
@@ -2802,6 +2888,7 @@ function demoInit(){
   }).catch(()=>{});
 }
 
+
 document.addEventListener("click",e=>{
   const c=e.target.closest("#demo-close"), h=e.target.closest("#demo-hide");
   const msg=document.getElementById("demo-msg");
@@ -2817,16 +2904,14 @@ document.addEventListener("click",e=>{
   }
 });
 
-/* ===== Presentation path: next buttons ===== */
+/* ===== Presentation path: follow the agenda run ===== */
 (function nextLinks(){
-  const PATH=[["today", "Crumbs today"], ["thesis", "Thesis"], ["demo", "Live demo"], ["findings", "Blocking findings"], ["options", "Options"], ["market", "Where to start"], ["customers", "Customers"], ["compete", "Competition"], ["chain", "Signal chain"], ["prebid", "How it works in Prebid"], ["how", "What has to be true"], ["trust", "Zero trust"], ["revenue", "Revenue model"], ["launch", "Launch notes"], ["plan", "First 30 days and beyond"], ["why", "Why me"]];
-  PATH.forEach(([k],i)=>{
-    const panel=document.getElementById("tab-"+k); if(!panel) return;
-    const nxt=PATH[i+1];
-    const w=document.createElement("div"); w.className="next-wrap";
-    w.innerHTML = nxt ? `<button type="button" class="next-btn" data-goto="${nxt[0]}">Next: ${i+2}. ${nxt[1]} →</button>` : `<button type="button" class="next-btn" data-goto="thesis" data-anchor="questions-card">Back to the questions for the team</button>`;
-    panel.appendChild(w);
-  });
+  const RUN=[["today","Crumbs today"],["demo","Live demo"],["findings","Blocking findings"],["market","Where to start"],["how","What has to be true"],["plan","First 30 days and beyond"]];
+  const add=(k,html)=>{ const p=document.getElementById("tab-"+k); if(!p) return; const w=document.createElement("div"); w.className="next-wrap"; w.innerHTML=html; p.appendChild(w); };
+  add("agenda",`<button type="button" class="next-btn" data-goto="today">Start: 1. Crumbs today →</button>`);
+  RUN.forEach(([k],i)=>{ const n=RUN[i+1];
+    add(k, n ? `<button type="button" class="next-btn" data-goto="${n[0]}">Next on the agenda: ${n[1]} →</button>` : `<button type="button" class="next-btn" data-goto="agenda">Back to the agenda</button>`); });
+  TABS.filter(k=>k!=="agenda" && !RUN.some(r=>r[0]===k)).forEach(k=>add(k,`<button type="button" class="next-btn" data-goto="agenda" style="background:var(--surface);color:var(--ink)">Back to the agenda</button>`));
 })();
 
 /* ===== Zero trust layers ===== */
@@ -2883,7 +2968,7 @@ document.getElementById("layers").innerHTML=LAYERS.map(l=>`<div class="layer d${
 
 /* ===== Boot ===== */
 const initial=location.hash.slice(1);
-showTab(TABS.includes(initial)?initial:"today",false);
+showTab(TABS.includes(initial)?initial:"agenda",false);
 if(document.fonts && document.fonts.ready) document.fonts.ready.then(()=>{ if(activeTab==="chain") layout(); if(activeTab==="market") drawTreemaps(); });
 </script>
 
