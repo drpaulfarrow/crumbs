@@ -705,23 +705,22 @@ a.goto{text-decoration:none;text-align:center;display:inline-block}
       <div><b>Crumbs Outcomes</b></div>
     </div>
     <nav class="tabs" role="tablist" aria-label="Sections">
-      <button class="tab" role="tab" data-tab="thesis" aria-selected="true"><span class="tn">1</span>Thesis</button>
-      <button class="tab" role="tab" data-tab="today" aria-selected="false"><span class="tn">2</span>Crumbs today</button>
-      <button class="tab" role="tab" data-tab="findings" aria-selected="false"><span class="tn">3</span>Blocking findings</button>
-      <button class="tab" role="tab" data-tab="demo" aria-selected="false"><span class="tn">4</span>Live demo</button>
-      <button class="tab" role="tab" data-tab="customers" aria-selected="false"><span class="tn">5</span>Customers</button>
+      <button class="tab" role="tab" data-tab="today" aria-selected="true"><span class="tn">1</span>Crumbs today</button>
+      <button class="tab" role="tab" data-tab="thesis" aria-selected="false"><span class="tn">2</span>Thesis</button>
+      <button class="tab" role="tab" data-tab="demo" aria-selected="false"><span class="tn">3</span>Live demo</button>
+      <button class="tab" role="tab" data-tab="findings" aria-selected="false"><span class="tn">4</span>Blocking findings</button>
+      <button class="tab" role="tab" data-tab="options" aria-selected="false"><span class="tn">5</span>Options</button>
       <button class="tab" role="tab" data-tab="market" aria-selected="false"><span class="tn">6</span>Where to start</button>
-      <button class="tab" role="tab" data-tab="revenue" aria-selected="false"><span class="tn">7</span>Revenue model</button>
-      <button class="tab" role="tab" data-tab="prebid" aria-selected="false"><span class="tn">8</span>How it works in Prebid</button>
-      <button class="tab" role="tab" data-tab="how" aria-selected="false"><span class="tn">9</span>What has to be true</button>
-      <button class="tab" role="tab" data-tab="plan" aria-selected="false"><span class="tn">10</span>First 30 days and beyond</button>
-      <span class="tab-div" aria-hidden="true">Appendix</span>
-      <button class="tab app-tab" role="tab" data-tab="chain" aria-selected="false">Signal chain</button>
-      <button class="tab app-tab" role="tab" data-tab="launch" aria-selected="false">Launch notes</button>
-      <button class="tab app-tab" role="tab" data-tab="compete" aria-selected="false">Competition</button>
-      <button class="tab app-tab" role="tab" data-tab="options" aria-selected="false">Options</button>
-      <button class="tab app-tab" role="tab" data-tab="trust" aria-selected="false">Zero trust</button>
-      <button class="tab app-tab" role="tab" data-tab="why" aria-selected="false">Why me</button>
+      <button class="tab" role="tab" data-tab="customers" aria-selected="false"><span class="tn">7</span>Customers</button>
+      <button class="tab" role="tab" data-tab="compete" aria-selected="false"><span class="tn">8</span>Competition</button>
+      <button class="tab" role="tab" data-tab="chain" aria-selected="false"><span class="tn">9</span>Signal chain</button>
+      <button class="tab" role="tab" data-tab="prebid" aria-selected="false"><span class="tn">10</span>How it works in Prebid</button>
+      <button class="tab" role="tab" data-tab="how" aria-selected="false"><span class="tn">11</span>What has to be true</button>
+      <button class="tab" role="tab" data-tab="trust" aria-selected="false"><span class="tn">12</span>Zero trust</button>
+      <button class="tab" role="tab" data-tab="revenue" aria-selected="false"><span class="tn">13</span>Revenue model</button>
+      <button class="tab" role="tab" data-tab="launch" aria-selected="false"><span class="tn">14</span>Launch notes</button>
+      <button class="tab" role="tab" data-tab="plan" aria-selected="false"><span class="tn">15</span>First 30 days and beyond</button>
+      <button class="tab" role="tab" data-tab="why" aria-selected="false"><span class="tn">16</span>Why me</button>
     </nav>
   </div>
 </header>
@@ -849,7 +848,7 @@ a.goto{text-decoration:none;text-align:center;display:inline-block}
       <li>How do we think about neutrality between Google and independent ad tech companies?</li>
       <li>What is the route for getting an interest-group signal into the auction, and is DNS meant to enforce privacy long-term or mainly to distribute Crumbs?</li>
       <li>How many opted-in iOS users do we have today, by market? This number changes every sizing estimate by a factor of two or more.</li>
-      <li>What is the status of the router work, and could Whalebone's ISP customers become a distribution route?</li>
+      <li>What is the status of the router work, and which router makers or ISPs is eyeo already talking to?</li>
       <li>Would eyeo want the protection service itself to run on attested hardware, as well as the ad products?</li>
       <li>Where do we draw the line on inventory labels and on install suppression?</li>
       <li>Does the brief deliberately exclude the desktop extension? It sees more of the web than DNS does.</li>
@@ -883,9 +882,27 @@ a.goto{text-decoration:none;text-align:center;display:inline-block}
       <div><span class="n">Step 3</span><b>Prebid compared</b><p>Every two seconds the panel reads each window's Prebid results: bidders asked, bids received and the top bid per slot.</p></div>
       <div><span class="n">Step 4</span><b>Test page</b><p>A test publisher page runs a real Prebid auction and also works from the Android emulator running the Crumbs app.</p></div>
     </div>
-    <p class="note">Source code: <a href="https://github.com/drpaulfarrow/crumbs" target="_blank" rel="noopener">github.com/drpaulfarrow/crumbs</a></p>
-  </div>
+    <div class="card" id="run-it" style="margin-top:14px">
+      <div class="sec-head" style="margin-bottom:10px"><div><div class="label">Run it yourself</div><h3>Clone the repo and reproduce the findings on your own machine</h3></div><p>Everything on the Blocking findings tab came from this code. Running it is the quickest way to check the numbers.</p></div>
+      <p style="margin:0 0 12px"><a href="https://github.com/drpaulfarrow/crumbs" target="_blank" rel="noopener"><b>github.com/drpaulfarrow/crumbs</b></a></p>
+      <div class="grid2">
+        <div class="code-card"><span class="label">Windows: set up once, then start</span><pre><code>git clone https://github.com/drpaulfarrow/crumbs
+cd crumbs
+powershell -ExecutionPolicy Bypass -File scripts\windows\setup.ps1
 
+scripts\windows\start-demo.ps1              # real sites
+scripts\windows\start-demo.ps1 -Page test   # Prebid test page
+scripts\windows\start-demo.ps1 -Local       # local EasyPrivacy list</code></pre></div>
+        <div class="code-card"><span class="label">macOS or Linux: development mode</span><pre><code>git clone https://github.com/drpaulfarrow/crumbs
+cd crumbs
+pip install -r requirements-dev.txt
+python -m pytest -q tests
+python -m crumbs_demo run --no-dns --crumbs-resolver local</code></pre>
+        <p class="note">Development mode skips the DNS port that needs admin rights and uses a local blocklist rather than eyeo's resolver.</p></div>
+      </div>
+      <p class="note">Needs Python 3.10 or later and Chrome or Edge. The control panel opens at <code>http://127.0.0.1:5380/</code>, and this site is served from it at <code>/case-study</code>. Admin rights are only needed for the optional whole-PC test, and Android Studio only for the emulator test.</p>
+    </div>
+  </div>
   <div class="card" id="demo-script" style="margin-top:16px">
     <div class="label">Demo script</div>
     <h3>Three steps, about five minutes</h3>
@@ -927,7 +944,7 @@ a.goto{text-decoration:none;text-align:center;display:inline-block}
           <div><dt>Why they choose us</dt><dd>A security feature their customers want, which earns a revenue share instead of only costing money.</dd></div>
           <div><dt>What they give</dt><dd>One-click or default Crumbs on their routers, mesh systems and ISP gateways.</dd></div>
           <div><dt>What they get back</dt><dd>A share of measurement and curation revenue from the households they bring, and a consumer privacy brand.</dd></div>
-          <div><dt>First move</dt><dd>One mesh maker such as eero or TP-Link, one UK ISP, and Whalebone's ISP customers.</dd></div>
+          <div><dt>First move</dt><dd>One mesh maker such as eero or TP-Link, and one UK ISP.</dd></div>
           <div><dt>Measure</dt><dd>Households switchable, households live, partner revenue share paid.</dd></div>
         </dl>
       </article>
@@ -936,7 +953,7 @@ a.goto{text-decoration:none;text-align:center;display:inline-block}
         <h3>Tech providers</h3>
         <p class="cust-lede">The paying customer at launch. They already sell to advertisers, so eyeo does not need its own advertiser sales team.</p>
         <dl>
-          <div><dt>Who</dt><dd>MMPs, verification and incrementality vendors first. SSPs, curators and DSPs once targeting arrives. Whalebone as the infrastructure partner.</dd></div>
+          <div><dt>Who</dt><dd>MMPs, verification and incrementality vendors first. SSPs, curators and DSPs once targeting arrives.</dd></div>
           <div><dt>Why they choose us</dt><dd>Independent iOS outcome data where they have relied on modelling since ATT, plus fraud flags and neutral lift reads.</dd></div>
           <div><dt>What they pay</dt><dd>Data licences, per-study fees, and a share of curated media.</dd></div>
           <div><dt>First move</dt><dd>Two MMP conversations, one incrementality vendor, one SSP curator.</dd></div>
@@ -1057,7 +1074,7 @@ a.goto{text-decoration:none;text-align:center;display:inline-block}
       <li>Perform Digital, citing Jounce Media's analysis of 1.5 billion bid requests: 73% multi-seller curated deals, 18.6% open auction. <a href="https://perform.digital/blogs/programmatic-curation/">perform.digital</a></li>
       <li>UK Competition and Markets Authority case page: investigation into Google's Privacy Sandbox browser changes, including commitments accepted from Google. <a href="https://www.gov.uk/cma-cases/investigation-into-googles-privacy-sandbox-browser-changes">gov.uk</a></li>
       <li>Publisher revenue gap, blocked auctions and Ozone as the Guardian's top bidder: see the Blocking findings tab.</li>
-      <li>Router and ISP reach, and Whalebone's role: see the Crumbs today tab.</li>
+      <li>Router and ISP reach: see the Crumbs today tab.</li>
       <li>The characterisation of where Privacy Sandbox opposition came from is the author's view from industry standards work.</li>
     </ol>
   </div>
@@ -1099,10 +1116,10 @@ a.goto{text-decoration:none;text-align:center;display:inline-block}
       <p class="pm">This matters most for the plan, because partnerships are the only route to a household panel at scale.</p>
     </div>
     <div class="prod">
-      <div class="prod-top"><span class="pi" data-ic="server"></span><span class="status live">Confirmed</span></div>
+      <div class="prod-top"><span class="pi" data-ic="server"></span><span class="status open">To confirm</span></div>
       <h3>Resolver infrastructure</h3>
-      <p>crumbs.com says Crumbs is built with Whalebone's DNS services. Whalebone also runs the resolver layer behind the Adblock Plus iOS app, while eyeo controls the blocking policy. crumbs.com also states ISO 27001:2022 certification.</p>
-      <p class="pm">This affects the privacy claims, because logging and any move to attested hardware need Whalebone's involvement. It also gives Crumbs a route to Whalebone's ISP customers.</p>
+      <p>Crumbs answers lookups from its own DNS servers, and eyeo sets the blocking policy. crumbs.com states ISO 27001:2022 certification.</p>
+      <p class="pm">Who operates the resolver, and how it logs, affects every privacy claim and any move to attested hardware. This is a week-one question.</p>
     </div>
   </div>
   <div class="card">
@@ -1129,7 +1146,7 @@ a.goto{text-decoration:none;text-align:center;display:inline-block}
     <div class="eyebrow">Day one priority</div>
     <h2>Router and ISP partnerships should make Crumbs a one-click setup</h2>
     <p class="lede" style="font-size:16px;max-width:none">The household panel, CTV measurement and any scale in the ad products all depend on routers. Self-setup will not reach enough homes, so partnerships need to start immediately rather than in a later phase.</p>
-    <div class="routes">
+    <div class="routes" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
       <div class="route">
         <span class="pi" data-ic="network"></span>
         <h3>ISPs</h3>
@@ -1142,12 +1159,6 @@ a.goto{text-decoration:none;text-align:center;display:inline-block}
         <p>People who buy their own router or mesh system can turn Crumbs on in the maker's app with one tap. In the US, eero, TP-Link and Netgear each account for about 10% of routers in Ookla's speed-test data.</p>
         <p class="how">Route: a Crumbs option inside the eero, TP-Link Deco, Netgear or Asus app. This also reaches households whose ISP router is locked, because the mesh system becomes the router.</p>
       </div>
-      <div class="route">
-        <span class="pi" data-ic="server"></span>
-        <h3>DNS platform partners</h3>
-        <p>Crumbs is built on Whalebone's DNS services, according to crumbs.com. Whalebone also sells DNS security services to ISPs.</p>
-        <p class="how">Route: offer Crumbs to Whalebone's ISP customers as an option. This needs a commercial conversation with Whalebone.</p>
-      </div>
     </div>
     <p class="note">ISP gateways are mostly built by manufacturers such as Arcadyan, Askey, Sagemcom, Calix and Arris, but the ISP decides what runs on them. For ISP routers, the ISP is the partner to approach.</p>
   </div>
@@ -1158,9 +1169,8 @@ a.goto{text-decoration:none;text-align:center;display:inline-block}
       <li>Observed blocking by company, from the Guardian, Daily Mail, test page and 30-site runs. <a href="https://github.com/drpaulfarrow/crumbs/blob/ccr-dd01651e-w1d70v/research/crumbs_blocking_observed.md">crumbs_blocking_observed.md</a></li>
       <li>Review of the net effect against Crumbs' goals. <a href="https://github.com/drpaulfarrow/crumbs/blob/ccr-dd01651e-w1d70v/research/crumbs_blocking_review.md">crumbs_blocking_review.md</a></li>
       <li>AppGoblin listing for Crumbs: DNS Privacy, with release date and modelled install and user estimates. <a href="https://appgoblin.info/apps/6771163116">appgoblin.info</a></li>
-      <li>Whalebone: eyeo selected Whalebone to run the DNS resolver layer for the Adblock Plus iOS app, December 2025. <a href="https://www.whalebone.io/post/whalebone-now-powers-dns-infrastructure-behind-adblock-plus">whalebone.io</a></li>
       <li>Crumbs website router setup page, including encrypted DNS (DoH) for modern routers. Reported by the author.</li>
-      <li>crumbs.com homepage, captured October 2026: built with Whalebone DNS services, ISO 27001:2022, App Store and Google Play links, and the list of trackers Crumbs blocks. <a href="https://crumbs.com/">crumbs.com</a></li>
+      <li>crumbs.com homepage, captured October 2026: ISO 27001:2022, App Store and Google Play links, and the list of trackers Crumbs blocks. <a href="https://crumbs.com/">crumbs.com</a></li>
       <li>Router setup test on a Sky hub and TP-Link Deco X20, October 2026. Carried out by the author.</li>
       <li>Sky Community forum: Sky hubs do not permit manual DNS selection. <a href="https://helpforum.sky.com/t5/Broadband/Change-my-DNS/m-p/4974824">helpforum.sky.com</a></li>
       <li>Broadband Switch, UK broadband market share reference, June 2026: BT Group about 8.8 million, Sky about 6.7 million, Virgin Media O2 5.69 million customers. <a href="https://broadbandswitch.uk/reports/uk-broadband-market-share/">broadbandswitch.uk</a></li>
@@ -1262,9 +1272,8 @@ a.goto{text-decoration:none;text-align:center;display:inline-block}
       <li>Observed blocking by company, from the Guardian, Daily Mail, test page and 30-site runs. <a href="https://github.com/drpaulfarrow/crumbs/blob/ccr-dd01651e-w1d70v/research/crumbs_blocking_observed.md">crumbs_blocking_observed.md</a></li>
       <li>Review of the net effect against Crumbs' goals. <a href="https://github.com/drpaulfarrow/crumbs/blob/ccr-dd01651e-w1d70v/research/crumbs_blocking_review.md">crumbs_blocking_review.md</a></li>
       <li>AppGoblin listing for Crumbs: DNS Privacy, with release date and modelled install and user estimates. <a href="https://appgoblin.info/apps/6771163116">appgoblin.info</a></li>
-      <li>Whalebone: eyeo selected Whalebone to run the DNS resolver layer for the Adblock Plus iOS app, December 2025. <a href="https://www.whalebone.io/post/whalebone-now-powers-dns-infrastructure-behind-adblock-plus">whalebone.io</a></li>
       <li>Crumbs website router setup page, including encrypted DNS (DoH) for modern routers. Reported by the author.</li>
-      <li>crumbs.com homepage, captured October 2026: built with Whalebone DNS services, ISO 27001:2022, App Store and Google Play links, and the list of trackers Crumbs blocks. <a href="https://crumbs.com/">crumbs.com</a></li>
+      <li>crumbs.com homepage, captured October 2026: ISO 27001:2022, App Store and Google Play links, and the list of trackers Crumbs blocks. <a href="https://crumbs.com/">crumbs.com</a></li>
       <li>Router setup test on a Sky hub and TP-Link Deco X20, October 2026. Carried out by the author.</li>
       <li>Sky Community forum: Sky hubs do not permit manual DNS selection. <a href="https://helpforum.sky.com/t5/Broadband/Change-my-DNS/m-p/4974824">helpforum.sky.com</a></li>
       <li>Broadband Switch, UK broadband market share reference, June 2026: BT Group about 8.8 million, Sky about 6.7 million, Virgin Media O2 5.69 million customers. <a href="https://broadbandswitch.uk/reports/uk-broadband-market-share/">broadbandswitch.uk</a></li>
@@ -1763,14 +1772,14 @@ hb_size   = "300x250"</code></pre>
 <!-- COMPETITION -->
 <section class="tabpanel" id="tab-compete" role="tabpanel" hidden>
   <div class="sec-head">
-    <div><div class="eyebrow">Competition</div><h2>Crumbs competes with free DNS blockers today, and could compete on measurement later</h2></div>
-    <p>Most competitors either block tracking or sell measurement. Few do both, and none we found combine DNS-level outcome data with partner distribution and a published privacy design.</p>
+    <div><div class="eyebrow">Competition</div><h2>Crumbs competes with DNS blockers for users, and with data providers for curation and measurement budgets</h2></div>
+    <p>On the user side, the rivals are free and paid DNS blockers. On the revenue side, the rivals are the companies already selling audience data into curated deals: identity graphs, publisher data platforms, contextual vendors and telcos. None we found combine opt-in, network-level outcome data with a published privacy design.</p>
   </div>
 
   <div class="card">
     <div class="sec-head" style="margin-bottom:12px"><div><div class="label">Positioning</div><h3>Where competitors sit</h3></div><p>The horizontal axis shows what a company sells. The vertical axis shows how it reaches users. Placements are our judgement, not measured values.</p></div>
     <div class="posmap" id="posMap" role="img" aria-label="Positioning map of Crumbs and competitors"></div>
-    <p class="note">MMPs and incrementality vendors are not on the map. They reach advertisers rather than users, and they are more likely to be Crumbs' customers than its competitors.</p>
+    <p class="note">Data providers, publisher data platforms and contextual vendors are not on the map because they do not reach users directly, but they compete for the same curation budgets. They are in the table below. MMPs and incrementality vendors are left off because they are more likely to be Crumbs' customers.</p>
   </div>
 
   <div class="tablewrap"><table class="opts comp" style="min-width:900px"><thead><tr><th>Group</th><th>Examples</th><th>What they offer</th><th>Relationship to Crumbs</th><th>How Crumbs differs</th></tr></thead><tbody id="compBody"></tbody></table></div>
@@ -1793,7 +1802,12 @@ hb_size   = "300x250"</code></pre>
       <li>Sensor Tower press release, March 2024: acquisition of data.ai; its products are powered by first-party panel data. <a href="https://sensortower.com/press/press-release-sensor-tower-acquires-market-intelligence-platform-data-ai">sensortower.com</a></li>
       <li>SimeonOnSecurity, 2026 comparison of NextDNS, AdGuard DNS, Quad9 and Cloudflare DNS. <a href="https://simeononsecurity.com/articles/dns-comparison-adguard-quad9-cloudflare-pi-hole/">simeononsecurity.com</a></li>
       <li>Infoblox: DNS-based value-added services for ISPs, including parental controls and ad blocking. <a href="https://www.infoblox.com/?p=3342">infoblox.com</a></li>
-      <li>Whalebone: DNS infrastructure behind Adblock Plus, December 2025. <a href="https://www.whalebone.io/post/whalebone-now-powers-dns-infrastructure-behind-adblock-plus">whalebone.io</a></li>
+      <li>Marketing Dive, July 2022: T-Mobile App Insights targets groups by which apps people download and how they use them; Android only, aggregated into personas. <a href="https://www.marketingdive.com/news/t-mobile-ad-business-mobile-app-insights-targeting/627667/">marketingdive.com</a></li>
+      <li>Android Central, June 2022: T-Mobile app usage data is used for advertising unless subscribers opt out. <a href="https://androidcentral.com/phones/carriers/t-mobile-sells-your-app-usage-data-to-advertisers-unless-you-opt-out-now">androidcentral.com</a></li>
+      <li>AdExchanger, September 2026: Permutive connects publishers to TransUnion's graph for sell-side curation; bid requests without an ID signal net 41% lower CPMs, per Permutive. <a href="https://www.adexchanger.com/technology/can-sell-side-curation-solve-the-cookieless-audience-problem-for-advertisers/">adexchanger.com</a></li>
+      <li>Viant press release: contextual targeting with Peer39 data. <a href="https://www.viantinc.com/press-releases/viant-enhances-contextual-targeting-capabilities-with-peer39-partnership/">viantinc.com</a></li>
+      <li>LiveRamp partner directory: Lotame as a data partner. <a href="https://partner-directory.liveramp.com/partners/lotame">liveramp.com</a></li>
+      <li>Data brokers and measurement tags Crumbs blocks today, including LiveRamp, Lotame, Eyeota, ID5 and Comscore: see the Blocking findings tab.</li>
       <li>Bitdefender white paper on prpl app deployment on ISP gateways. <a href="https://www.bitdefender.com/en-us/partners/subscriber-protection-platform/resources/files/smart-home-security-at-scale-using-prpl.pdf">bitdefender.com</a></li>
       <li>AppsFlyer revenue, market sizes and Crumbs install estimates: see the Market sizing and Crumbs today tabs.</li>
     </ol>
@@ -1873,7 +1887,7 @@ hb_size   = "300x250"</code></pre>
   </div>
   <div class="weeks">
     <div class="week"><span class="w">Week 1</span><h3>Establish the facts</h3><ul><li>Paired Crumbs-on and Crumbs-off measurement across 30 publisher sites, logging hostnames</li><li>User and opt-in counts by market, and the status of the router work</li><li>Router setup test on the main UK ISP hubs: BT, Sky, Virgin Media, TalkTalk</li><li>Visibility audit on test devices: Safari relay, Firefox, apps with their own DoH</li><li>Draft the one-page published design</li></ul></div>
-    <div class="week"><span class="w">Week 2</span><h3>Build</h3><ul><li>Draft the block-identity policy and test sending ib.adnxs.com to Xandr's cookieless endpoint</li><li>Fingerprint lab: top 200 iOS apps through install, open, background and idle</li><li>Privacy and accuracy simulator on synthetic data sized to the real base</li><li>Ask Whalebone about logging, retention and confidential computing options</li></ul></div>
+    <div class="week"><span class="w">Week 2</span><h3>Build</h3><ul><li>Draft the block-identity policy and test sending ib.adnxs.com to Xandr's cookieless endpoint</li><li>Fingerprint lab: top 200 iOS apps through install, open, background and idle</li><li>Privacy and accuracy simulator on synthetic data sized to the real base</li><li>Confirm who operates the resolver, and its logging, retention and confidential computing options</li></ul></div>
     <div class="week"><span class="w">Week 3</span><h3>Test demand</h3><ul><li>Two publisher conversations, starting with UK news publishers, about advocating for Crumbs</li><li>Router conversations with one mesh maker, such as eero or TP-Link, and one UK ISP, about one-click setup</li><li>Two MMP conversations, one incrementality vendor, one SSP curator</li><li>Inventory propensity test against a contextual baseline</li><li>Red-team the design: differencing, probing, collusion</li></ul></div>
     <div class="week"><span class="w">Week 4</span><h3>Decide</h3><ul><li>Go or no-go memo based on the five measurements</li><li>Publish the policy draft with publisher feedback</li><li>Pilot terms with one MMP</li><li>Opt-in experiment plan to test value-exchange variants</li></ul></div>
   </div>
@@ -1922,8 +1936,8 @@ hb_size   = "300x250"</code></pre>
       <tr><td><b>The privacy design</b></td><td>Work on the Ad Selection API and Privacy Sandbox, and in W3C and IAB Tech Lab. Secure hardware, k-anonymity and attestation are the same building blocks this plan uses.</td><td class="c"><span class="pip p2" role="img" aria-label="Strong"></span></td></tr>
       <tr><td><b>The outcome panel and lift readouts</b></td><td>A PhD in Neuroscience from Bristol. Experimental design, noisy measurement and fixing the analysis before seeing the data are the core of a credible lift test.</td><td class="c"><span class="pip p2" role="img" aria-label="Strong"></span></td></tr>
       <tr><td><b>Selling data to MMPs</b></td><td>I know where MMPs sit in the stack, but I haven't sold a data product to them. I'd pair early with eyeo's partnerships team.</td><td class="c"><span class="pip p1" role="img" aria-label="Partial"></span></td></tr>
-      <tr><td><b>ISP and router partnerships</b></td><td>New ground beyond the router test on this site. Whalebone's ISP relationships and eyeo's business development team would lead, with me owning the product case.</td><td class="c"><span class="pip" role="img" aria-label="Gap"></span></td></tr>
-      <tr><td><b>DNS resolver operations</b></td><td>Whalebone runs the resolver. Anything touching logging or attested hardware needs their engineers in the room from the start.</td><td class="c"><span class="pip" role="img" aria-label="Gap"></span></td></tr>
+      <tr><td><b>ISP and router partnerships</b></td><td>New ground beyond the router test on this site. eyeo's business development team would lead, with me owning the product case.</td><td class="c"><span class="pip" role="img" aria-label="Gap"></span></td></tr>
+      <tr><td><b>DNS resolver operations</b></td><td>I haven't run DNS infrastructure. Anything touching logging or attested hardware needs the resolver's engineers in the room from the start.</td><td class="c"><span class="pip" role="img" aria-label="Gap"></span></td></tr>
     </tbody></table></div>
     <div class="key" style="margin-top:12px"><span><i class="pip p2"></i>Strong</span><span><i class="pip p1"></i>Partial</span><span><i class="pip"></i>Gap, with a partner to lead</span></div>
   </div>
@@ -2088,7 +2102,7 @@ const NODES = [
    gives:"Encrypted, capped event contributions", gets:"Fingerprint updates and privacy-budget rules", guarantee:"Raw lookups never leave the device.",
    comps:[["One-click router setup through partners",0],["On-device app detection",0],["Local seen-before memory",0],["On-device deal matching",1],["Router household view",3]]},
   {name:"Relay and resolver", sub:"Blocks identity, allows auctions", from:0, kicker:"The resolver blocks tracking domains and, in later phases, proves it keeps no logs.",
-   who:[{i:"server",c:"var(--ink)",label:"Crumbs resolver",sub:"Built on Whalebone; eyeo sets the policy",from:0},{i:"relay",c:"var(--muted)",label:"Independent relay operator",sub:"A CDN or non-profit strips IP addresses",from:3},{i:"shield",c:"var(--signal)",label:"Independent auditors",sub:"Check attestations and the transparency log",from:2}],
+   who:[{i:"server",c:"var(--ink)",label:"Crumbs resolver",sub:"eyeo sets the policy",from:0},{i:"relay",c:"var(--muted)",label:"Independent relay operator",sub:"A CDN or non-profit strips IP addresses",from:3},{i:"shield",c:"var(--signal)",label:"Independent auditors",sub:"Check attestations and the transparency log",from:2}],
    now:["Today the blocklist cuts some independent auctions entirely, while Google, the Meta Pixel and several ID providers pass through. Day one replaces it with a published policy: ID syncs, data brokers and cross-site analytics are blocked, and auctions and ad serving are allowed. Where a partner offers a cookieless endpoint, Crumbs sends traffic there instead of blocking it. This protection is free for every user, whether or not they opt in.","Encrypted DNS endpoints keep modern browsers on Crumbs, and the Firefox canary domain stops automatic DoH from routing around it.","The resolver moves into an attested TEE. Clients check the attestation against a published image before sending a single query.","An independent operator runs an Oblivious DoH relay that strips IP addresses. Relay and resolver attest to each other, so nobody holds both who and what."],
    gives:"Answers, or a refusal for bad domains", gets:"Lookups", guarantee:"From Target, no-logging is attested in hardware rather than promised in a policy.",
    comps:[["Published block-identity policy",0],["Steering to cookieless endpoints",0],["Encrypted DNS (DoH) for routers, live today",0],["Encrypted DNS for apps and browsers",1],["Attested TEE resolver",2],["Independent ODoH relay",3]]},
@@ -2508,11 +2522,12 @@ document.getElementById("advPeople").innerHTML=[
     {n:"NextDNS, AdGuard DNS, Control D",s:"Paid or free DNS blockers",x:.12,y:.22,c:"var(--muted)",dy:-12},
     {n:"Cloudflare 1.1.1.1, Quad9",s:"Free public DNS",x:.06,y:.38,c:"var(--muted)",dy:-12},
     {n:"eero Plus and router suites",s:"Subscription on the router",x:.16,y:.7,c:"var(--muted)",dy:-12},
-    {n:"ISP DNS security vendors",s:"Whalebone, Infoblox, Allot",x:.24,y:.9,c:"var(--muted)",dy:22,anchor:"start"},
+    {n:"ISP DNS security vendors",s:"Infoblox, Allot, SafeDNS",x:.24,y:.9,c:"var(--muted)",dy:22,anchor:"start"},
     {n:"Brave",s:"Browser with its own ads",x:.7,y:.32,c:"var(--ads)",dy:-12},
     {n:"Sensor Tower",s:"App data from its own panel",x:.9,y:.14,c:"var(--web)",dy:-12,anchor:"end"},
     {n:"Crumbs today",s:"Self-installed DNS blocker",x:.22,y:.08,c:"var(--bad)",dy:-12},
-    {n:"Crumbs with the plan",s:"Partner distribution plus ad products",x:.76,y:.8,c:"var(--signal)",dy:-14}
+    {n:"Crumbs with the plan",s:"Partner distribution plus ad products",x:.76,y:.8,c:"var(--signal)",dy:-14},
+    {n:"T-Mobile Advertising Solutions",s:"App-usage audiences from the network",x:.93,y:.64,c:"var(--warn)",dy:22,anchor:"end"}
   ];
   let s=`<svg viewBox="0 0 ${W} ${H}"><defs><marker id="pmArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" style="fill:var(--signal)"/></marker></defs>`;
   s+=`<rect class="pm-q" x="${L}" y="${T}" width="${iw/2}" height="${ih/2}"/><rect class="pm-q tr" x="${L+iw/2}" y="${T}" width="${iw/2}" height="${ih/2}"/><rect class="pm-q" x="${L}" y="${T+ih/2}" width="${iw/2}" height="${ih/2}"/><rect class="pm-q" x="${L+iw/2}" y="${T+ih/2}" width="${iw/2}" height="${ih/2}"/>`;
@@ -2532,7 +2547,12 @@ document.getElementById("advPeople").innerHTML=[
   const COMP=[
     ["Consumer DNS blockers","NextDNS, AdGuard DNS, Control D, Cloudflare 1.1.1.1 for Families, Quad9","Tracker, ad and malware blocking through a DNS setting, often free","comp","Competitor","Today, little. With the plan, a privacy-safe ad and measurement business funds the free product, and partners make setup one click."],
     ["Router security suites","eero Plus, other router makers' subscriptions","DNS ad blocking, threat protection and filters sold with the router","both","Competitor and possible partner","Router makers could add Crumbs as an option instead of building their own, and earn a share of ad revenue rather than only subscription fees."],
-    ["ISP DNS security vendors","Whalebone, Infoblox, Allot, SafeDNS","DNS security and parental controls that ISPs sell to subscribers","both","Competitor and possible partner","Crumbs is built on Whalebone. Crumbs brings a consumer brand and ad products that could give ISPs revenue, not only cost."],
+    ["ISP DNS security vendors","Infoblox, Allot, SafeDNS","DNS security and parental controls that ISPs sell to subscribers","both","Competitor and possible partner","Crumbs brings a consumer brand and ad products that could give ISPs revenue, not only cost."],
+    ["Audience data providers","LiveRamp, TransUnion, Lotame, Eyeota","Identity graphs and third-party segments sold into curated deals and DSPs","comp","Direct competitor in curation","They sell segments about individuals, matched through IDs. Crumbs sells opt-in groups of at least 100 people with no ID. Crumbs also blocks several of them today, so the published policy must apply the same rule to them as to everyone, or it looks like clearing the field for eyeo."],
+    ["Publisher data platforms","Permutive, Optable","Publishers' first-party audiences packaged for sell-side curation, increasingly matched to graphs such as TransUnion's","both","Competitor and possible partner","They see what happens on one publisher's site. Crumbs sees outcomes across apps, so it could feed these platforms as a signal rather than replace them."],
+    ["Contextual data","Peer39, and contextual segments from IAS and DoubleVerify","Signals about the page rather than the person, needing no ID or consent","comp","Competitor and baseline","Contextual is the default no-ID signal. Crumbs groups have to beat it on outcomes, which is already a kill criterion on the Roadmap."],
+    ["Telco data","T-Mobile Advertising Solutions","Audiences built from which apps subscribers install and how they use them, Android only, opt-out","comp","Closest like-for-like competitor","The same kind of signal, taken from the network. T-Mobile's is opt-out; Crumbs is opt-in, published and covers iOS. It proves the data has value, and shows the backlash risk when consent is weak."],
+    ["Audience measurement panels","Nielsen, Comscore","Paid opt-in panels that measure who saw media","comp","Competitor in measurement","They measure audiences for media. Crumbs measures app outcomes. Crumbs also blocks Comscore's tag today."],
     ["Privacy-first ad platforms","Brave","Blocks third-party ads and sells its own privacy-preserving ads","comp","Competitor for the idea","Brave works inside its own browser. Crumbs works across apps and devices at the network level, and supports existing publishers and ad tech rather than replacing them."],
     ["App intelligence panels","Sensor Tower, including data.ai","App downloads, usage and ad intelligence from first-party panels","comp","Competitor in measurement","Crumbs would sell outcome data with a published privacy design and confidence intervals, to MMPs rather than directly to app publishers."],
     ["MMPs and incrementality vendors","AppsFlyer, Adjust, Singular, Haus, Measured","Attribution, fraud protection and lift testing for app advertisers","both","Possible customers","Crumbs could supply independent outcome data. But crumbs.com lists AppsFlyer, Branch, Kochava and Tenjin as blocked because they trace app installs, so this relationship needs care."],
@@ -2550,10 +2570,10 @@ document.getElementById("advPeople").innerHTML=[
   document.getElementById("diffs").innerHTML=DIFFS.map(d=>`<div class="diff"><h3>${d[0]}</h3><p>${d[1]}</p><span class="dep">${d[3]}</span><p class="vs">${d[2]}</p></div>`).join("");
 
   const SW=[
-    ["s","S","Strengths","Internal",["eyeo's brand and reach: Adblock Plus serves hundreds of millions of users, according to Whalebone","The Acceptable Ads standard, committee and advertiser and publisher relationships","Blockthrough, which already runs in publishers' ad code","A DNS position that can observe app outcomes on iOS with consent","Encrypted DNS (DoH) already supported for modern routers"]],
+    ["s","S","Strengths","Internal",["eyeo's brand and reach: hundreds of millions of AdBlock and Adblock Plus users","The Acceptable Ads standard, committee and advertiser and publisher relationships","Blockthrough, which already runs in publishers' ad code","A DNS position that can observe app outcomes on iOS with consent","Encrypted DNS (DoH) already supported for modern routers"]],
     ["w","W","Weaknesses","Internal",["A very small user base today: a third-party estimate is about 350 iOS installs","Router setup is manual, and many ISP routers do not allow it","The current blocklist cuts some independent auctions while Google and the Meta Pixel pass","No privacy-safe signal reaches the auction yet","DNS cannot see inside requests, or Safari traffic with Private Relay on","Crumbs blocks MMP attribution domains, which complicates selling data to MMPs"]],
     ["o","O","Opportunities","External",["The post-ATT measurement gap on iOS, where app acquisition spend grew 35% in 2025","Rapid growth in curated deals, which need trusted audience data","Publishers who want audience value without tracking","ISP gateways that can now install third-party apps through prpl, such as AT&T's 12 million","Router makers looking for subscription and revenue features","CTV advertisers who need proof of outcomes"]],
-    ["t","T","Threats","External",["Apple changing DNS, Private Relay or attribution rules","Free DNS blockers that users already trust","Router makers and ISPs bundling their own blocking, such as eero Plus","Sensor Tower and MMPs improving their own panels and models","Brave's model, with 109 million monthly users, as an established privacy-ads alternative","Criticism from publishers and ad tech, or pay-to-play claims, if blocking stays as it is","Regulators questioning any use of DNS data, even aggregated"]]
+    ["t","T","Threats","External",["Apple changing DNS, Private Relay or attribution rules","Free DNS blockers that users already trust","Router makers and ISPs bundling their own blocking, such as eero Plus","Sensor Tower and MMPs improving their own panels and models","Data providers and publisher platforms, such as LiveRamp, TransUnion and Permutive, already selling into curated deals","Telco app-usage data, such as T-Mobile's, offering a similar signal at scale","Brave's model, with 109 million monthly users, as an established privacy-ads alternative","Criticism from publishers and ad tech, or pay-to-play claims, if blocking stays as it is","Regulators questioning any use of DNS data, even aggregated"]]
   ];
   document.getElementById("swot").innerHTML=SW.map(q=>`<div class="sq ${q[0]}"><div class="sh"><span class="sl">${q[1]}</span><div><h3>${q[2]}</h3><span class="kind">${q[3]}</span></div></div><ul>${q[4].map(i=>`<li>${i}</li>`).join("")}</ul></div>`).join("");
 })();
@@ -2567,7 +2587,7 @@ document.getElementById("advPeople").innerHTML=[
       ["Policy","Measure the publisher revenue gap with Crumbs on and off, and draft a block-identity policy.","eyeo knows how large the revenue problem is and has a policy to discuss.","Revenue gap measured on 30 sites"],
       ["Distribution","Test router setup on the main UK ISP hubs, and open conversations with one ISP and one mesh maker.","We know which hubs allow setup and whether partners are interested.","4 hubs tested: BT, Sky, Virgin Media, TalkTalk. 1 ISP and 1 mesh maker spoken to"],
       ["Product","Build the fingerprint lab and the privacy simulator, and speak to two MMPs.","We know whether the panel can be built and whether buyers want it.","At least 50% of the top 200 iOS apps identified cleanly. Reportable app and country combinations counted. 2 MMPs spoken to"],
-      ["Privacy","Draft the one-page published design and agree logging terms with Whalebone.","The privacy design can be reviewed before anything is built.","Design drafted. Logging terms agreed"],
+      ["Privacy","Draft the one-page published design and confirm how the resolver logs and retains data.","The privacy design can be reviewed before anything is built.","Design drafted. Logging and retention confirmed"],
       ["Users","Confirm real user and opt-in numbers for iOS, Android and routers.","The plan is based on eyeo's own numbers rather than estimates.","Counts confirmed with eyeo data"]]},
     {cls:"h2",when:"After 1 year",by:"By October 2027",mission:"Fix, distribute and pilot",outcome:"Publishers trust Crumbs, some households can switch it on in one click, and Crumbs has a paying customer.",rows:[
       ["Policy","The published policy is live, and a Prebid Crumbs mode runs with the first publishers through Blockthrough.","Publishers and ad tech partners see Crumbs as neutral.","Header-bidding value at least 90% of Crumbs off. No identifiers in bid requests. At least 90% of ID syncs blocked. 5 publishers in Crumbs mode"],
@@ -2694,7 +2714,7 @@ document.getElementById("advPeople").innerHTML=[
     news:["A one-tap Crumbs option inside partner router and mesh apps.","A Crumbs app for ISP gateways that support third-party apps through the prpl standard.","A partner dashboard showing protected households, blocked threats and revenue share.","Encrypted DNS on supported routers by default."],
     get:"Partners integrate Crumbs through the partner programme. Households turn it on in their router app or receive it from their ISP.",
     quote:["Our customers wanted privacy protection, and this one pays us instead of costing us.","Example product lead at a mesh router maker, written for planning"],
-    gtm:{seg:"Mesh makers first, such as eero and TP-Link Deco, then UK ISPs and Whalebone's existing ISP customers.",why:"A security feature their customers want, a trusted privacy brand, and a revenue share instead of a licence cost.",price:"Free to integrate. Partners receive a share of measurement and curation revenue from their households.",reach:"Direct partnerships led by eyeo business development, and Whalebone's ISP relationships.",plan:["Router setup tested on the main UK ISP hubs","Integration pilot with one mesh maker","First ISP gateway pilot through prpl"],kpi:["1 router maker live, 1 ISP pilot","Households protected in the hundreds of thousands","Opt-in rate in partner households at least 30%"],
+    gtm:{seg:"Mesh makers first, such as eero and TP-Link Deco, then UK ISPs.",why:"A security feature their customers want, a trusted privacy brand, and a revenue share instead of a licence cost.",price:"Free to integrate. Partners receive a share of measurement and curation revenue from their households.",reach:"Direct partnerships led by eyeo business development.",plan:["Router setup tested on the main UK ISP hubs","Integration pilot with one mesh maker","First ISP gateway pilot through prpl"],kpi:["1 router maker live, 1 ISP pilot","Households protected in the hundreds of thousands","Opt-in rate in partner households at least 30%"],
     faq:[["Why would an ISP share its DNS?","It does not have to give up its resolver. Crumbs can run as an app on the gateway, and the ISP earns revenue from a feature its customers value."],["What about households where the ISP router is locked?","A partner mesh system in router mode can run Crumbs for the whole home."]]}},
    {id:"tech",who:"Tech providers",ico:"chart",tier:"Primary · first paying",name:"Crumbs Outcomes",date:"Target: September 2027",
     head:"Crumbs Outcomes gives MMPs independent iOS install and retention data",
@@ -2776,7 +2796,7 @@ function demoInit(){
 
 /* ===== Presentation path: next buttons ===== */
 (function nextLinks(){
-  const PATH=[["thesis","Thesis"],["today","Crumbs today"],["findings","Blocking findings"],["demo","Live demo"],["customers","Customers"],["market","Where to start"],["revenue","Revenue model"],["prebid","How it works in Prebid"],["how","What has to be true"],["plan","First 30 days and beyond"]];
+  const PATH=[["today", "Crumbs today"], ["thesis", "Thesis"], ["demo", "Live demo"], ["findings", "Blocking findings"], ["options", "Options"], ["market", "Where to start"], ["customers", "Customers"], ["compete", "Competition"], ["chain", "Signal chain"], ["prebid", "How it works in Prebid"], ["how", "What has to be true"], ["trust", "Zero trust"], ["revenue", "Revenue model"], ["launch", "Launch notes"], ["plan", "First 30 days and beyond"], ["why", "Why me"]];
   PATH.forEach(([k],i)=>{
     const panel=document.getElementById("tab-"+k); if(!panel) return;
     const nxt=PATH[i+1];
@@ -2840,7 +2860,7 @@ document.getElementById("layers").innerHTML=LAYERS.map(l=>`<div class="layer d${
 
 /* ===== Boot ===== */
 const initial=location.hash.slice(1);
-showTab(TABS.includes(initial)?initial:"thesis",false);
+showTab(TABS.includes(initial)?initial:"today",false);
 if(document.fonts && document.fonts.ready) document.fonts.ready.then(()=>{ if(activeTab==="chain") layout(); if(activeTab==="market") drawTreemaps(); });
 </script>
 
