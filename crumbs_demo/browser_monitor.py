@@ -73,6 +73,8 @@ class LaneMonitor:
         self.tally: Counter = Counter()  # (company, outcome kind) -> requests, since last reset
         self.sync_tally: Counter = Counter()  # outcome kind -> ID-sync requests, since last reset
         self.prebid: dict[str, dict] = {}  # targetId -> {url, title, summary}
+        # Returns the Crumbs Prebid module source to inject into new pages, or None.
+        self.inject_source = None
 
     def start(self, poll_prebid: bool = True) -> None:
         self._task = asyncio.ensure_future(self._run())
@@ -267,6 +269,12 @@ class LaneMonitor:
             if info.get("type") == "page":
                 self._page_sessions[info["targetId"]] = child
             await self._send("Network.enable", {}, child)
+            source = self.inject_source() if (self.inject_source and info.get("type") == "page") else None
+            if source:
+                # Runs before the page's own scripts, like a publisher's Prebid module would.
+                # Chrome only applies it once the Page domain is enabled for the session.
+                await self._send("Page.enable", {}, child)
+                await self._send("Page.addScriptToEvaluateOnNewDocument", {"source": source}, child)
             await self._send("Target.setAutoAttach",
                              {"autoAttach": True, "waitForDebuggerOnStart": True, "flatten": True}, child)
             if params.get("waitingForDebugger"):

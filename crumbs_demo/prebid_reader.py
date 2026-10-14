@@ -30,15 +30,27 @@ PREBID_SNAPSHOT_JS = r"""
     try { events = p.getEvents() || []; } catch (e) {}
     const bids = [], won = [], slots = new Set();
     const requested = new Set(), noBid = new Set(), timedOut = new Set(), errored = new Set();
-    let auctions = 0;
+    let auctions = 0, lastUser = null;
     for (const e of events) {
       const a = e.args || {};
       switch (e.eventType) {
         case "auctionInit": auctions++; break;
-        case "bidRequested":
+        case "bidRequested": {
           requested.add(a.bidderCode);
+          // What bidders were told about the user, from the latest request.
+          const u = (a.ortb2 && a.ortb2.user) || {};
+          const firstBid = (a.bids || [])[0] || {};
+          const eids = (u.ext && u.ext.eids) || firstBid.userIdAsEids || [];
+          lastUser = {
+            bidder: a.bidderCode,
+            data: (u.data || []).map(d => ({ name: d.name || "", segtax: d.ext && d.ext.segtax,
+              ids: (d.segment || []).map(x => x.id) })),
+            keywords: u.keywords || "",
+            eids: eids.map(e => e.source).filter(Boolean),
+          };
           (a.bids || []).forEach(b => slots.add(b.adUnitCode));
           break;
+        }
         case "bidResponse": bids.push(bidOf(a)); break;
         case "bidWon": won.push(bidOf(a)); break;
         case "noBid": noBid.add(a.bidder || a.bidderCode); break;
@@ -55,7 +67,9 @@ PREBID_SNAPSHOT_JS = r"""
     }
     out.push({ global: name, version: p.version || "", ad_units: slots.size, auctions, bids, won,
       requested: [...requested].filter(Boolean), no_bid: [...noBid].filter(Boolean),
-      timed_out: [...timedOut].filter(Boolean), errored: [...errored].filter(Boolean) });
+      timed_out: [...timedOut].filter(Boolean), errored: [...errored].filter(Boolean), user: lastUser,
+      crumbs: window.__crumbs ? { status: window.__crumbs.status, group: window.__crumbs.group,
+        mode: window.__crumbs.crumbsMode, tagged: window.__crumbs.auctionsTagged, gam: window.__crumbs.gam } : null });
   }
   return out;
 })()
@@ -106,6 +120,8 @@ def summarise(snapshots: list[dict]) -> dict:
         "won": len(won),
         "won_sum": round(sum(b["cpm"] for b in won), 3),
         "currency": "/".join(currencies) or "",
+        "user": next((s["user"] for s in snapshots if s.get("user")), None),
+        "crumbs": next((s["crumbs"] for s in snapshots if s.get("crumbs")), None),
         "by_bidder": {k: {**v, "sum_cpm": round(v["sum_cpm"], 3), "max_cpm": round(v["max_cpm"], 3)}
                       for k, v in sorted(by_bidder.items())},
     }

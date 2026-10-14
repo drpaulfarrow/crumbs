@@ -50,6 +50,36 @@ Background research for the case study is in [`research/RESEARCH_BRIEF.md`](rese
 - This lane is a real DNS server.
 - `system-dns-on.ps1` points Windows at it; `system-dns-off.ps1` puts everything back.
 
+## Case-study page with the panel inside it
+
+The demo also serves the case-study site at **http://127.0.0.1:5380/case-study**. Its "Live demo" tab shows the control panel, so you can present and demo from one page.
+
+- Start the demo as usual, or with `--open-site` to open the case-study page instead of the bare panel.
+- Put the case-study window on the left third of the screen.
+- Use the "Open A/B" buttons in the Live demo tab. When the panel is inside the case-study page, the A/B windows open on the right two-thirds, leaving the page visible.
+- `"site_share"` in `demo_config.json` sets how much of the screen's left side is kept free (default `0.34`).
+- The file is `crumbs_demo/static/case-study.html`, a copy of the published case-study site.
+
+## The fix: proposed policy and the Crumbs Prebid module
+
+A strip under the panel header switches on the fix for window B. Turn the switches on, then reload the pages.
+
+**Proposed policy: allow auctions.** Crumbs keeps blocking ID syncs and trackers but lets auction hosts through (`ib.adnxs.com`, Magnite, Ozone and Kargo by default; set `proposed_policy.allow_auction_hosts` in `demo_config.json`). This is "block identity, not auctions".
+
+**Crumbs Prebid module** (`static/crumbs-prebid.js`). The demo injects it into every page in both windows through the DevTools port, before the page's own scripts run, so it works on real sites such as the Guardian as well as the test page. It only uses public Prebid APIs.
+
+1. It looks up `signal.crumbs.test`. Only a Crumbs-on lane answers that name, with one local address per interest group (127.0.0.20 and up). A small server on those addresses replies with the group it was reached on. This stands in for DNS steering: the address Crumbs returns carries the group.
+2. Window A gets no answer, so the module does nothing there.
+3. In window B it turns on Crumbs mode: no ID syncs, no Prebid device storage, and no user IDs where the page's Prebid includes the activity controls module. Auctions still run.
+4. It adds the opted-in group to every auction:
+   - as a seller-defined audience in `user.data` (provider `crumbs.com`, IAB Audience Taxonomy 1.1, `segtax` 4, a real taxonomy ID such as 410 for running and jogging);
+   - as the keyword `crumbs_grp=running`, which the Xandr adapter sends as a key-value;
+   - as a Google Ad Manager key-value on pages that use GAM.
+
+Choose the group in the panel. The Prebid section of the panel and the test page show what each window's bid request told bidders: the module's state, the audience data and any user IDs.
+
+The A/B windows start with `--allow-running-insecure-content` so the module on https sites can call the local http signal server. A production signal endpoint would use https, and a production module would be a Prebid real-time data submodule.
+
 ## Updating
 
 ```powershell
